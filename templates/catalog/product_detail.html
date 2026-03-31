@@ -1,0 +1,1158 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="bg-gray-100 dark:bg-gray-900 min-h-screen">
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <!-- Breadcrumb -->
+        <div class="flex items-center gap-2 text-sm mb-6 flex-wrap text-gray-600 dark:text-gray-300">
+            <a href="{% url 'home' %}" class="hover:opacity-70 text-accent">Home</a>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+            <a href="#" class="hover:opacity-70 text-accent">Components</a>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+            <span>{{ category }}</span>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+            <span>{{ product.name }}</span>
+        </div>
+
+        <!-- Main section -->
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-8 mb-12">
+            <!-- Left - images -->
+            <div class="lg:col-span-3">
+                <div class="relative rounded-lg overflow-hidden mb-3 group cursor-zoom-in border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800" style="height: 420px;">
+                    {% if product.image %}
+                        <img id="main-product-image" src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-contain p-2">
+                    {% else %}
+                        <div class="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                            <svg class="w-24 h-24 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                    {% endif %}
+                    <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/10">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path>
+                        </svg>
+                    </div>
+                </div>
+                {% if additional_images %}
+                    <div class="grid grid-cols-4 sm:grid-cols-5 gap-2">
+                        {% for extra_image in additional_images %}
+                            <button type="button" class="product-thumb h-16 rounded-md overflow-hidden border border-gray-300 dark:border-gray-600 hover:border-accent transition-colors" data-image-url="{{ extra_image.image.url }}">
+                                <img src="{{ extra_image.image.url }}" alt="{{ product.name }} photo {{ forloop.counter }}" class="w-full h-full object-contain bg-white dark:bg-gray-800">
+                            </button>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Right - product info -->
+            <div class="lg:col-span-2">
+                <p class="text-sm font-medium mb-1 text-gray-600 dark:text-gray-300">{{ product.manufacturer }}</p>
+                <h1 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">{{ product.name }}</h1>
+
+                <!-- Rating -->
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="flex">
+                        {% for i in "12345" %}
+                            <svg class="w-4 h-4 {% if forloop.counter <= avg_rating %}text-amber-500{% else %}text-gray-300 dark:text-gray-600{% endif %}" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                        {% endfor %}
+                    </div>
+                    <span id="detail-rating-summary" class="text-sm text-gray-600 dark:text-gray-300">{{ avg_rating }}/5 ({{ review_count }} reviews)</span>
+                </div>
+
+                <p class="text-3xl font-bold text-gray-900 dark:text-white mb-2">${{ product.price }}</p>
+
+                <!-- Stock -->
+                <div class="flex items-center gap-2 mb-4">
+                    <span class="w-2 h-2 rounded-full {% if product.stock > 0 %}bg-green-500{% else %}bg-red-500{% endif %}"></span>
+                    <span class="text-sm {% if product.stock > 0 %}text-green-500{% else %}text-red-500{% endif %}">
+                        {% if product.stock > 0 %}In Stock ({{ product.stock }} available){% else %}Out of Stock{% endif %}
+                    </span>
+                </div>
+
+                <p class="text-base leading-relaxed mb-4 text-gray-700 dark:text-gray-200">{{ product.description }}</p>
+
+                <!-- Specs table -->
+                <div class="rounded-lg overflow-hidden mb-4 border border-gray-200 dark:border-gray-700">
+                    {% if product.cores %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-3 py-2 font-medium bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300">Cores</div>
+                            <div class="flex-1 px-3 py-2 text-gray-900 dark:text-white">{{ product.cores }}</div>
+                        </div>
+                    {% endif %}
+                    {% if product.threads %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-3 py-2 font-medium bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300">Threads</div>
+                            <div class="flex-1 px-3 py-2 text-gray-900 dark:text-white">{{ product.threads }}</div>
+                        </div>
+                    {% endif %}
+                    {% if product.socket %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-3 py-2 font-medium bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300">Socket</div>
+                            <div class="flex-1 px-3 py-2 text-gray-900 dark:text-white">{{ product.socket }}</div>
+                        </div>
+                    {% endif %}
+                    {% if product.base_clock %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-3 py-2 font-medium bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300">Base Clock</div>
+                            <div class="flex-1 px-3 py-2 text-gray-900 dark:text-white">{{ product.base_clock }} GHz</div>
+                        </div>
+                    {% endif %}
+                    {% if product.boost_clock %}
+                        <div class="flex text-sm">
+                            <div class="w-1/3 px-3 py-2 font-medium bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300">Boost Clock</div>
+                            <div class="flex-1 px-3 py-2 text-gray-900 dark:text-white">{{ product.boost_clock }} GHz</div>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Compatibility note -->
+                <div class="rounded-lg px-4 py-3 mb-4 text-sm bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700">
+                    <p class="text-gray-700 dark:text-gray-200">
+                        Check compatibility with your build. <a href="{% url 'configurator' %}" class="text-accent hover:opacity-70">Open Configurator →</a>
+                    </p>
+                </div>
+
+                <!-- Quantity -->
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Qty:</span>
+                    <div class="flex items-center border border-gray-200 dark:border-gray-700 rounded-lg">
+                        <button id="qty-decrease" type="button" class="px-3 py-2 hover:opacity-70 transition-opacity text-gray-900 dark:text-white">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                            </svg>
+                        </button>
+                        <span id="qty-value" class="px-4 py-2 font-medium text-sm text-gray-900 dark:text-white border-l border-r border-gray-200 dark:border-gray-700">1</span>
+                        <button id="qty-increase" type="button" class="px-3 py-2 hover:opacity-70 transition-opacity text-gray-900 dark:text-white">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <span id="qty-stock-hint" class="text-xs text-gray-500 dark:text-gray-400"></span>
+                </div>
+
+                <!-- Actions -->
+                <div class="space-y-2">
+                    <form method="post" action="{% url 'cart_add' product_model product.pk %}">
+                        {% csrf_token %}
+                        <input type="hidden" id="qty-input" name="quantity" value="1">
+                        <button type="submit" {% if product.stock <= 0 %}disabled{% endif %} class="w-full py-3 rounded-lg font-medium transition-opacity hover:opacity-90 bg-accent text-gray-900 disabled:opacity-50 disabled:cursor-not-allowed">
+                            {% if product.stock > 0 %}Add to Cart{% else %}Out of Stock{% endif %}
+                        </button>
+                    </form>
+                    <form method="post" action="{{ wishlist_url }}" class="wishlist-form-detail">
+                        {% csrf_token %}
+                        <button type="submit" class="wishlist-btn-detail w-full py-3 rounded-lg font-medium transition-all hover:opacity-90 flex items-center justify-center gap-2 border {% if in_wishlist %}bg-red-500 border-red-500 text-white{% else %}border-accent text-accent bg-transparent{% endif %}">
+                            <svg class="w-5 h-5" fill="{% if in_wishlist %}currentColor{% else %}none{% endif %}" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                            </svg>
+                            <span class="wishlist-text">{% if in_wishlist %}Remove from Wishlist{% else %}Add to Wishlist{% endif %}</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="product-ai-box" class="mb-10 rounded-xl border border-amber-300/70 dark:border-amber-300/40 bg-white dark:bg-gray-800 shadow-md"
+             data-product-model="{{ product_model }}" data-product-id="{{ product.pk }}">
+            <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-semibold text-gray-900 dark:text-white">BuildBox AI for This Product</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Answers only about {{ product.name }}</p>
+                </div>
+                <button id="product-ai-clear" type="button" class="text-xs px-2 py-1 rounded-md border border-red-300 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40">
+                    Clear
+                </button>
+            </div>
+            <div id="product-ai-messages" class="h-72 overflow-y-auto p-4 space-y-2 bg-gray-50 dark:bg-gray-900"></div>
+            <div id="product-ai-typing" class="hidden px-4 pb-2 bg-gray-50 dark:bg-gray-900">
+                <div class="inline-flex items-center gap-1 px-3 py-2 rounded-xl rounded-bl-sm bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600">
+                    <span class="w-2 h-2 rounded-full bg-gray-400 animate-pulse"></span>
+                    <span class="w-2 h-2 rounded-full bg-gray-400 animate-pulse [animation-delay:120ms]"></span>
+                    <span class="w-2 h-2 rounded-full bg-gray-400 animate-pulse [animation-delay:240ms]"></span>
+                </div>
+            </div>
+            <div class="p-3 border-t border-gray-200 dark:border-gray-700 flex items-center gap-2 bg-white dark:bg-gray-800">
+                <input id="product-ai-input" type="text" placeholder="Ask about this product..." class="w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-transparent text-sm text-gray-900 dark:text-white outline-none focus:border-accent">
+                <button id="product-ai-send" type="button" class="px-3 py-2 rounded-lg bg-accent text-gray-900 text-sm font-medium disabled:opacity-40" disabled>Send</button>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="border-b border-gray-200 dark:border-gray-700 flex gap-6 mb-6">
+            <button class="tab-btn pb-3 text-sm font-medium capitalize transition-colors text-gray-900 dark:text-white border-b-2 border-accent -mb-px" data-tab="description">
+                Description
+            </button>
+            <button class="tab-btn pb-3 text-sm font-medium capitalize transition-colors text-gray-700 dark:text-gray-300 border-b-2 border-transparent -mb-px" data-tab="specifications">
+                Specifications
+            </button>
+        </div>
+
+        <!-- Tab content -->
+        <div class="max-w-4xl">
+            <!-- Description Tab -->
+            <div id="description-tab" class="tab-content">
+                <p class="text-base leading-relaxed mb-4 text-gray-700 dark:text-gray-200">{{ product.description }}</p>
+            </div>
+
+            <!-- Specifications Tab -->
+            <div id="specifications-tab" class="tab-content hidden">
+                <div class="rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
+                    {% if product.manufacturer %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Manufacturer</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.manufacturer }}</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.cores %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Cores</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.cores }}</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.threads %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Threads</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.threads }}</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.socket %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Socket</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.socket }}</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.base_clock %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Base Clock</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.base_clock }} GHz</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.boost_clock %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Boost Clock</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.boost_clock }} GHz</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.tdp_base %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">TDP Base</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.tdp_base }} W</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.tdp_max %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">TDP Max</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.tdp_max }} W</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.chipset %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Chipset</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.chipset }}</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.vram %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">VRAM</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.vram }} GB</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.vram_type %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">VRAM Type</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.vram_type }}</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.power_consumption %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Power Consumption</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.power_consumption }} W</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.recommended_psu %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Recommended PSU</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.recommended_psu }} W</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.length %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Length</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.length }} mm</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.memory_type %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Memory Type</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.memory_type }}</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.capacity %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Capacity</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.capacity }} GB{% if product.modules %} x{{ product.modules }}{% endif %}</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.speed %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Speed</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.speed }} MHz</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.form_factor %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Form Factor</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.get_form_factor_display }}</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.ram_type %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">RAM Type</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.ram_type }}</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.ram_slots %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">RAM Slots</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.ram_slots }}</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.max_ram %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Max RAM</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.max_ram }} GB</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.storage_type %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Storage Type</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.get_storage_type_display }}</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.read_speed %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Read Speed</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.read_speed }} MB/s</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.write_speed %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Write Speed</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.write_speed }} MB/s</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.wattage %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Wattage</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.wattage }} W</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.efficiency %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Efficiency</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.get_efficiency_display }}</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.modular != None %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Modular</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{% if product.modular %}Yes{% else %}No{% endif %}</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.max_gpu_length %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Max GPU Length</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.max_gpu_length }} mm</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.processor_name %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Processor</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.processor_name }}</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.gpu_name %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">GPU</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.gpu_name }}</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.screen_size %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Screen Size</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.screen_size }}"</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.screen_resolution %}
+                        <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Resolution</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.screen_resolution }}</div>
+                        </div>
+                    {% endif %}
+                    
+                    {% if product.weight %}
+                        <div class="flex text-sm">
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Weight</div>
+                            <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.weight }} kg</div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+
+        <div class="max-w-4xl mt-10 mb-8 flex items-center gap-4" aria-hidden="true">
+            <div class="h-px flex-1 bg-gray-300 dark:bg-gray-700"></div>
+            <span class="text-xs uppercase tracking-[0.2em] text-gray-500 dark:text-gray-400">Reviews</span>
+            <div class="h-px flex-1 bg-gray-300 dark:bg-gray-700"></div>
+        </div>
+
+        <section id="reviews-section" class="max-w-4xl">
+                <div class="mb-8 flex flex-col gap-6">
+                    <div class="flex items-center justify-between rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-5 py-4">
+                        <div>
+                            <p class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">Rating</p>
+                            <p id="reviews-avg-rating" class="text-2xl font-bold text-gray-900 dark:text-white">{{ avg_rating }}/5</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400">Reviews</p>
+                            <p id="reviews-count" class="text-2xl font-bold text-gray-900 dark:text-white">{{ review_count }}</p>
+                        </div>
+                    </div>
+
+                    {% if user.is_authenticated %}
+                        <form method="post" action="{% url 'add_review' product_model product.pk %}" class="review-create-form rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5">
+                            {% csrf_token %}
+                            <div class="flex items-start gap-3">
+                                <img src="{{ user.profile_image.url }}" alt="{{ user.username }}" class="w-10 h-10 rounded-full object-cover border border-gray-200 dark:border-gray-700">
+                                <div class="flex-1">
+                                    <h4 class="text-sm font-semibold text-gray-900 dark:text-white mb-2">{% if user_review %}Edit your review{% else %}Add your review{% endif %}</h4>
+                                    <input type="hidden" id="review-rating-input" name="rating" value="{% if user_review %}{{ user_review.rating }}{% else %}5{% endif %}">
+                                    <div class="flex items-center gap-1 mb-3">
+                                        {% for i in "12345" %}
+                                            <button type="button" class="review-star-btn text-2xl leading-none {% if user_review and forloop.counter <= user_review.rating %}text-amber-500{% else %}text-gray-300 dark:text-gray-600{% endif %}" data-rating="{{ forloop.counter }}" aria-label="Rate {{ forloop.counter }}">★</button>
+                                        {% endfor %}
+                                        <span id="review-rating-label" class="text-xs text-gray-500 dark:text-gray-400 ml-2">5/5</span>
+                                    </div>
+                                    <textarea name="comment" rows="2" required class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white outline-none focus:border-accent" placeholder="Write your thoughts...">{% if user_review %}{{ user_review.comment }}{% endif %}</textarea>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <button type="submit" class="px-5 py-2.5 rounded-lg text-sm font-medium bg-accent text-gray-900 hover:opacity-90 transition-opacity">Save</button>
+                            </div>
+                        </form>
+                    {% else %}
+                        <div class="rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 text-sm text-gray-500 dark:text-gray-400">
+                            Please <a href="{% url 'login_view' %}" class="text-accent hover:opacity-80">sign in</a> to leave a review.
+                        </div>
+                    {% endif %}
+                </div>
+
+                {% if reviews %}
+                    <div id="reviews-list" class="space-y-6">
+                        {% for review in reviews %}
+                            <article class="flex gap-3" data-review-item="{{ review.id }}">
+                                <img src="{{ review.user.profile_image.url }}" alt="{{ review.user.username }}" class="w-10 h-10 rounded-full object-cover border border-gray-200 dark:border-gray-700">
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-start justify-between gap-3">
+                                        <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                                        <p class="text-sm font-semibold text-gray-900 dark:text-white">{{ review.user.username }}</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ review.created_at|date:'M d, Y H:i' }}</p>
+                                        <p class="text-amber-500 text-xs">{% for _ in "12345" %}{% if forloop.counter <= review.rating %}★{% else %}☆{% endif %}{% endfor %}</p>
+                                        </div>
+                                        {% if user.is_authenticated and user.id == review.user.id %}
+                                            <div class="relative">
+                                                <button type="button" class="review-menu-toggle p-1 text-gray-500 hover:text-gray-900 dark:hover:text-white" data-menu-target="review-menu-{{ review.id }}">⋯</button>
+                                                <div id="review-menu-{{ review.id }}" class="review-menu hidden absolute right-0 mt-1 w-28 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg p-1 z-20">
+                                                    <form method="post" action="{% url 'delete_review' review.id %}" class="delete-review-form" data-review-delete="{{ review.id }}">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="w-full text-left px-2 py-1.5 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">Delete</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <p class="mt-1 text-sm text-gray-700 dark:text-gray-200 leading-relaxed">{{ review.comment }}</p>
+
+                                    <div class="mt-2 flex items-center gap-3 text-xs">
+                                        {% if review.replies.all|length %}
+                                            <span class="text-gray-500 dark:text-gray-400" data-reply-count="{{ review.id }}">{{ review.replies.all|length }} repl{% if review.replies.all|length != 1 %}ies{% else %}y{% endif %}</span>
+                                        {% endif %}
+                                        {% if user.is_authenticated %}
+                                            <button type="button" class="review-reply-toggle px-2 py-1 rounded-md border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" data-review-id="{{ review.id }}">Reply</button>
+                                        {% endif %}
+                                    </div>
+
+                                    {% if user.is_authenticated %}
+                                        <form method="post" action="{% url 'add_review_reply' review.id %}" class="review-reply-form mt-3 hidden" data-review-form="{{ review.id }}">
+                                            {% csrf_token %}
+                                            <div class="flex gap-2">
+                                                <input type="text" name="comment" required placeholder="Add a reply..." class="flex-1 h-10 px-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-sm text-gray-900 dark:text-white outline-none focus:border-accent">
+                                                <button type="submit" class="px-4 h-10 rounded-lg text-sm font-medium bg-accent text-gray-900 hover:opacity-90 transition-opacity">Post</button>
+                                            </div>
+                                        </form>
+                                    {% endif %}
+
+                                    {% if review.replies.all %}
+                                        <div class="mt-4 space-y-3 border-l-2 border-gray-200 dark:border-gray-700 pl-4" data-replies-list="{{ review.id }}">
+                                            {% for reply in review.replies.all %}
+                                                <div class="flex items-start gap-2" data-reply-item="{{ reply.id }}">
+                                                    <img src="{{ reply.user.profile_image.url }}" alt="{{ reply.user.username }}" class="w-8 h-8 rounded-full object-cover border border-gray-200 dark:border-gray-700">
+                                                    <div class="flex-1 min-w-0">
+                                                        <div class="flex items-start justify-between gap-2">
+                                                            <p class="text-xs font-semibold text-gray-900 dark:text-white">{{ reply.user.username }} <span class="text-[11px] font-normal text-gray-500 dark:text-gray-400">{{ reply.created_at|date:'M d, Y H:i' }}</span></p>
+                                                            {% if user.is_authenticated and user.id == reply.user.id %}
+                                                                <div class="relative">
+                                                                    <button type="button" class="review-menu-toggle p-1 text-gray-500 hover:text-gray-900 dark:hover:text-white" data-menu-target="reply-menu-{{ reply.id }}">⋯</button>
+                                                                    <div id="reply-menu-{{ reply.id }}" class="review-menu hidden absolute right-0 mt-1 w-28 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg p-1 z-20">
+                                                                        <form method="post" action="{% url 'delete_review_reply' reply.id %}" class="delete-reply-form" data-reply-delete="{{ reply.id }}" data-review-id="{{ review.id }}">
+                                                                            {% csrf_token %}
+                                                                            <button type="submit" class="w-full text-left px-2 py-1.5 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">Delete</button>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            {% endif %}
+                                                        </div>
+                                                        <p class="text-sm text-gray-700 dark:text-gray-200">{{ reply.comment }}</p>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </article>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div id="empty-reviews-state" class="text-center py-10 rounded-2xl border border-dashed border-gray-300 dark:border-gray-700">
+                        <p class="text-gray-500 mb-1">No reviews yet</p>
+                        <p class="text-sm text-gray-400">Be the first to post one.</p>
+                    </div>
+                {% endif %}
+        </section>
+    </div>
+</div>
+
+<script>
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return '';
+    }
+
+    (() => {
+        const decreaseBtn = document.getElementById('qty-decrease');
+        const increaseBtn = document.getElementById('qty-increase');
+        const qtyValue = document.getElementById('qty-value');
+        const qtyInput = document.getElementById('qty-input');
+        const qtyStockHint = document.getElementById('qty-stock-hint');
+        const maxStock = parseInt("{{ product.stock|default:0 }}", 10) || 0;
+        if (!decreaseBtn || !increaseBtn || !qtyValue || !qtyInput) return;
+
+        let qty = maxStock > 0 ? 1 : 0;
+        const syncQty = () => {
+            qtyValue.textContent = String(qty);
+            qtyInput.value = String(qty);
+            if (qtyStockHint) {
+                qtyStockHint.textContent = maxStock > 0 ? `Max: ${maxStock}` : 'Out of stock';
+            }
+            decreaseBtn.disabled = maxStock <= 0 || qty <= 1;
+            decreaseBtn.classList.toggle('opacity-40', decreaseBtn.disabled);
+            decreaseBtn.classList.toggle('cursor-not-allowed', decreaseBtn.disabled);
+            increaseBtn.disabled = maxStock > 0 ? qty >= maxStock : true;
+            increaseBtn.classList.toggle('opacity-40', increaseBtn.disabled);
+            increaseBtn.classList.toggle('cursor-not-allowed', increaseBtn.disabled);
+        };
+
+        decreaseBtn.addEventListener('click', () => {
+            if (maxStock <= 0) return;
+            qty = Math.max(1, qty - 1);
+            syncQty();
+        });
+
+        increaseBtn.addEventListener('click', () => {
+            if (maxStock > 0) {
+                qty = Math.min(maxStock, qty + 1);
+            }
+            syncQty();
+        });
+        syncQty();
+    })();
+
+    (() => {
+        const ratingInput = document.getElementById('review-rating-input');
+        const ratingLabel = document.getElementById('review-rating-label');
+        const stars = document.querySelectorAll('.review-star-btn');
+        if (!ratingInput || !stars.length) return;
+
+        const paintStars = (value) => {
+            stars.forEach((star) => {
+                const starValue = parseInt(star.dataset.rating || '0', 10);
+                star.classList.toggle('text-amber-500', starValue <= value);
+                star.classList.toggle('text-gray-300', starValue > value);
+                star.classList.toggle('dark:text-gray-600', starValue > value);
+            });
+            if (ratingLabel) ratingLabel.textContent = `${value}/5`;
+        };
+
+        let current = parseInt(ratingInput.value || '5', 10);
+        if (!current || current < 1 || current > 5) current = 5;
+        ratingInput.value = String(current);
+        paintStars(current);
+
+        stars.forEach((star) => {
+            star.addEventListener('click', () => {
+                const value = parseInt(star.dataset.rating || '5', 10);
+                ratingInput.value = String(value);
+                paintStars(value);
+            });
+        });
+    })();
+
+    const productAiBox = document.getElementById('product-ai-box');
+    const productAiMessages = document.getElementById('product-ai-messages');
+    const productAiTyping = document.getElementById('product-ai-typing');
+    const productAiInput = document.getElementById('product-ai-input');
+    const productAiSend = document.getElementById('product-ai-send');
+    const productAiClear = document.getElementById('product-ai-clear');
+    const productModel = productAiBox?.dataset.productModel;
+    const productId = productAiBox?.dataset.productId;
+
+    function addProductAiMessage(role, text) {
+        const row = document.createElement('div');
+        row.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
+        const bubble = document.createElement('div');
+        bubble.className = 'max-w-[86%] px-3 py-2 text-sm whitespace-pre-line leading-6';
+        if (role === 'user') {
+            bubble.classList.add('bg-accent', 'text-gray-900');
+            bubble.style.borderRadius = '12px 12px 4px 12px';
+        } else {
+            bubble.classList.add('bg-white', 'dark:bg-gray-700', 'text-gray-900', 'dark:text-white', 'border', 'border-gray-200', 'dark:border-gray-600');
+            bubble.style.borderRadius = '12px 12px 12px 4px';
+        }
+        bubble.textContent = text;
+        row.appendChild(bubble);
+        productAiMessages.appendChild(row);
+        productAiMessages.scrollTop = productAiMessages.scrollHeight;
+    }
+
+    async function loadProductChat() {
+        if (!productModel || !productId) return;
+        try {
+            const res = await fetch(`{% url 'product_ai_chat_messages' %}?product_model=${productModel}&product_id=${productId}`);
+            const data = await res.json();
+            productAiMessages.innerHTML = '';
+            if (!data.messages || data.messages.length === 0) {
+                addProductAiMessage('assistant', 'I am BuildBox AI for this product page. Ask me about specs, compatibility, performance, or usage of this item.');
+                return;
+            }
+            data.messages.forEach((msg) => addProductAiMessage(msg.role === 'user' ? 'user' : 'assistant', msg.content));
+        } catch (e) {
+            addProductAiMessage('assistant', 'Product assistant is unavailable right now.');
+        }
+    }
+
+    async function sendProductChat() {
+        const text = productAiInput.value.trim();
+        if (!text) return;
+        addProductAiMessage('user', text);
+        productAiInput.value = '';
+        productAiSend.disabled = true;
+        productAiTyping.classList.remove('hidden');
+
+        const formData = new URLSearchParams();
+        formData.append('product_model', productModel || '');
+        formData.append('product_id', productId || '');
+        formData.append('message', text);
+
+        try {
+            const res = await fetch("{% url 'product_ai_chat_send' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: formData.toString(),
+            });
+            const data = await res.json();
+            productAiTyping.classList.add('hidden');
+            if (data.assistant_message) {
+                addProductAiMessage('assistant', data.assistant_message.content);
+            } else {
+                addProductAiMessage('assistant', 'I can only answer about this product.');
+            }
+        } catch (e) {
+            productAiTyping.classList.add('hidden');
+            addProductAiMessage('assistant', 'Network error. Please try again.');
+        }
+    }
+
+    async function clearProductChat() {
+        const formData = new URLSearchParams();
+        formData.append('product_model', productModel || '');
+        formData.append('product_id', productId || '');
+        try {
+            await fetch("{% url 'product_ai_chat_clear' %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: formData.toString(),
+            });
+            productAiMessages.innerHTML = '';
+            addProductAiMessage('assistant', 'Chat reset. Ask anything about this product.');
+        } catch (e) {
+            addProductAiMessage('assistant', 'Could not clear chat.');
+        }
+    }
+
+    productAiInput?.addEventListener('input', () => {
+        productAiSend.disabled = !productAiInput.value.trim();
+    });
+    productAiInput?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            sendProductChat();
+        }
+    });
+    productAiSend?.addEventListener('click', sendProductChat);
+    productAiClear?.addEventListener('click', clearProductChat);
+    loadProductChat();
+
+    const mainProductImage = document.getElementById('main-product-image');
+    const productThumbs = document.querySelectorAll('.product-thumb');
+
+    productThumbs.forEach((thumb) => {
+        thumb.addEventListener('click', () => {
+            const nextUrl = thumb.getAttribute('data-image-url');
+            if (mainProductImage && nextUrl) {
+                mainProductImage.src = nextUrl;
+            }
+        });
+    });
+
+    // Tab switching
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const tabName = button.getAttribute('data-tab');
+            
+            // Remove active state from all buttons
+            tabButtons.forEach(btn => {
+                btn.classList.remove('text-gray-900', 'dark:text-white', 'border-accent');
+                btn.classList.add('text-gray-500', 'border-transparent');
+            });
+            
+            // Add active state to clicked button
+            button.classList.remove('text-gray-500', 'border-transparent');
+            button.classList.add('text-gray-900', 'dark:text-white', 'border-accent');
+            
+            // Hide all tab contents
+            tabContents.forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName + '-tab').classList.remove('hidden');
+        });
+    });
+
+    const activateTab = (tabName) => {
+        const targetBtn = document.querySelector(`.tab-btn[data-tab="${tabName}"]`);
+        const targetContent = document.getElementById(tabName + '-tab');
+        if (!targetBtn || !targetContent) return;
+        tabButtons.forEach(btn => {
+            btn.classList.remove('text-gray-900', 'dark:text-white', 'border-accent');
+            btn.classList.add('text-gray-500', 'border-transparent');
+        });
+        tabContents.forEach(content => content.classList.add('hidden'));
+        targetBtn.classList.remove('text-gray-500', 'border-transparent');
+        targetBtn.classList.add('text-gray-900', 'dark:text-white', 'border-accent');
+        targetContent.classList.remove('hidden');
+    };
+    if (window.location.hash === '#reviews-section') {
+        const section = document.getElementById('reviews-section');
+        if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    const bindReplyToggles = () => {
+        const replyToggles = document.querySelectorAll('.review-reply-toggle');
+        replyToggles.forEach((btn) => {
+            btn.onclick = () => {
+                const reviewId = btn.getAttribute('data-review-id');
+                const form = document.querySelector(`.review-reply-form[data-review-form="${reviewId}"]`);
+                if (!form) return;
+                form.classList.toggle('hidden');
+                if (!form.classList.contains('hidden')) {
+                    const input = form.querySelector('input[name="comment"]');
+                    if (input) input.focus();
+                }
+            };
+        });
+    };
+    bindReplyToggles();
+
+    const bindReviewMenus = () => {
+        document.querySelectorAll('.review-menu-toggle').forEach((btn) => {
+            btn.onclick = (e) => {
+                e.stopPropagation();
+                const target = document.getElementById(btn.dataset.menuTarget);
+                document.querySelectorAll('.review-menu').forEach((menu) => {
+                    if (menu !== target) menu.classList.add('hidden');
+                });
+                if (target) target.classList.toggle('hidden');
+            };
+        });
+    };
+    bindReviewMenus();
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.review-menu').forEach((menu) => menu.classList.add('hidden'));
+    });
+
+    const updateReviewCounters = (avgRating, reviewCount) => {
+        const avgEl = document.getElementById('reviews-avg-rating');
+        const countEl = document.getElementById('reviews-count');
+        const detailEl = document.getElementById('detail-rating-summary');
+        if (avgEl) avgEl.textContent = `${avgRating}/5`;
+        if (countEl) countEl.textContent = String(reviewCount);
+        if (detailEl) detailEl.textContent = `${avgRating}/5 (${reviewCount} reviews)`;
+    };
+
+    const parseJsonSafe = async (res) => {
+        const text = await res.text();
+        try {
+            return JSON.parse(text);
+        } catch (e) {
+            return { ok: false, error: text || `HTTP ${res.status}` };
+        }
+    };
+
+    const i18nText = (text) => {
+        if (window.BuildBoxI18n && typeof window.BuildBoxI18n.translateText === 'function') {
+            return window.BuildBoxI18n.translateText(text);
+        }
+        return text;
+    };
+
+    const i18nMessage = (key, fallback) => {
+        if (window.BuildBoxI18n && typeof window.BuildBoxI18n.t === 'function') {
+            return window.BuildBoxI18n.t(key);
+        }
+        return fallback;
+    };
+
+    const reviewForm = document.querySelector('.review-create-form');
+    if (reviewForm) {
+        reviewForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(reviewForm);
+            try {
+                const res = await fetch(reviewForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                    credentials: 'same-origin',
+                });
+                const data = await parseJsonSafe(res);
+                if (!res.ok || !data.ok) {
+                    alert(i18nText(data.error || i18nMessage('review_save_failed', 'Failed to save review.')));
+                    return;
+                }
+                updateReviewCounters(data.avg_rating, data.review_count);
+                const card = document.querySelector(`[data-review-item="${data.review.id}"]`);
+                if (card) {
+                    const stars = '★★★★★'.slice(0, data.review.rating) + '☆☆☆☆☆'.slice(0, 5 - data.review.rating);
+                    const comment = card.querySelector('p.mt-1');
+                    const ratingLine = card.querySelector('.text-amber-500.text-xs');
+                    if (comment) comment.textContent = data.review.comment;
+                    if (ratingLine) ratingLine.textContent = stars;
+                } else {
+                    const reviewsList = document.getElementById('reviews-list');
+                    const emptyState = document.getElementById('empty-reviews-state');
+                    if (emptyState) emptyState.remove();
+                    if (reviewsList) {
+                        const stars = '★★★★★'.slice(0, data.review.rating) + '☆☆☆☆☆'.slice(0, 5 - data.review.rating);
+                        const reviewHtml = `
+                            <article class="flex gap-3" data-review-item="${data.review.id}">
+                                <img src="${data.review.avatar_url}" alt="${data.review.username}" class="w-10 h-10 rounded-full object-cover border border-gray-200 dark:border-gray-700">
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-start justify-between gap-3">
+                                        <div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+                                            <p class="text-sm font-semibold text-gray-900 dark:text-white">${data.review.username}</p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">${data.review.created_at}</p>
+                                            <p class="text-amber-500 text-xs">${stars}</p>
+                                        </div>
+                                        <div class="relative">
+                                            <button type="button" class="review-menu-toggle p-1 text-gray-500 hover:text-gray-900 dark:hover:text-white" data-menu-target="review-menu-${data.review.id}">⋯</button>
+                                            <div id="review-menu-${data.review.id}" class="review-menu hidden absolute right-0 mt-1 w-28 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg p-1 z-20">
+                                                <form method="post" action="/main_site/reviews/${data.review.id}/delete/" class="delete-review-form" data-review-delete="${data.review.id}">
+                                                    <input type="hidden" name="csrfmiddlewaretoken" value="${getCookie('csrftoken')}">
+                                                    <button type="submit" class="w-full text-left px-2 py-1.5 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">Delete</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="mt-1 text-sm text-gray-700 dark:text-gray-200 leading-relaxed">${data.review.comment}</p>
+                                    <div class="mt-2 flex items-center gap-3 text-xs">
+                                        <button type="button" class="review-reply-toggle px-2 py-1 rounded-md border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700" data-review-id="${data.review.id}">Reply</button>
+                                    </div>
+                                    <form method="post" action="/main_site/reviews/reply/${data.review.id}/add/" class="review-reply-form mt-3 hidden" data-review-form="${data.review.id}">
+                                        <input type="hidden" name="csrfmiddlewaretoken" value="${getCookie('csrftoken')}">
+                                        <div class="flex gap-2">
+                                            <input type="text" name="comment" required placeholder="Add a reply..." class="flex-1 h-10 px-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-sm text-gray-900 dark:text-white outline-none focus:border-accent">
+                                            <button type="submit" class="px-4 h-10 rounded-lg text-sm font-medium bg-accent text-gray-900 hover:opacity-90 transition-opacity">Post</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </article>
+                        `;
+                        reviewsList.insertAdjacentHTML('afterbegin', reviewHtml);
+                        bindReplyToggles();
+                        bindReplyForms();
+                        bindReviewMenus();
+                        bindDeleteForms();
+                    }
+                }
+            } catch (err) {
+                alert(i18nMessage('review_save_network_error', 'Network error while saving review.'));
+            }
+        });
+    }
+
+    const bindReplyForms = () => {
+        const replyForms = document.querySelectorAll('.review-reply-form');
+        replyForms.forEach((form) => {
+            if (form.dataset.ajaxBound === '1') return;
+            form.dataset.ajaxBound = '1';
+            form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(form);
+            try {
+                const res = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                    credentials: 'same-origin',
+                });
+                const data = await parseJsonSafe(res);
+                if (!res.ok || !data.ok) {
+                    alert(i18nText(data.error || i18nMessage('reply_post_failed', 'Failed to post reply.')));
+                    return;
+                }
+                const reviewId = String(data.reply.review_id);
+                let repliesList = document.querySelector(`[data-replies-list="${reviewId}"]`);
+                if (!repliesList) {
+                    const reviewCard = document.querySelector(`[data-review-item="${reviewId}"] .review-reply-form`);
+                    if (!reviewCard) {
+                        alert(i18nMessage('reply_ui_update_failed', 'Reply was saved, but UI update failed. Please open Reviews tab again.'));
+                        return;
+                    }
+                    repliesList = document.createElement('div');
+                    repliesList.className = 'mt-4 space-y-3 border-l-2 border-gray-200 dark:border-gray-700 pl-4';
+                    repliesList.setAttribute('data-replies-list', reviewId);
+                    reviewCard.insertAdjacentElement('afterend', repliesList);
+                }
+                const replyHtml = `
+                    <div class="flex items-start gap-2" data-reply-item="${data.reply.id}">
+                        <img src="${data.reply.avatar_url}" alt="${data.reply.username}" class="w-8 h-8 rounded-full object-cover border border-gray-200 dark:border-gray-700">
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-start justify-between gap-2">
+                                <p class="text-xs font-semibold text-gray-900 dark:text-white">${data.reply.username} <span class="text-[11px] font-normal text-gray-500 dark:text-gray-400">${data.reply.created_at}</span></p>
+                                <div class="relative">
+                                    <button type="button" class="review-menu-toggle p-1 text-gray-500 hover:text-gray-900 dark:hover:text-white" data-menu-target="reply-menu-${data.reply.id}">⋯</button>
+                                    <div id="reply-menu-${data.reply.id}" class="review-menu hidden absolute right-0 mt-1 w-28 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg p-1 z-20">
+                                        <form method="post" action="/main_site/reviews/reply/${data.reply.id}/delete/" class="delete-reply-form" data-reply-delete="${data.reply.id}" data-review-id="${data.reply.review_id}">
+                                            <input type="hidden" name="csrfmiddlewaretoken" value="${getCookie('csrftoken')}">
+                                            <button type="submit" class="w-full text-left px-2 py-1.5 text-sm text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded">Delete</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-700 dark:text-gray-200">${data.reply.comment}</p>
+                        </div>
+                    </div>
+                `;
+                repliesList.insertAdjacentHTML('beforeend', replyHtml);
+                bindReviewMenus();
+                bindDeleteForms();
+                const countBadge = document.querySelector(`[data-reply-count="${reviewId}"]`);
+                if (countBadge) {
+                    const current = parseInt(countBadge.textContent, 10) || 0;
+                    const next = current + 1;
+                    countBadge.textContent = next === 1 ? '1 reply' : `${next} replies`;
+                } else {
+                    const metaRow = document.querySelector(`[data-review-item="${reviewId}"] .mt-2.flex.items-center.gap-3.text-xs`);
+                    if (metaRow) {
+                        const badge = document.createElement('span');
+                        badge.className = 'text-gray-500 dark:text-gray-400';
+                        badge.setAttribute('data-reply-count', reviewId);
+                        badge.textContent = '1 reply';
+                        metaRow.prepend(badge);
+                    }
+                }
+                const input = form.querySelector('input[name="comment"]');
+                if (input) input.value = '';
+                form.classList.add('hidden');
+            } catch (err) {
+                alert(i18nMessage('reply_post_network_error', 'Network error while posting reply.'));
+            }
+        });
+        });
+    };
+    bindReplyForms();
+
+    function bindDeleteForms() {
+        document.querySelectorAll('.delete-review-form').forEach((form) => {
+            if (form.dataset.ajaxBound === '1') return;
+            form.dataset.ajaxBound = '1';
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(form);
+                const res = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRFToken': getCookie('csrftoken') },
+                    credentials: 'same-origin',
+                });
+                const data = await parseJsonSafe(res);
+                if (!res.ok || !data.ok) {
+                    alert(i18nText(data.error || i18nMessage('review_delete_failed', 'Failed to delete review.')));
+                    return;
+                }
+                const reviewNode = document.querySelector(`[data-review-item="${data.review_id}"]`);
+                if (reviewNode) reviewNode.remove();
+            });
+        });
+        document.querySelectorAll('.delete-reply-form').forEach((form) => {
+            if (form.dataset.ajaxBound === '1') return;
+            form.dataset.ajaxBound = '1';
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(form);
+                const res = await fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRFToken': getCookie('csrftoken') },
+                    credentials: 'same-origin',
+                });
+                const data = await parseJsonSafe(res);
+                if (!res.ok || !data.ok) {
+                    alert(i18nText(data.error || i18nMessage('reply_delete_failed', 'Failed to delete reply.')));
+                    return;
+                }
+                const replyNode = document.querySelector(`[data-reply-item="${data.reply_id}"]`);
+                if (replyNode) replyNode.remove();
+            });
+        });
+    }
+    bindDeleteForms();
+</script>
+
+<script>
+    // Wishlist button handler for detail page
+    document.addEventListener('DOMContentLoaded', function() {
+        const wishlistForm = document.querySelector('.wishlist-form-detail');
+        if (wishlistForm) {
+            wishlistForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const button = this.querySelector('.wishlist-btn-detail');
+                const svg = button.querySelector('svg');
+                const span = button.querySelector('.wishlist-text');
+                const formData = new FormData(this);
+                
+                button.disabled = true;
+                
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    credentials: 'same-origin'
+                })
+                .then(response => response.text())
+                .then(data => {
+                    const isInWishlist = button.classList.contains('bg-red-500');
+                    
+                    if (isInWishlist) {
+                        // Remove from wishlist
+                        button.classList.remove('bg-red-500', 'border-red-500', 'text-white');
+                        button.classList.add('border-accent', 'text-accent', 'bg-transparent');
+                        svg.setAttribute('fill', 'none');
+                        span.textContent = 'Add to Wishlist';
+                    } else {
+                        // Add to wishlist
+                        button.classList.remove('border-accent', 'text-accent', 'bg-transparent');
+                        button.classList.add('bg-red-500', 'border-red-500', 'text-white');
+                        svg.setAttribute('fill', 'currentColor');
+                        span.textContent = 'Remove from Wishlist';
+                    }
+                    
+                    button.disabled = false;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    button.disabled = false;
+                    alert(i18nMessage('wishlist_update_failed', 'Failed to update wishlist. Please try again.'));
+                });
+                
+                return false;
+            });
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% block title %}Explore All - BuildBox{% endblock %}
+
+{% block content %}
+<div class="bg-gray-100 dark:bg-gray-900 min-h-screen">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Continue Browsing</h1>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">Mixed picks from PC components only</p>
+      </div>
+      <a href="{% url 'home' %}" class="px-5 py-2.5 rounded-lg text-sm font-medium bg-accent text-gray-900 hover:opacity-90">Back Home</a>
+    </div>
+
+    <form method="get" class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-3 rounded-2xl p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600">
+      <select name="category" class="px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
+        <option value="">All categories</option>
+        {% for cat in categories %}
+          <option value="{{ cat|lower }}" {% if current_category == cat|lower %}selected{% endif %}>{{ cat }}</option>
+        {% endfor %}
+      </select>
+      <input name="min_price" value="{{ min_price }}" placeholder="Min price" class="px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
+      <input name="max_price" value="{{ max_price }}" placeholder="Max price" class="px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
+      <select name="sort" class="px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
+        <option value="">Sort</option>
+        <option value="price_asc" {% if sort == "price_asc" %}selected{% endif %}>Price: Low to High</option>
+        <option value="price_desc" {% if sort == "price_desc" %}selected{% endif %}>Price: High to Low</option>
+        <option value="name_asc" {% if sort == "name_asc" %}selected{% endif %}>Name: A-Z</option>
+      </select>
+      <div class="md:col-span-4 flex gap-2">
+        <button class="px-4 py-2 rounded-xl text-sm font-semibold bg-accent text-gray-900 hover:opacity-90">Apply Filters</button>
+        <a href="{% url 'explore_all' %}" class="px-4 py-2 rounded-xl text-sm font-semibold border border-gray-200 dark:border-gray-600 text-gray-900 dark:text-white">Reset</a>
+      </div>
+    </form>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+      {% for card in cards %}
+        <div class="rounded-lg overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow cursor-pointer" onclick="window.location.href='{{ card.detail_url }}'">
+          <div class="relative overflow-hidden" style="height: 180px;">
+            {% if card.image %}
+              <img src="{{ card.image }}" alt="{{ card.name }}" class="w-full h-full object-cover">
+            {% else %}
+              <div class="w-full h-full bg-gray-200 dark:bg-gray-700"></div>
+            {% endif %}
+            {% if card.wishlist_url_name %}
+              <button type="button"
+                      class="wishlist-toggle absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full transition-all hover:scale-110 {% if card.in_wishlist %}bg-red-500{% else %}bg-gray-100/90{% endif %}"
+                      onclick="event.stopPropagation();"
+                      data-ct="{{ card.content_type_id }}"
+                      data-obj="{{ card.object_id }}">
+                <svg class="w-4 h-4 {% if card.in_wishlist %}text-white{% else %}text-gray-600{% endif %}" fill="{% if card.in_wishlist %}currentColor{% else %}none{% endif %}" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                </svg>
+              </button>
+            {% endif %}
+          </div>
+          <div class="p-4">
+            <span class="text-xs font-medium px-2 py-0.5 rounded bg-amber-50 text-amber-600">{{ card.category }}</span>
+            <h4 class="mt-2 mb-1 text-sm font-semibold text-gray-900 dark:text-white line-clamp-2">{{ card.name }}</h4>
+            <p class="text-xs text-gray-500 dark:text-gray-300 mb-3">{{ card.manufacturer }}</p>
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-gray-900 dark:text-white text-base">${{ card.price }}</span>
+              <span class="text-xs text-accent">View →</span>
+            </div>
+          </div>
+        </div>
+      {% empty %}
+        <div class="col-span-full rounded-lg p-8 text-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600">
+          <p class="text-gray-500 dark:text-gray-300">No items for showcase yet.</p>
+        </div>
+      {% endfor %}
+    </div>
+
+    {% if page_obj and page_obj.has_other_pages %}
+      <div class="flex items-center justify-center gap-2 mt-8">
+        {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="w-8 h-8 rounded text-sm font-medium transition-colors border border-gray-200 dark:border-gray-700 text-gray-500 flex items-center justify-center hover:opacity-70">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+          </a>
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+          {% if num == page_obj.number %}
+            <span class="w-8 h-8 rounded text-sm font-medium bg-accent text-gray-900 flex items-center justify-center">{{ num }}</span>
+          {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <a href="?page={{ num }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="w-8 h-8 rounded text-sm font-medium border border-gray-200 dark:border-gray-700 text-gray-500 flex items-center justify-center hover:opacity-70">{{ num }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="w-8 h-8 rounded text-sm font-medium transition-colors border border-gray-200 dark:border-gray-700 text-gray-500 flex items-center justify-center hover:opacity-70">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+<script>
+(() => {
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  const csrfToken = getCookie('csrftoken');
+  document.querySelectorAll('.wishlist-toggle').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const ct = btn.dataset.ct;
+      const obj = btn.dataset.obj;
+      const formData = new FormData();
+      formData.append('content_type_id', ct);
+      formData.append('object_id', obj);
+
+      const res = await fetch("{% url 'toggle_wishlist_ajax' %}", {
+        method: 'POST',
+        headers: { 'X-CSRFToken': csrfToken },
+        body: formData,
+      });
+
+      if (res.status === 401) {
+        window.location.href = "{% url 'login_view' %}";
+        return;
+      }
+      if (!res.ok) return;
+      const data = await res.json();
+      if (!data.ok) return;
+
+      const icon = btn.querySelector('svg');
+      if (data.in_wishlist) {
+        btn.classList.remove('bg-gray-100/90');
+        btn.classList.add('bg-red-500');
+        icon.classList.remove('text-gray-600');
+        icon.classList.add('text-white');
+        icon.setAttribute('fill', 'currentColor');
+      } else {
+        btn.classList.remove('bg-red-500');
+        btn.classList.add('bg-gray-100/90');
+        icon.classList.remove('text-white');
+        icon.classList.add('text-gray-600');
+        icon.setAttribute('fill', 'none');
+      }
+    });
+  });
+})();
+</script>
+{% endblock %}

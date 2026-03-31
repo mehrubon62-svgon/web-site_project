@@ -1,0 +1,9 @@
+asgiref==3.11.1
+crispy-tailwind==1.0.3
+Django==6.0.3
+django-crispy-forms==2.6
+django-filter==25.2
+Faker==40.11.1
+pillow==12.1.1
+psycopg2-binary==2.9.11
+sqlparse==0.5.5

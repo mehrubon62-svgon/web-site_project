@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="bg-gray-100 dark:bg-gray-900 min-h-screen">
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <!-- Breadcrumb -->
+        <div class="flex items-center gap-2 text-sm mb-6 flex-wrap text-gray-500">
+            <a href="{% url 'home' %}" class="hover:opacity-70 text-accent">Home</a>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+            <span class="text-gray-900 dark:text-white">{{ category }}</span>
+        </div>
+
+        <div class="flex gap-6">
+            <!-- Sidebar - desktop -->
+            <aside class="hidden lg:block w-[260px] flex-shrink-0 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-5 h-fit sticky top-20">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="font-semibold text-gray-900 dark:text-white">Filters</h3>
+                    <a href="?" class="text-xs hover:opacity-70 text-accent">Clear All</a>
+                </div>
+                
+                <form method="get" id="filter-form">
+                    {% block filters %}{% endblock %}
+                </form>
+            </aside>
+
+            <!-- Main content -->
+            <div class="flex-1 min-w-0">
+                <!-- Header bar -->
+                <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+                    <span class="text-sm text-gray-500">{{ page_obj.paginator.count }} products</span>
+                    <!-- Mobile filter toggle -->
+                    <button id="mobile-filter-btn" class="lg:hidden flex items-center gap-1 px-3 py-1.5 rounded text-sm border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+                        </svg>
+                        Filters
+                    </button>
+                </div>
+
+                <!-- Mobile filters -->
+                <div id="mobile-filters" class="hidden lg:hidden mb-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-5">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="font-semibold text-gray-900 dark:text-white">Filters</h3>
+                        <button id="close-mobile-filters" class="text-gray-500 hover:opacity-70">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <form method="get">
+                        {% block mobile_filters %}{% endblock %}
+                    </form>
+                </div>
+
+                <!-- Products Grid -->
+                {% if page_obj %}
+                    <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                        {% block products %}{% endblock %}
+                    </div>
+
+                    <!-- Pagination -->
+                    {% if page_obj.has_other_pages %}
+                        <div class="flex items-center justify-center gap-2 mt-8">
+                            {% if page_obj.has_previous %}
+                                <a href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="w-8 h-8 rounded text-sm font-medium transition-colors border border-gray-200 dark:border-gray-700 text-gray-500 flex items-center justify-center hover:opacity-70">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                    </svg>
+                                </a>
+                            {% endif %}
+
+                            {% for num in page_obj.paginator.page_range %}
+                                {% if num == page_obj.number %}
+                                    <span class="w-8 h-8 rounded text-sm font-medium bg-accent text-gray-900 flex items-center justify-center">{{ num }}</span>
+                                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                                    <a href="?page={{ num }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="w-8 h-8 rounded text-sm font-medium border border-gray-200 dark:border-gray-700 text-gray-500 flex items-center justify-center hover:opacity-70">{{ num }}</a>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                                <a href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="w-8 h-8 rounded text-sm font-medium transition-colors border border-gray-200 dark:border-gray-700 text-gray-500 flex items-center justify-center hover:opacity-70">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
+                                </a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="text-center py-16 text-gray-500">
+                        <svg class="w-16 h-16 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                        </svg>
+                        <p class="text-lg mb-2">No products found</p>
+                        <a href="?" class="text-sm hover:opacity-70 text-accent">Clear filters</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Mobile filter toggle
+    const mobileFilterBtn = document.getElementById('mobile-filter-btn');
+    const mobileFilters = document.getElementById('mobile-filters');
+    const closeMobileFilters = document.getElementById('close-mobile-filters');
+
+    if (mobileFilterBtn) {
+        mobileFilterBtn.addEventListener('click', () => {
+            mobileFilters.classList.toggle('hidden');
+        });
+    }
+
+    if (closeMobileFilters) {
+        closeMobileFilters.addEventListener('click', () => {
+            mobileFilters.classList.add('hidden');
+        });
+    }
+
+    {% block extra_js %}{% endblock %}
+</script>
+
+<script src="{% static 'js/wishlist.js' %}"></script>
+{% endblock %}

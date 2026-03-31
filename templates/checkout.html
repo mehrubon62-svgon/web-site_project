@@ -1,0 +1,411 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout - BuildBox{% endblock %}
+
+{% block content %}
+<section class="min-h-screen bg-gray-100 dark:bg-gray-900">
+    <div id="processing-overlay" class="fixed inset-0 z-50 hidden flex-col items-center justify-center bg-black/60">
+        <div class="w-12 h-12 rounded-full border-4 border-t-transparent border-accent animate-spin mb-4"></div>
+        <p class="text-white font-medium">Processing your order...</p>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+        <div class="flex items-center gap-2 text-sm mb-6 text-gray-500 dark:text-gray-400">
+            <a href="{% url 'home' %}" class="hover:opacity-70 text-accent">Home</a>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            <a href="{% url 'shopping_cart' %}" class="hover:opacity-70 text-accent">Cart</a>
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+            <span>Checkout</span>
+        </div>
+
+        <h1 class="mb-8 text-[28px] font-bold text-gray-900 dark:text-white" style="letter-spacing:-0.01em;">Checkout</h1>
+
+        <div class="flex items-center mb-10">
+            <div class="flex items-center flex-1">
+                <div class="flex flex-col items-center">
+                    <div id="step-dot-1" class="w-9 h-9 rounded-full flex items-center justify-center bg-accent text-gray-900">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7h18M3 12h18M3 17h18"></path></svg>
+                    </div>
+                    <span class="text-xs mt-1 font-medium text-gray-900 dark:text-white">Shipping</span>
+                </div>
+                <div id="step-line-1" class="flex-1 h-px mx-3 mb-5 bg-gray-200 dark:bg-gray-700"></div>
+            </div>
+            <div class="flex items-center flex-1">
+                <div class="flex flex-col items-center">
+                    <div id="step-dot-2" class="w-9 h-9 rounded-full flex items-center justify-center bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2" stroke-width="2"></rect></svg>
+                    </div>
+                    <span class="text-xs mt-1 font-medium text-gray-500 dark:text-gray-400">Payment</span>
+                </div>
+                <div id="step-line-2" class="flex-1 h-px mx-3 mb-5 bg-gray-200 dark:bg-gray-700"></div>
+            </div>
+            <div class="flex items-center">
+                <div class="flex flex-col items-center">
+                    <div id="step-dot-3" class="w-9 h-9 rounded-full flex items-center justify-center bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6M7 4h10a2 2 0 012 2v12a2 2 0 01-2 2H7a2 2 0 01-2-2V6a2 2 0 012-2z"></path></svg>
+                    </div>
+                    <span class="text-xs mt-1 font-medium text-gray-500 dark:text-gray-400">Review</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col lg:flex-row gap-6">
+            <div class="flex-1">
+                <div class="rounded-lg p-6 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md">
+                    <div id="step-1">
+                        <h2 class="mb-5 text-[20px] font-semibold text-gray-900 dark:text-white">Shipping Information</h2>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="sm:col-span-2">
+                                <label class="block text-sm text-gray-500 dark:text-gray-400 mb-1.5">Full Name *</label>
+                                <input id="full_name" type="text" value="{{ saved_address.full_name|default:'' }}" placeholder="Muhammad Ali" class="w-full px-3.5 py-2.5 rounded-md border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:border-accent outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-500 dark:text-gray-400 mb-1.5">Email *</label>
+                                <input id="email" type="email" value="{{ saved_address.email|default:'' }}" placeholder="you@example.com" class="w-full px-3.5 py-2.5 rounded-md border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:border-accent outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-500 dark:text-gray-400 mb-1.5">Phone</label>
+                                <input id="phone" type="tel" value="{{ saved_address.phone|default:'' }}" placeholder="+992 90 000 00 00" class="w-full px-3.5 py-2.5 rounded-md border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:border-accent outline-none">
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label class="block text-sm text-gray-500 dark:text-gray-400 mb-1.5">Address Line 1 *</label>
+                                <input id="address1" type="text" value="{{ saved_address.address1|default:'' }}" placeholder="Rudaki Avenue 10" class="w-full px-3.5 py-2.5 rounded-md border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:border-accent outline-none">
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label class="block text-sm text-gray-500 dark:text-gray-400 mb-1.5">Address Line 2 (optional)</label>
+                                <input id="address2" type="text" value="{{ saved_address.address2|default:'' }}" placeholder="Apartment, office, floor" class="w-full px-3.5 py-2.5 rounded-md border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:border-accent outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-500 dark:text-gray-400 mb-1.5">City *</label>
+                                <select id="city" class="w-full px-3.5 py-2.5 rounded-md border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:border-accent outline-none">
+                                    <option value="">Select city</option>
+                                    <option value="Dushanbe" {% if saved_address.city == 'Dushanbe' %}selected{% endif %}>Dushanbe</option>
+                                    <option value="Khujand" {% if saved_address.city == 'Khujand' %}selected{% endif %}>Khujand</option>
+                                    <option value="Bokhtar" {% if saved_address.city == 'Bokhtar' %}selected{% endif %}>Bokhtar</option>
+                                    <option value="Kulob" {% if saved_address.city == 'Kulob' %}selected{% endif %}>Kulob</option>
+                                    <option value="Panjakent" {% if saved_address.city == 'Panjakent' %}selected{% endif %}>Panjakent</option>
+                                    <option value="Tursunzoda" {% if saved_address.city == 'Tursunzoda' %}selected{% endif %}>Tursunzoda</option>
+                                    <option value="Hisor" {% if saved_address.city == 'Hisor' %}selected{% endif %}>Hisor</option>
+                                    <option value="Istaravshan" {% if saved_address.city == 'Istaravshan' %}selected{% endif %}>Istaravshan</option>
+                                    <option value="Isfara" {% if saved_address.city == 'Isfara' %}selected{% endif %}>Isfara</option>
+                                    <option value="Vahdat" {% if saved_address.city == 'Vahdat' %}selected{% endif %}>Vahdat</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-500 dark:text-gray-400 mb-1.5">Postal Code *</label>
+                                <input id="zip" type="text" value="{{ saved_address.zip_code|default:'' }}" placeholder="734000" class="w-full px-3.5 py-2.5 rounded-md border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:border-accent outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-500 dark:text-gray-400 mb-1.5">Country *</label>
+                                <select id="country" class="w-full px-3.5 py-2.5 rounded-md border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:border-accent outline-none">
+                                    <option value="Tajikistan" {% if saved_address.country == 'Tajikistan' or not saved_address.country %}selected{% endif %}>Tajikistan</option>
+                                </select>
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input id="save_address" type="checkbox" class="w-4 h-4 accent-accent">
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">Save address for future orders</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="flex justify-end mt-6">
+                            <button id="to-step-2" type="button" class="px-8 py-2.5 rounded-lg text-sm font-medium bg-accent text-gray-900 hover:opacity-90 transition-opacity">Continue to Payment →</button>
+                        </div>
+                    </div>
+
+                    <div id="step-2" class="hidden">
+                        <h2 class="mb-5 text-[20px] font-semibold text-gray-900 dark:text-white">Payment Method</h2>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+                            <label class="flex items-center gap-2 p-3 rounded-lg border border-accent bg-amber-50 dark:bg-gray-700 cursor-pointer"><input type="radio" name="pay" value="card" checked class="accent-accent"><span class="text-xs font-medium text-gray-900 dark:text-white">Credit/Debit Card</span></label>
+                            <label class="flex items-center gap-2 p-3 rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer"><input type="radio" name="pay" value="payme" class="accent-accent"><span class="text-xs font-medium text-gray-900 dark:text-white">PayMe</span></label>
+                            <label class="flex items-center gap-2 p-3 rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer"><input type="radio" name="pay" value="alif" class="accent-accent"><span class="text-xs font-medium text-gray-900 dark:text-white">Alif Mobi</span></label>
+                            <label class="flex items-center gap-2 p-3 rounded-lg border border-gray-200 dark:border-gray-700 cursor-pointer"><input type="radio" name="pay" value="cod" class="accent-accent"><span class="text-xs font-medium text-gray-900 dark:text-white">Cash on Delivery</span></label>
+                        </div>
+                        <div id="card-fields" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="sm:col-span-2">
+                                <label class="block text-sm text-gray-500 dark:text-gray-400 mb-1.5">Card Number</label>
+                                <input id="card-number" type="text" placeholder="8600 0000 0000 0000" class="w-full px-3.5 py-2.5 rounded-md border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:border-accent outline-none">
+                                <p id="card-error" class="hidden mt-1 text-xs text-red-500"></p>
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label class="block text-sm text-gray-500 dark:text-gray-400 mb-1.5">Cardholder Name</label>
+                                <input id="card-name" type="text" placeholder="Muhammad Ali" class="w-full px-3.5 py-2.5 rounded-md border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:border-accent outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-500 dark:text-gray-400 mb-1.5">Expiration (MM/YY)</label>
+                                <input id="card-expiry" type="text" placeholder="12/30" class="w-full px-3.5 py-2.5 rounded-md border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:border-accent outline-none">
+                                <p id="expiry-error" class="hidden mt-1 text-xs text-red-500"></p>
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-500 dark:text-gray-400 mb-1.5">CVV</label>
+                                <input id="card-cvv" type="password" placeholder="123" class="w-full px-3.5 py-2.5 rounded-md border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:border-accent outline-none">
+                                <p id="cvv-error" class="hidden mt-1 text-xs text-red-500"></p>
+                            </div>
+                            <div class="sm:col-span-2">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="checkbox" class="w-4 h-4 accent-accent">
+                                    <span class="text-sm text-gray-500 dark:text-gray-400">Save card for future purchases</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between mt-6">
+                            <button id="to-step-1" type="button" class="px-6 py-2.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white hover:opacity-80 transition-opacity">← Back</button>
+                            <button id="to-step-3" type="button" class="px-8 py-2.5 rounded-lg text-sm font-medium bg-accent text-gray-900 hover:opacity-90 transition-opacity">Continue →</button>
+                        </div>
+                    </div>
+
+                    <div id="step-3" class="hidden">
+                        <h2 class="mb-5 text-[20px] font-semibold text-gray-900 dark:text-white">Review Your Order</h2>
+                        <div class="rounded-lg p-4 mb-4 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="text-sm font-semibold text-gray-900 dark:text-white">Shipping Address</h4>
+                                <button id="edit-shipping" type="button" class="text-xs text-accent hover:opacity-70">Edit</button>
+                            </div>
+                            <p id="shipping-review" class="text-sm text-gray-500 dark:text-gray-300">Not provided</p>
+                        </div>
+
+                        <div class="rounded-lg p-4 mb-4 bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600">
+                            <h4 class="text-sm font-semibold mb-3 text-gray-900 dark:text-white">Order Items ({{ cart_items|length }})</h4>
+                            <div class="space-y-2">
+                                {% for item in cart_items %}
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded overflow-hidden flex-shrink-0 bg-gray-200 dark:bg-gray-600">
+                                            {% if item.image %}<img src="{{ item.image }}" alt="{{ item.name }}" class="w-full h-full object-cover">{% endif %}
+                                        </div>
+                                        <div class="flex-1 min-w-0">
+                                            <p class="text-xs font-medium truncate text-gray-900 dark:text-white">{{ item.name }}</p>
+                                            <p class="text-xs text-gray-500 dark:text-gray-400">Qty: {{ item.quantity }}</p>
+                                        </div>
+                                        <span class="text-sm font-semibold text-gray-900 dark:text-white">${{ item.line_total|floatformat:2 }}</span>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-sm text-gray-500 dark:text-gray-400 mb-1.5">Order Notes (optional)</label>
+                            <textarea name="order_note" rows="3" placeholder="Special instructions for your order..." class="w-full px-3.5 py-2.5 rounded-md border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:border-accent outline-none"></textarea>
+                        </div>
+
+                        <label class="flex items-start gap-2 mb-6 cursor-pointer">
+                            <input id="agreed" type="checkbox" class="w-4 h-4 mt-0.5 accent-accent">
+                            <span class="text-sm text-gray-500 dark:text-gray-300">I agree to the <a href="#" class="text-accent hover:opacity-70">Terms of Service</a> and <a href="#" class="text-accent hover:opacity-70">Privacy Policy</a></span>
+                        </label>
+
+                        <div class="flex items-center justify-between">
+                            <button id="to-step-2-back" type="button" class="px-6 py-2.5 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white hover:opacity-80 transition-opacity">← Back</button>
+                            <form id="place-order-form" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="place_order">
+                                <button id="place-order-btn" type="submit" disabled class="px-8 py-2.5 rounded-lg text-sm font-medium bg-accent text-gray-900 disabled:opacity-40 hover:opacity-90 transition-opacity">Place Order — ${{ total|floatformat:2 }}</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:w-[300px]">
+                <div class="rounded-lg p-5 sticky top-24 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md">
+                    <h3 class="font-semibold mb-4 text-gray-900 dark:text-white">Order Summary</h3>
+                    <div class="space-y-3 mb-4 pb-4 border-b border-gray-200 dark:border-gray-700">
+                        {% for item in cart_items %}
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded overflow-hidden flex-shrink-0 relative bg-gray-200 dark:bg-gray-600">
+                                    {% if item.image %}<img src="{{ item.image }}" alt="{{ item.name }}" class="w-full h-full object-cover">{% endif %}
+                                    <span class="absolute -top-1 -right-1 w-4 h-4 rounded-full text-[9px] font-bold flex items-center justify-center bg-accent text-gray-900">{{ item.quantity }}</span>
+                                </div>
+                                <div class="flex-1 min-w-0"><p class="text-xs truncate text-gray-900 dark:text-white">{{ item.name }}</p></div>
+                                <span class="text-xs font-semibold text-gray-900 dark:text-white">${{ item.line_total|floatformat:2 }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="space-y-2 mb-4 pb-4 border-b border-gray-200 dark:border-gray-700">
+                        <div class="flex justify-between text-sm"><span class="text-gray-500 dark:text-gray-400">Subtotal</span><span class="text-gray-900 dark:text-white">${{ subtotal|floatformat:2 }}</span></div>
+                        <div class="flex justify-between text-sm"><span class="text-gray-500 dark:text-gray-400">Shipping</span><span class="{% if shipping == 0 %}text-green-500{% else %}text-gray-900 dark:text-white{% endif %}">{% if shipping == 0 %}Free{% else %}${{ shipping|floatformat:2 }}{% endif %}</span></div>
+                        <div class="flex justify-between text-sm"><span class="text-gray-500 dark:text-gray-400">Tax (1%)</span><span class="text-gray-900 dark:text-white">${{ tax|floatformat:2 }}</span></div>
+                    </div>
+                    <div class="flex justify-between"><span class="font-semibold text-gray-900 dark:text-white">Total</span><span class="text-[20px] font-bold text-gray-900 dark:text-white">${{ total|floatformat:2 }}</span></div>
+                    <div class="mt-5 pt-4 border-t border-gray-200 dark:border-gray-700">
+                        <p class="text-xs text-center mb-2 text-gray-500 dark:text-gray-400">Secure checkout</p>
+                        <div class="flex justify-center gap-3">
+                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400">SSL</span>
+                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400">256-bit</span>
+                            <span class="px-2 py-1 rounded text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400">PCI DSS</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    (() => {
+        let step = 1;
+        const dots = {
+            1: document.getElementById('step-dot-1'),
+            2: document.getElementById('step-dot-2'),
+            3: document.getElementById('step-dot-3'),
+        };
+        const lines = {
+            1: document.getElementById('step-line-1'),
+            2: document.getElementById('step-line-2'),
+        };
+        const panels = {
+            1: document.getElementById('step-1'),
+            2: document.getElementById('step-2'),
+            3: document.getElementById('step-3'),
+        };
+
+        function activateStep(next) {
+            step = next;
+            Object.keys(panels).forEach(k => panels[k].classList.add('hidden'));
+            panels[next].classList.remove('hidden');
+
+            [1,2,3].forEach(i => {
+                dots[i].className = 'w-9 h-9 rounded-full flex items-center justify-center';
+                if (i < step) {
+                    dots[i].classList.add('bg-green-500', 'text-white');
+                } else if (i === step) {
+                    dots[i].classList.add('bg-accent', 'text-gray-900');
+                } else {
+                    dots[i].classList.add('bg-gray-200', 'dark:bg-gray-700', 'text-gray-500', 'dark:text-gray-400');
+                }
+            });
+
+            [1,2].forEach(i => {
+                if (i < step) lines[i].className = 'flex-1 h-px mx-3 mb-5 bg-green-500';
+                else lines[i].className = 'flex-1 h-px mx-3 mb-5 bg-gray-200 dark:bg-gray-700';
+            });
+        }
+
+        document.getElementById('to-step-2').addEventListener('click', () => activateStep(2));
+        document.getElementById('to-step-1').addEventListener('click', () => activateStep(1));
+        document.getElementById('to-step-3').addEventListener('click', (e) => {
+            const name = document.getElementById('full_name').value || 'Not provided';
+            const address1 = document.getElementById('address1').value;
+            const city = document.getElementById('city').value;
+            const zip = document.getElementById('zip').value;
+            const country = document.getElementById('country').value || 'Tajikistan';
+
+            const selectedPayment = document.querySelector('input[name="pay"]:checked')?.value || 'card';
+            const cardNumber = document.getElementById('card-number').value || '';
+            const cardName = document.getElementById('card-name').value || '';
+            const cardExpiry = document.getElementById('card-expiry').value || '';
+            const cardCvv = document.getElementById('card-cvv').value || '';
+            const cardError = document.getElementById('card-error');
+            const expiryError = document.getElementById('expiry-error');
+            const cvvError = document.getElementById('cvv-error');
+            cardError.classList.add('hidden');
+            expiryError.classList.add('hidden');
+            cvvError.classList.add('hidden');
+
+            function isValidLuhn(number) {
+                const digits = number.replace(/\D/g, '');
+                if (digits.length < 12) return false;
+                let sum = 0;
+                let shouldDouble = false;
+                for (let i = digits.length - 1; i >= 0; i--) {
+                    let digit = parseInt(digits.charAt(i), 10);
+                    if (shouldDouble) {
+                        digit *= 2;
+                        if (digit > 9) digit -= 9;
+                    }
+                    sum += digit;
+                    shouldDouble = !shouldDouble;
+                }
+                return sum % 10 === 0;
+            }
+
+            function isValidExpiry(value) {
+                const match = value.match(/^(\d{2})\/(\d{2})$/);
+                if (!match) return false;
+                const month = parseInt(match[1], 10);
+                const year = 2000 + parseInt(match[2], 10);
+                if (month < 1 || month > 12) return false;
+                const now = new Date();
+                const exp = new Date(year, month);
+                return exp > now;
+            }
+
+            if (selectedPayment === 'card' && !isValidLuhn(cardNumber)) {
+                e.preventDefault();
+                cardError.textContent = 'Invalid card number.';
+                cardError.classList.remove('hidden');
+                return;
+            }
+            if (selectedPayment === 'card' && !cardName.trim()) {
+                e.preventDefault();
+                cardError.textContent = 'Cardholder name is required.';
+                cardError.classList.remove('hidden');
+                return;
+            }
+            if (selectedPayment === 'card' && !isValidExpiry(cardExpiry.trim())) {
+                e.preventDefault();
+                expiryError.textContent = 'Invalid expiry date (MM/YY).';
+                expiryError.classList.remove('hidden');
+                return;
+            }
+            if (selectedPayment === 'card' && !/^\d{3,4}$/.test(cardCvv.trim())) {
+                e.preventDefault();
+                cvvError.textContent = 'Invalid CVV.';
+                cvvError.classList.remove('hidden');
+                return;
+            }
+
+            document.getElementById('shipping-review').innerText = `${name}\n${address1}${address1 ? ', ' : ''}${city} ${zip}\n${country}`;
+            activateStep(3);
+        });
+        document.getElementById('to-step-2-back').addEventListener('click', () => activateStep(2));
+        document.getElementById('edit-shipping').addEventListener('click', () => activateStep(1));
+
+        const agreed = document.getElementById('agreed');
+        const placeOrderBtn = document.getElementById('place-order-btn');
+        const paymentRadios = document.querySelectorAll('input[name="pay"]');
+        const cardFields = document.getElementById('card-fields');
+        agreed.addEventListener('change', () => {
+            placeOrderBtn.disabled = !agreed.checked;
+        });
+
+        function toggleCardFields() {
+            const selectedPayment = document.querySelector('input[name="pay"]:checked')?.value || 'card';
+            if (selectedPayment === 'card') {
+                cardFields.classList.remove('hidden');
+            } else {
+                cardFields.classList.add('hidden');
+            }
+        }
+        paymentRadios.forEach(radio => radio.addEventListener('change', toggleCardFields));
+        toggleCardFields();
+
+        const placeOrderForm = document.getElementById('place-order-form');
+        const overlay = document.getElementById('processing-overlay');
+        placeOrderForm.addEventListener('submit', () => {
+            const fields = {
+                full_name: document.getElementById('full_name').value || '',
+                email: document.getElementById('email').value || '',
+                phone: document.getElementById('phone').value || '',
+                address1: document.getElementById('address1').value || '',
+                address2: document.getElementById('address2').value || '',
+                city: document.getElementById('city').value || '',
+                zip: document.getElementById('zip').value || '',
+                country: document.getElementById('country').value || 'Tajikistan',
+                save_address: document.getElementById('save_address').checked ? '1' : '0',
+                order_note: document.querySelector('textarea[name="order_note"]')?.value || '',
+            };
+            Object.entries(fields).forEach(([key, value]) => {
+                const existing = placeOrderForm.querySelector(`input[name="${key}"]`);
+                if (existing) existing.remove();
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = value;
+                placeOrderForm.appendChild(input);
+            });
+
+            overlay.classList.remove('hidden');
+            overlay.classList.add('flex');
+        });
+    })();
+</script>
+{% endblock %}

@@ -1,0 +1,118 @@
+{% extends 'catalog/catalog_base.html' %}
+
+{% block filters %}
+<div class="space-y-5">
+    <div>
+        <p class="text-xs font-medium mb-2 text-gray-500 uppercase">Search by Name</p>
+        <input type="text" name="name" value="{{ filter.form.name.value|default:'' }}" placeholder="e.g. XPS, ThinkPad" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-sm outline-none focus:border-accent">
+    </div>
+    <div>
+        <p class="text-xs font-medium mb-2 text-gray-500 uppercase">Manufacturer</p>
+        <div class="space-y-2">
+            {% for choice in filter.form.manufacturer %}
+                <label class="flex items-center gap-2 cursor-pointer">
+                    {{ choice.tag }}
+                    <span class="text-sm text-gray-900 dark:text-white">{{ choice.choice_label }}</span>
+                </label>
+            {% endfor %}
+        </div>
+    </div>
+    <div>
+        <p class="text-xs font-medium mb-2 text-gray-500 uppercase">Category</p>
+        <div class="space-y-2">
+            {% for choice in filter.form.category %}
+                <label class="flex items-center gap-2 cursor-pointer">
+                    {{ choice.tag }}
+                    <span class="text-sm text-gray-900 dark:text-white">{{ choice.choice_label }}</span>
+                </label>
+            {% endfor %}
+        </div>
+    </div>
+    <div>
+        <p class="text-xs font-medium mb-2 text-gray-500 uppercase">Price ($)</p>
+        <div class="flex gap-2">
+            <input type="number" name="price_min" value="{{ filter.form.price_min.value|default:'' }}" placeholder="Min" class="w-1/2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-sm outline-none focus:border-accent">
+            <input type="number" name="price_max" value="{{ filter.form.price_max.value|default:'' }}" placeholder="Max" class="w-1/2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-sm outline-none focus:border-accent">
+        </div>
+    </div>
+    <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" name="in_stock" id="in_stock" value="true" {% if filter.form.in_stock.value %}checked{% endif %} class="w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-accent focus:ring-accent cursor-pointer">
+        <span class="text-sm text-gray-900 dark:text-white">In Stock Only</span>
+    </label>
+    <button type="submit" class="w-full py-2 rounded text-sm font-medium transition-opacity hover:opacity-90 bg-accent text-gray-900">
+        Apply Filters
+    </button>
+</div>
+{% endblock %}
+
+{% block mobile_filters %}
+<div class="space-y-5">
+    <div>
+        <p class="text-xs font-medium mb-2 text-gray-500 uppercase">Search by Name</p>
+        <input type="text" name="name" value="{{ filter.form.name.value|default:'' }}" placeholder="e.g. XPS" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-sm outline-none focus:border-accent">
+    </div>
+    <div>
+        <p class="text-xs font-medium mb-2 text-gray-500 uppercase">Price ($)</p>
+        <div class="flex gap-2">
+            <input type="number" name="price_min" value="{{ filter.form.price_min.value|default:'' }}" placeholder="Min" class="w-1/2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-sm outline-none focus:border-accent">
+            <input type="number" name="price_max" value="{{ filter.form.price_max.value|default:'' }}" placeholder="Max" class="w-1/2 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white text-sm outline-none focus:border-accent">
+        </div>
+    </div>
+    <label class="flex items-center gap-2 cursor-pointer">
+        <input type="checkbox" name="in_stock" value="true" {% if filter.form.in_stock.value %}checked{% endif %} class="w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-accent focus:ring-accent cursor-pointer">
+        <span class="text-sm text-gray-900 dark:text-white">In Stock Only</span>
+    </label>
+    <button type="submit" class="w-full py-2 rounded text-sm font-medium transition-opacity hover:opacity-90 bg-accent text-gray-900">
+        Apply Filters
+    </button>
+</div>
+{% endblock %}
+
+{% block products %}
+{% for laptop in page_obj %}
+    <div class="product-card rounded-lg overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-shadow hover:shadow-lg cursor-pointer" onclick="window.location.href='{% url 'laptop_detail' laptop.pk %}'">
+        <div class="product-image relative overflow-hidden h-52">
+            {% if laptop.image %}
+                <img src="{{ laptop.image.url }}" alt="{{ laptop.name }}" class="w-full h-full object-cover">
+            {% else %}
+                <div class="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                    <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+            {% endif %}
+            <form method="post" action="{% url 'add_wish_laptop' laptop.pk %}" class="wishlist-form" onclick="event.stopPropagation();">
+                {% csrf_token %}
+                <button type="submit" class="absolute top-2 right-2 w-8 h-8 flex items-center justify-center rounded-full hover:scale-110 {% if laptop.pk in user_wishlist %}bg-red-500{% else %}bg-gray-100/90{% endif %}">
+                    <svg class="w-4 h-4 {% if laptop.pk in user_wishlist %}text-white{% else %}text-gray-600{% endif %}" fill="{% if laptop.pk in user_wishlist %}currentColor{% else %}none{% endif %}" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    </svg>
+                </button>
+            </form>
+        </div>
+        <div class="product-info p-4 flex flex-col">
+            <h4 class="product-title text-sm font-semibold mb-1 line-clamp-2 text-gray-900 dark:text-white">{{ laptop.name }}</h4>
+            <ul class="product-specs mb-2 text-xs text-gray-500">
+                <li>• {{ laptop.processor_name }}</li>
+                <li>• {{ laptop.ram_size }}GB RAM • {{ laptop.storage_size }}GB {{ laptop.storage_type }}</li>
+            </ul>
+            <div class="flex items-center gap-1 mb-3">
+                <span class="w-1.5 h-1.5 rounded-full {% if laptop.stock > 0 %}bg-green-500{% else %}bg-red-500{% endif %}"></span>
+                <span class="text-xs {% if laptop.stock > 0 %}text-green-500{% else %}text-red-500{% endif %}">
+                    {% if laptop.stock > 0 %}In Stock{% else %}Out of Stock{% endif %}
+                </span>
+            </div>
+            <div class="product-actions mt-auto">
+                <p class="product-price font-bold mb-2 text-gray-900 dark:text-white text-lg">${{ laptop.price }}</p>
+                <form method="post" action="{% url 'cart_add' 'laptop' laptop.pk %}" onclick="event.stopPropagation();">
+                    {% csrf_token %}
+                    <button type="submit" class="w-full py-2 rounded text-sm font-medium transition-opacity hover:opacity-90 bg-accent text-gray-900" {% if laptop.stock == 0 %}disabled{% endif %}>
+                        Add to Cart
+                    </button>
+                </form>
+                <span class="block text-center text-xs mt-2 text-accent">View Details</span>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+{% endblock %}

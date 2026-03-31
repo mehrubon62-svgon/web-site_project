@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Profile - BuildBox{% endblock %}
+
+{% block content %}
+<section class="py-10 bg-gray-100 dark:bg-gray-900 min-h-[70vh]">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+        {% if messages %}
+            <div class="mb-6 space-y-2">
+                {% for message in messages %}
+                    <div class="px-4 py-3 rounded-lg text-sm border {% if message.tags == 'success' %}bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800{% else %}bg-red-50 text-red-700 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-lg overflow-hidden">
+            <div class="px-6 sm:px-8 py-8 border-b border-gray-200 dark:border-gray-700">
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Edit Profile</h1>
+                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Update your avatar and bio.</p>
+            </div>
+
+            <form method="post" enctype="multipart/form-data" class="px-6 sm:px-8 py-8 space-y-6">
+                {% csrf_token %}
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="first_name" class="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">First Name</label>
+                        <input
+                            type="text"
+                            id="first_name"
+                            name="first_name"
+                            value="{{ profile_user.first_name }}"
+                            class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent transition-all outline-none bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                            placeholder="Your first name"
+                        >
+                    </div>
+                    <div>
+                        <label for="last_name" class="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Last Name</label>
+                        <input
+                            type="text"
+                            id="last_name"
+                            name="last_name"
+                            value="{{ profile_user.last_name }}"
+                            class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent transition-all outline-none bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                            placeholder="Your last name"
+                        >
+                    </div>
+                </div>
+
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Nickname (Username)</label>
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        value="{{ profile_user.username }}"
+                        required
+                        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent transition-all outline-none bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                        placeholder="Your unique nickname"
+                    >
+                </div>
+
+                <div>
+                    <label for="profile_image" class="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Avatar</label>
+                    <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                        <img src="{{ profile_user.profile_image.url }}" alt="Current avatar" class="w-20 h-20 rounded-full object-cover border-2 border-gray-200 dark:border-gray-700 bg-gray-200 dark:bg-gray-700">
+                        <input
+                            type="file"
+                            id="profile_image"
+                            name="profile_image"
+                            accept="image/*"
+                            class="w-full sm:w-auto text-sm text-gray-700 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-accent file:text-gray-900 file:font-medium hover:file:opacity-90"
+                        >
+                    </div>
+                </div>
+
+                <div>
+                    <label for="bio" class="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Bio</label>
+                    <textarea
+                        id="bio"
+                        name="bio"
+                        rows="5"
+                        maxlength="500"
+                        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent transition-all outline-none bg-white dark:bg-gray-900 text-gray-900 dark:text-white"
+                        placeholder="Tell others something about yourself"
+                    >{{ profile_user.bio }}</textarea>
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Up to 500 characters.</p>
+                </div>
+
+                <div class="flex flex-wrap gap-3">
+                    <button type="submit" class="inline-flex items-center gap-2 px-5 py-2.5 bg-accent text-gray-900 rounded-lg font-medium hover:opacity-90 transition-opacity">
+                        Save Changes
+                    </button>
+                    <a href="{% url 'profile' %}" class="inline-flex items-center gap-2 px-5 py-2.5 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg font-medium hover:opacity-80 transition-opacity">
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

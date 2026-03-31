@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile - BuildBox{% endblock %}
+
+{% block content %}
+<section class="py-10 bg-gray-100 dark:bg-gray-900 min-h-[70vh]">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+        {% if messages %}
+            <div class="mb-6 space-y-2">
+                {% for message in messages %}
+                    <div class="px-4 py-3 rounded-lg text-sm border {% if message.tags == 'success' %}bg-green-50 text-green-700 border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800{% else %}bg-red-50 text-red-700 border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-lg overflow-hidden">
+            <div class="px-6 sm:px-8 py-8 border-b border-gray-200 dark:border-gray-700">
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-white">My Profile</h1>
+                <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">Manage your BuildBox profile information.</p>
+            </div>
+
+            <div class="px-6 sm:px-8 py-8">
+                <div class="flex flex-col sm:flex-row sm:items-start gap-6">
+                    <img src="{{ profile_user.profile_image.url }}" alt="Profile image" class="w-28 h-28 rounded-full object-cover border-4 border-accent/30 bg-gray-200 dark:bg-gray-700">
+
+                    <div class="flex-1">
+                        {% if profile_user.first_name or profile_user.last_name %}
+                            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">{{ profile_user.first_name }} {{ profile_user.last_name }}</h2>
+                            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">@{{ profile_user.username }}</p>
+                        {% else %}
+                            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">{{ profile_user.username }}</h2>
+                        {% endif %}
+                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ profile_user.email }}</p>
+
+                        <div class="mt-5">
+                            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide">Bio</h3>
+                            <p class="mt-2 text-gray-700 dark:text-gray-200 leading-relaxed">{{ profile_user.bio }}</p>
+                        </div>
+
+                        <div class="mt-6">
+                            <a href="{% url 'edit_profile' %}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-accent text-gray-900 rounded-lg font-medium hover:opacity-90 transition-opacity">
+                                Edit Profile
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

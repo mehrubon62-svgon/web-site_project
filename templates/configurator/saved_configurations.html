@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}My Configurations - BuildBox{% endblock %}
+
+{% block content %}
+<div class="bg-gray-100 dark:bg-gray-900 min-h-screen">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">My Configurations</h1>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-300">{{ configurations|length }} saved builds</p>
+      </div>
+      <a href="{% url 'configurator' %}" class="px-5 py-2.5 rounded-lg text-sm font-medium bg-accent text-gray-900 hover:opacity-90">Create New</a>
+    </div>
+
+    {% if configurations %}
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+        {% for config in configurations %}
+          <div class="rounded-lg p-5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 shadow-sm">
+            <div class="flex items-start justify-between mb-3">
+              <h3 class="font-semibold text-base text-gray-900 dark:text-white">{{ config.name }}</h3>
+              {% if config.check_compatibility %}
+                <span class="text-xs px-2 py-1 rounded-full bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300">Issues</span>
+              {% else %}
+                <span class="text-xs px-2 py-1 rounded-full bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300">Compatible</span>
+              {% endif %}
+            </div>
+
+            <div class="space-y-1.5 mb-4 text-sm text-gray-700 dark:text-gray-200">
+              {% if config.processor %}<p class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 text-gray-500 dark:text-gray-300" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="9" y="9" width="6" height="6"></rect></svg><span><span class="font-medium">CPU:</span> {{ config.processor.name }}</span></p>{% endif %}
+              {% if config.gpu %}<p class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 text-gray-500 dark:text-gray-300" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="12" rx="2"></rect><path d="M8 21h8"></path></svg><span><span class="font-medium">GPU:</span> {{ config.gpu.name }}</span></p>{% endif %}
+              {% if config.motherboard %}<p class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 text-gray-500 dark:text-gray-300" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"></rect><path d="M8 8h8M8 12h4M8 16h6"></path></svg><span><span class="font-medium">MB:</span> {{ config.motherboard.name }}</span></p>{% endif %}
+              {% if config.ram %}<p class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 text-gray-500 dark:text-gray-300" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="9" width="18" height="6" rx="1"></rect><path d="M7 15v2M10 15v2M14 15v2M17 15v2"></path></svg><span><span class="font-medium">RAM:</span> {{ config.ram.name }}</span></p>{% endif %}
+              {% if config.power_supply %}<p class="flex items-start gap-2"><svg class="w-4 h-4 mt-0.5 text-gray-500 dark:text-gray-300" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M13 3 5 14h6l-1 7 8-11h-6z"></path></svg><span><span class="font-medium">PSU:</span> {{ config.power_supply.name }} {{ config.power_supply.wattage }}W</span></p>{% endif %}
+            </div>
+
+            <div class="flex items-center justify-between mb-4">
+              <span class="text-2xl font-bold text-gray-900 dark:text-white">${{ config.calculate_total_price|floatformat:2 }}</span>
+              <span class="text-xs text-gray-500 dark:text-gray-300">{{ config.created_at|date:"M d, Y" }}</span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <a href="{% url 'configurator' %}?load={{ config.id }}" class="text-center py-2 rounded-lg text-sm font-semibold bg-accent text-gray-900 hover:opacity-90">Edit</a>
+              <form method="post" action="{% url 'add_saved_configuration_to_cart' config.id %}">
+                {% csrf_token %}
+                <button class="w-full py-2 rounded-lg text-sm font-semibold border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white hover:opacity-80">Add to Cart</button>
+              </form>
+            </div>
+            <form method="post" action="{% url 'delete_saved_configuration' config.id %}" class="mt-2">
+              {% csrf_token %}
+              <button class="w-full py-2 rounded-lg text-sm text-red-600 hover:opacity-80">Delete</button>
+            </form>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="rounded-lg p-8 text-center bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+        <p class="text-gray-500 mb-4">No configurations yet</p>
+        <a href="{% url 'configurator' %}" class="px-5 py-2.5 rounded-lg text-sm font-medium bg-accent text-gray-900 hover:opacity-90">Create first build</a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

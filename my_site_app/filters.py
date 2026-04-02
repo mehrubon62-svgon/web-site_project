@@ -158,6 +158,27 @@ class CaseFilter(django_filters.FilterSet):
         fields = ['name', 'manufacturer', 'form_factor']
 
 
+class CoolerFilter(django_filters.FilterSet):
+    name = django_filters.CharFilter(field_name='name', lookup_expr='icontains', label='Search by Name')
+    manufacturer = django_filters.CharFilter(field_name='manufacturer', lookup_expr='icontains', label='Manufacturer')
+    cooler_type = django_filters.MultipleChoiceFilter(
+        choices=Cooler.COOLER_TYPES,
+        widget=django_filters.widgets.forms.CheckboxSelectMultiple
+    )
+    price_min = django_filters.NumberFilter(field_name='price', lookup_expr='gte')
+    price_max = django_filters.NumberFilter(field_name='price', lookup_expr='lte')
+    in_stock = django_filters.BooleanFilter(method='filter_in_stock', label='In Stock')
+
+    def filter_in_stock(self, queryset, name, value):
+        if value:
+            return queryset.filter(stock__gt=0)
+        return queryset
+
+    class Meta:
+        model = Cooler
+        fields = ['name', 'manufacturer', 'cooler_type']
+
+
 class LaptopFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(field_name='name', lookup_expr='icontains', label='Search by Name')
     manufacturer = django_filters.MultipleChoiceFilter(

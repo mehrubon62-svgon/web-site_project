@@ -3,6 +3,7 @@ from .views import *
 
 urlpatterns = [
     path('home', Home.as_view(), name='home'),
+    path('about/', AboutUsView.as_view(), name='about_us'),
     path('cart/', ShoppingCartView.as_view(), name='shopping_cart'),
     path('checkout/', CheckoutView.as_view(), name='checkout'),
     path('cart/add/<str:model_name>/<int:pk>/', AddCatalogItemToCartView.as_view(), name='cart_add'),
@@ -16,6 +17,7 @@ urlpatterns = [
     path('catalog/storage/', StorageListView.as_view(), name='storage'),
     path('catalog/power-supplies/', PowerSupplyListView.as_view(), name='power_supplies'),
     path('catalog/cases/', CaseListView.as_view(), name='cases'),
+    path('catalog/coolers/', CoolerListView.as_view(), name='coolers'),
     path('catalog/laptops/', LaptopListView.as_view(), name='laptops'),
     
     # Product detail pages
@@ -26,6 +28,7 @@ urlpatterns = [
     path('storage/<int:pk>/', StorageDetailView.as_view(), name='storage_detail'),
     path('power-supply/<int:pk>/', PowerSupplyDetailView.as_view(), name='power_supply_detail'),
     path('case/<int:pk>/', CaseDetailView.as_view(), name='case_detail'),
+    path('cooler/<int:pk>/', CoolerDetailView.as_view(), name='cooler_detail'),
     path('laptop/<int:pk>/', LaptopDetailView.as_view(), name='laptop_detail'),
 
     # Wishlist
@@ -36,6 +39,7 @@ urlpatterns = [
     path('wishlist/add/storage/<int:pk>/', AddWishStorage.as_view(), name='add_wish_storage'),
     path('wishlist/add/power-supply/<int:pk>/', AddWishPowerSupply.as_view(), name='add_wish_power_supply'),
     path('wishlist/add/case/<int:pk>/', AddWishCase.as_view(), name='add_wish_case'),
+    path('wishlist/add/cooler/<int:pk>/', AddWishCooler.as_view(), name='add_wish_cooler'),
     path('wishlist/add/laptop/<int:pk>/', AddWishLaptop.as_view(), name='add_wish_laptop'),
     path('wishlist/', WishlistView.as_view(), name='wishlist'),
     path('wishlist/<int:pk>/remove/', RemoveWishlistItemView.as_view(), name='wishlist_remove'),

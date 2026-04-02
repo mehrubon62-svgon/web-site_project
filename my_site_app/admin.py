@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.contrib.contenttypes.admin import GenericTabularInline
 from .models import (
-    Processor, GPU, RAM, Motherboard, Storage, PowerSupply, Case,
+    Processor, GPU, RAM, Motherboard, Storage, PowerSupply, Case, Cooler,
     Laptop, ProductImage, HomeHeroImage, Wishlist, PromoCode, PromoCodeUsage, UserSavedAddress
 )
 
@@ -44,21 +44,21 @@ class ProcessorAdmin(admin.ModelAdmin):
     def stock_status(self, obj):
         if obj.stock > 10:
             color = '#10B981'
-            text = f'✓ In Stock ({obj.stock})'
+            text = f'✓ В наличии ({obj.stock})'
         elif obj.stock > 0:
             color = '#F59E0B'
-            text = f'⚠ Low Stock ({obj.stock})'
+            text = f'⚠ Мало на складе ({obj.stock})'
         else:
             color = '#EF4444'
-            text = '✗ Out of Stock'
+            text = '✗ Нет в наличии'
         return format_html('<span style="color: {}; font-weight: bold;">{}</span>', color, text)
-    stock_status.short_description = 'Stock'
+    stock_status.short_description = 'Наличие'
     
     def main_image_preview(self, obj):
         if obj.image:
             return format_html('<img src="{}" width="50" height="50" style="object-fit: cover; border-radius: 4px;" />', obj.image.url)
-        return "No image"
-    main_image_preview.short_description = 'Image'
+        return "Нет изображения"
+    main_image_preview.short_description = 'Изображение'
 
 
 # ==================== GPU ADMIN ====================
@@ -309,6 +309,46 @@ class CaseAdmin(admin.ModelAdmin):
             return format_html('<img src="{}" width="50" height="50" style="object-fit: cover; border-radius: 4px;" />', obj.image.url)
         return "No image"
     main_image_preview.short_description = 'Image'
+
+
+# ==================== COOLER ADMIN ====================
+@admin.register(Cooler)
+class CoolerAdmin(admin.ModelAdmin):
+    list_display = ('name', 'manufacturer', 'cooler_type', 'tdp_capacity', 'price', 'stock_status', 'main_image_preview')
+    list_filter = ('manufacturer', 'cooler_type')
+    search_fields = ('name', 'manufacturer', 'supported_sockets')
+    inlines = [ProductImageInline]
+
+    fieldsets = (
+        ('Основная информация', {
+            'fields': ('name', 'manufacturer', 'cooler_type', 'image', 'description')
+        }),
+        ('Характеристики', {
+            'fields': ('supported_sockets', 'tdp_capacity', 'height_mm', 'radiator_length_mm')
+        }),
+        ('Цена и остаток', {
+            'fields': ('price', 'stock')
+        }),
+    )
+
+    def stock_status(self, obj):
+        if obj.stock > 10:
+            color = '#10B981'
+            text = f'✓ В наличии ({obj.stock})'
+        elif obj.stock > 0:
+            color = '#F59E0B'
+            text = f'⚠ Мало на складе ({obj.stock})'
+        else:
+            color = '#EF4444'
+            text = '✗ Нет в наличии'
+        return format_html('<span style="color: {}; font-weight: bold;">{}</span>', color, text)
+    stock_status.short_description = 'Наличие'
+
+    def main_image_preview(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" width="50" height="50" style="object-fit: cover; border-radius: 4px;" />', obj.image.url)
+        return "Нет изображения"
+    main_image_preview.short_description = 'Изображение'
 
 
 # ==================== LAPTOP ADMIN ====================

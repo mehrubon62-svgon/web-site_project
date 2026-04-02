@@ -8,7 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.core.files.base import ContentFile
 from django.core.management.base import BaseCommand
 
-from my_site_app.models import Case, GPU, Laptop, Motherboard, PowerSupply, Processor, ProductImage, RAM, Storage
+from my_site_app.models import Case, Cooler, GPU, Laptop, Motherboard, PowerSupply, Processor, ProductImage, RAM, Storage
 
 
 def _open_url(url, timeout=25):
@@ -178,6 +178,7 @@ class Command(BaseCommand):
             Storage.objects.all().delete()
             PowerSupply.objects.all().delete()
             Case.objects.all().delete()
+            Cooler.objects.all().delete()
             Laptop.objects.all().delete()
             self.stdout.write(self.style.SUCCESS("Done."))
 
@@ -347,6 +348,29 @@ class Command(BaseCommand):
             )
             _attach_image_if_missing(obj, f"{name} computer case")
             _attach_gallery_images(obj, f"{name} computer case")
+
+        coolers = [
+            ("Noctua NH-D15", "Noctua", "AIR", "AM5, LGA1700", 220, 165, None, 109.99),
+            ("DeepCool AK620", "DeepCool", "AIR", "AM5, LGA1700", 260, 160, None, 64.99),
+            ("Arctic Liquid Freezer III 360", "Arctic", "AIO", "AM5, LGA1700", 320, None, 360, 139.99),
+        ]
+        for name, manufacturer, cooler_type, sockets, tdp_capacity, height_mm, radiator_length_mm, price in coolers:
+            obj, _ = Cooler.objects.get_or_create(
+                name=name,
+                defaults={
+                    "manufacturer": manufacturer,
+                    "cooler_type": cooler_type,
+                    "supported_sockets": sockets,
+                    "tdp_capacity": tdp_capacity,
+                    "height_mm": height_mm,
+                    "radiator_length_mm": radiator_length_mm,
+                    "description": f"{name} кулер для процессора.",
+                    "price": price,
+                    "stock": random.randint(6, 25),
+                },
+            )
+            _attach_image_if_missing(obj, f"{name} cpu cooler")
+            _attach_gallery_images(obj, f"{name} cpu cooler")
 
         laptops = [
             ("ASUS ROG Zephyrus G16", "ASUS", "GAMING", "Intel Core Ultra 9", "RTX 4070", 16, "DDR5", 1000, "NVMe SSD", 16.0, "2560x1600", 240, 1.9, 90, 180, 1899.99),

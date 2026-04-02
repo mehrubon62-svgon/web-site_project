@@ -219,6 +219,45 @@ class Case(models.Model):
         return f"{self.manufacturer} {self.name}"
 
 
+class Cooler(models.Model):
+    """Кулеры для процессора"""
+    COOLER_TYPES = [
+        ("AIR", "Воздушный кулер"),
+        ("AIO", "Жидкостное охлаждение"),
+    ]
+
+    name = models.CharField(max_length=200, verbose_name="Название")
+    manufacturer = models.CharField(max_length=100, verbose_name="Производитель")
+    cooler_type = models.CharField(max_length=20, choices=COOLER_TYPES, default="AIR", verbose_name="Тип кулера")
+    supported_sockets = models.CharField(max_length=200, verbose_name="Поддерживаемые сокеты")
+    tdp_capacity = models.IntegerField(verbose_name="Поддерживаемый TDP процессора (Вт)")
+    height_mm = models.IntegerField(null=True, blank=True, verbose_name="Высота (мм)")
+    radiator_length_mm = models.IntegerField(null=True, blank=True, verbose_name="Длина радиатора (мм)")
+    description = models.TextField(blank=True, verbose_name="Описание")
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name="Цена")
+    stock = models.IntegerField(default=0, verbose_name="Остаток")
+    image = models.ImageField(upload_to="coolers/", blank=True, verbose_name="Основное изображение")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Кулер"
+        verbose_name_plural = "Кулеры"
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"{self.manufacturer} {self.name}"
+
+    @property
+    def supported_sockets_list(self):
+        return [socket.strip() for socket in self.supported_sockets.split(",") if socket.strip()]
+
+    def supports_socket(self, socket_name):
+        if not socket_name:
+            return False
+        normalized = socket_name.strip().lower()
+        return normalized in {socket.lower() for socket in self.supported_sockets_list}
+
+
 # ==================== НОУТБУКИ ====================
 
 class Laptop(models.Model):

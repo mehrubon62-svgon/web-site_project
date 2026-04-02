@@ -1,0 +1,636 @@
+{% extends 'base.html' %}
+
+{% block title %}О нас - BuildBox{% endblock %}
+
+{% block content %}
+<style>
+  .about-canvas {
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(60rem 30rem at 10% 10%, rgba(251, 191, 36, 0.16), transparent 58%),
+      radial-gradient(50rem 32rem at 90% 12%, rgba(59, 130, 246, 0.13), transparent 60%),
+      radial-gradient(42rem 28rem at 50% 100%, rgba(16, 185, 129, 0.10), transparent 65%),
+      linear-gradient(180deg, #f8fafc 0%, #eef2f7 42%, #ffffff 100%);
+  }
+
+  .dark .about-canvas {
+    background:
+      radial-gradient(60rem 32rem at 10% 8%, rgba(251, 191, 36, 0.18), transparent 55%),
+      radial-gradient(54rem 36rem at 92% 10%, rgba(59, 130, 246, 0.16), transparent 58%),
+      radial-gradient(42rem 26rem at 50% 100%, rgba(16, 185, 129, 0.13), transparent 62%),
+      linear-gradient(180deg, #020617 0%, #07111f 38%, #0b1220 100%);
+  }
+
+  .about-grid {
+    position: absolute;
+    inset: 0;
+    opacity: 0.18;
+    background-image:
+      linear-gradient(rgba(148, 163, 184, 0.12) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(148, 163, 184, 0.12) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(circle at center, black 48%, transparent 90%);
+    pointer-events: none;
+  }
+
+  .about-noise {
+    position: absolute;
+    inset: 0;
+    opacity: 0.08;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg fill='%2364748b' fill-opacity='.22'%3E%3Ccircle cx='12' cy='14' r='1'/%3E%3Ccircle cx='84' cy='32' r='1'/%3E%3Ccircle cx='145' cy='28' r='1'/%3E%3Ccircle cx='34' cy='70' r='1'/%3E%3Ccircle cx='119' cy='91' r='1'/%3E%3Ccircle cx='58' cy='124' r='1'/%3E%3Ccircle cx='168' cy='146' r='1'/%3E%3Ccircle cx='92' cy='162' r='1'/%3E%3Ccircle cx='16' cy='150' r='1'/%3E%3C/g%3E%3C/svg%3E");
+    mix-blend-mode: soft-light;
+  }
+
+  .about-orb {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(0);
+    opacity: 0.62;
+    animation: about-float 18s ease-in-out infinite alternate;
+    pointer-events: none;
+  }
+
+  .about-orb.orb-a {
+    width: 14rem;
+    height: 14rem;
+    top: 7rem;
+    left: -3rem;
+    background: radial-gradient(circle at 30% 30%, rgba(251, 191, 36, 0.9), rgba(251, 191, 36, 0.02));
+  }
+
+  .about-orb.orb-b {
+    width: 22rem;
+    height: 22rem;
+    top: 20rem;
+    right: -8rem;
+    background: radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.7), rgba(59, 130, 246, 0.02));
+    animation-duration: 22s;
+  }
+
+  .about-orb.orb-c {
+    width: 16rem;
+    height: 16rem;
+    bottom: 16rem;
+    left: 48%;
+    background: radial-gradient(circle at 30% 30%, rgba(16, 185, 129, 0.65), rgba(16, 185, 129, 0.02));
+    animation-duration: 24s;
+  }
+
+  @keyframes about-float {
+    from { transform: translate3d(0, 0, 0) scale(1); }
+    to { transform: translate3d(0, -24px, 0) scale(1.05); }
+  }
+
+  .about-spotlight {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(18rem 18rem at var(--spot-x, 50%) var(--spot-y, 30%), rgba(255, 255, 255, 0.16), transparent 72%);
+    mix-blend-mode: screen;
+    opacity: 0.45;
+  }
+
+  .dark .about-spotlight {
+    background:
+      radial-gradient(18rem 18rem at var(--spot-x, 50%) var(--spot-y, 30%), rgba(251, 191, 36, 0.12), transparent 72%);
+    mix-blend-mode: normal;
+  }
+
+  .glass-panel {
+    backdrop-filter: blur(14px);
+    background: linear-gradient(180deg, rgba(255,255,255,0.82) 0%, rgba(255,255,255,0.55) 100%);
+    border: 1px solid rgba(255,255,255,0.58);
+    box-shadow: 0 18px 60px -34px rgba(15, 23, 42, 0.45);
+  }
+
+  .dark .glass-panel {
+    background: linear-gradient(180deg, rgba(15,23,42,0.8) 0%, rgba(15,23,42,0.55) 100%);
+    border-color: rgba(148,163,184,0.18);
+    box-shadow: 0 22px 70px -38px rgba(0, 0, 0, 0.8);
+  }
+
+  .deck-card {
+    position: relative;
+    overflow: hidden;
+    transition: transform .45s cubic-bezier(0.22, 0.61, 0.36, 1), box-shadow .45s cubic-bezier(0.22, 0.61, 0.36, 1), border-color .45s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  .deck-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(251,191,36,0.16), transparent 45%, rgba(59,130,246,0.10));
+    opacity: 0;
+    transition: opacity .45s ease;
+    pointer-events: none;
+  }
+
+  .deck-card:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 0 24px 70px -34px rgba(15, 23, 42, 0.45);
+    border-color: rgba(251, 191, 36, 0.55);
+  }
+
+  .deck-card:hover::before {
+    opacity: 1;
+  }
+
+  .metric-band {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .metric-band::after {
+    content: "";
+    position: absolute;
+    inset: auto -20% 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(251,191,36,.9), transparent);
+    animation: metric-line 4.8s linear infinite;
+  }
+
+  @keyframes metric-line {
+    from { transform: translateX(-20%); }
+    to { transform: translateX(20%); }
+  }
+
+  .story-card {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .story-card::after {
+    content: "";
+    position: absolute;
+    inset: -40% auto auto -20%;
+    width: 10rem;
+    height: 10rem;
+    background: radial-gradient(circle, rgba(251,191,36,0.22), transparent 70%);
+    opacity: .75;
+    pointer-events: none;
+  }
+
+  .slide-track {
+    scroll-snap-type: x proximity;
+    padding-top: .45rem;
+  }
+
+  .slide-card {
+    scroll-snap-align: start;
+    flex: 0 0 auto;
+  }
+
+  .slide-card.deck-card:hover {
+    transform: none;
+    box-shadow: 0 16px 34px -28px rgba(15, 23, 42, 0.22);
+    border-color: rgba(251, 191, 36, 0.38);
+  }
+
+  .chapter-card {
+    transition: transform .4s ease, border-color .4s ease, box-shadow .4s ease;
+  }
+
+  .chapter-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(251, 191, 36, 0.55);
+    box-shadow: 0 20px 56px -30px rgba(15, 23, 42, 0.35);
+  }
+
+  .workflow-line {
+    background: linear-gradient(180deg, rgba(251,191,36,0.9), rgba(59,130,246,0.55), rgba(16,185,129,0.45));
+  }
+
+  .media-frame {
+    position: relative;
+    overflow: hidden;
+    border-radius: 2rem;
+    background: #020617;
+    box-shadow: 0 26px 70px -34px rgba(15, 23, 42, 0.5);
+  }
+
+  .media-frame::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(2,6,23,0) 0%, rgba(2,6,23,0.14) 65%, rgba(2,6,23,0.58) 100%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .media-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transform: scale(1.015);
+    backface-visibility: hidden;
+    image-rendering: auto;
+  }
+
+  .media-pill {
+    position: absolute;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    gap: .55rem;
+    padding: .65rem .9rem;
+    border-radius: 9999px;
+    background: rgba(255,255,255,0.86);
+    color: #0f172a;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .22em;
+    box-shadow: 0 18px 40px -28px rgba(15, 23, 42, 0.55);
+  }
+
+  .dark .media-pill {
+    background: rgba(15, 23, 42, 0.88);
+    color: #f8fafc;
+  }
+
+  .photo-tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    transition: transform .8s cubic-bezier(0.22, 0.61, 0.36, 1), filter .45s ease;
+  }
+
+  .photo-tile {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    box-shadow: 0 22px 56px -34px rgba(15, 23, 42, 0.42);
+  }
+
+  .photo-tile::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0;
+    height: 45%;
+    background: linear-gradient(180deg, rgba(2,6,23,0) 0%, rgba(2,6,23,0.62) 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .photo-tile:hover img {
+    transform: translateZ(0) scale(1.04);
+    filter: saturate(1.05);
+  }
+
+  .media-shell {
+    position: relative;
+    isolation: isolate;
+  }
+
+  .media-shell::before {
+    content: "";
+    position: absolute;
+    inset: 9% 12% 7%;
+    border-radius: 2.2rem;
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.18), rgba(59, 130, 246, 0.12));
+    filter: blur(38px);
+    opacity: 0.7;
+    z-index: 0;
+  }
+
+  .media-meta {
+    position: absolute;
+    z-index: 3;
+    padding: 1.25rem 1.25rem 1.1rem;
+    border-radius: 1.6rem;
+    background: rgba(255,255,255,0.88);
+    border: 1px solid rgba(255,255,255,0.62);
+    box-shadow: 0 18px 44px -30px rgba(15, 23, 42, 0.42);
+    backdrop-filter: blur(12px);
+  }
+
+  .dark .media-meta {
+    background: rgba(15,23,42,0.88);
+    border-color: rgba(148,163,184,0.18);
+  }
+
+  .gallery-caption {
+    position: absolute;
+    inset: auto 0 0;
+    z-index: 2;
+    padding: 1.1rem 1.1rem 1rem;
+    color: #f8fafc;
+  }
+
+  .gallery-caption p {
+    color: rgba(248, 250, 252, 0.78);
+  }
+</style>
+
+<div id="about-canvas" class="about-canvas min-h-screen text-gray-900 dark:text-gray-50">
+  <div class="about-grid"></div>
+  <div class="about-noise"></div>
+  <div class="about-orb orb-a"></div>
+  <div class="about-orb orb-b"></div>
+  <div class="about-orb orb-c"></div>
+  <div class="about-spotlight"></div>
+
+  <section class="relative max-w-7xl mx-auto px-6 pt-20 pb-16 md:pt-28 md:pb-24">
+    <div class="grid lg:grid-cols-[1.08fr_.92fr] gap-12 items-center">
+      <div class="relative z-10">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel text-[11px] font-semibold uppercase tracking-[0.28em] text-gray-600 dark:text-gray-300">
+          <span class="w-2 h-2 rounded-full bg-accent"></span>
+          О BuildBox
+        </div>
+        <h1 class="mt-6 max-w-4xl text-5xl md:text-6xl lg:text-7xl font-black tracking-[-0.05em] leading-[0.95]">
+          Мы превращаем хаос железа в цельную и эффектную систему.
+        </h1>
+        <p class="mt-6 max-w-2xl text-lg md:text-xl leading-8 text-gray-600 dark:text-gray-300">
+          BuildBox создан для тех, кто хочет получить компьютер с характером, мощностью и без постоянных сомнений. Мы объединили понятную витрину, умную проверку совместимости и сильную подачу в одном опыте.
+        </p>
+
+        <div class="mt-10 flex flex-wrap gap-3">
+          <a href="{% url 'configurator' %}" class="motion-btn inline-flex items-center gap-2 px-6 py-3 rounded-full bg-accent text-gray-900 font-semibold shadow-[0_16px_40px_rgba(251,191,36,0.28)] hover:opacity-95">
+            Открыть конфигуратор
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </a>
+          <a href="{% url 'explore_all' %}" class="motion-btn inline-flex items-center gap-2 px-6 py-3 rounded-full border border-gray-300/80 dark:border-gray-600 glass-panel text-gray-900 dark:text-white font-semibold">
+            Перейти в каталог
+          </a>
+        </div>
+
+        <div class="mt-12 grid sm:grid-cols-3 gap-4">
+          <div class="glass-panel rounded-3xl px-5 py-4 motion-card">
+            <div class="text-[11px] uppercase tracking-[0.26em] text-gray-500 dark:text-gray-400">Направление</div>
+            <div class="mt-2 text-lg font-semibold">Сборки с понятным сценарием и движением вперед</div>
+          </div>
+          <div class="glass-panel rounded-3xl px-5 py-4 motion-card">
+            <div class="text-[11px] uppercase tracking-[0.26em] text-gray-500 dark:text-gray-400">Система</div>
+            <div class="mt-2 text-lg font-semibold">Совместимость до того, как появятся проблемы на заказе</div>
+          </div>
+          <div class="glass-panel rounded-3xl px-5 py-4 motion-card">
+            <div class="text-[11px] uppercase tracking-[0.26em] text-gray-500 dark:text-gray-400">Энергия</div>
+            <div class="mt-2 text-lg font-semibold">Витрина, которая ощущается как студия, а не как склад</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative min-h-[32rem] lg:min-h-[38rem] media-shell">
+        <div class="absolute inset-x-2 md:inset-x-6 top-6 bottom-8 z-10">
+          <div class="media-frame h-full border border-white/45 dark:border-gray-700/65">
+            <img src="{{ about_reel_src }}" alt="Анимированный ролик BuildBox" loading="eager">
+            <div class="media-pill top-5 left-5">
+              <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+              Студийный ролик
+            </div>
+            <div class="media-pill top-5 right-5">
+              Собрано из реальных материалов проекта
+            </div>
+            <div class="absolute inset-x-0 bottom-0 z-30 p-6 md:p-8 text-white">
+              <div class="text-[11px] uppercase tracking-[0.28em] text-white/65">Слой презентации</div>
+              <h2 class="mt-3 max-w-xl text-3xl md:text-4xl font-black tracking-[-0.04em] leading-tight">
+                Живое движение, настоящее железо и витрина, которая наконец выглядит живой.
+              </h2>
+              <p class="mt-4 max-w-lg text-sm md:text-base leading-7 text-white/78">
+                Мы заменили абстрактные заглушки на визуальный ролик из реальных материалов проекта, поэтому страница теперь одновременно продает атмосферу, движение и ощущение настоящего продукта.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="media-meta top-4 md:top-5 right-0 md:right-2 w-48 md:w-56">
+          <div class="text-[11px] uppercase tracking-[0.3em] text-gray-500 dark:text-gray-400">Живой сигнал</div>
+          <div class="mt-3 text-4xl font-black tracking-[-0.05em]">98%</div>
+          <p class="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-300">сборок проходят проверку совместимости уже на первой серьезной версии.</p>
+        </div>
+
+        {% if about_gallery_images.1 %}
+          <div class="absolute right-3 md:right-6 top-24 z-20 w-36 md:w-44 rotate-[7deg]">
+            <figure class="photo-tile deck-card rounded-[1.7rem] border border-white/55 dark:border-gray-700/60 bg-white/70 dark:bg-gray-950/55 p-2">
+              <div class="overflow-hidden rounded-[1.2rem] aspect-[3/4]">
+                <img src="{{ about_gallery_images.1 }}" alt="Атмосфера продуктов BuildBox" loading="lazy">
+              </div>
+              <figcaption class="gallery-caption">
+                <div class="text-[11px] uppercase tracking-[0.24em] text-white/70">Кадр 02</div>
+              </figcaption>
+            </figure>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </section>
+
+  <section class="relative py-8 md:py-12">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="metric-band glass-panel rounded-[2rem] px-6 py-6 md:px-8 md:py-8">
+        <div class="grid sm:grid-cols-2 xl:grid-cols-4 gap-6">
+          {% for stat in stats %}
+            <div class="motion-card rounded-[1.6rem] border border-white/40 dark:border-gray-700/60 px-5 py-5 bg-white/55 dark:bg-gray-900/45">
+              <div class="text-4xl md:text-5xl font-black tracking-[-0.06em]">
+                <span class="about-counter" data-target="{{ stat.value }}">0</span>{{ stat.suffix }}
+              </div>
+              <p class="mt-3 text-sm md:text-base text-gray-600 dark:text-gray-300 leading-6">{{ stat.label }}</p>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="relative max-w-7xl mx-auto px-6 py-12 md:py-16">
+      <div class="grid lg:grid-cols-[0.88fr_1.12fr] gap-6 lg:gap-8 items-end">
+      <div class="glass-panel rounded-[2rem] p-7 md:p-9">
+        <div class="text-[11px] uppercase tracking-[0.32em] text-gray-500 dark:text-gray-400">Визуальная презентация</div>
+        <h2 class="mt-4 text-3xl md:text-4xl font-black tracking-[-0.05em] leading-tight">
+          Бренд теперь ощущается как снятая и поставленная презентация, а не просто набор декоративных блоков.
+        </h2>
+        <p class="mt-5 text-base md:text-lg leading-8 text-gray-600 dark:text-gray-300">
+          Мы добавили движущийся ролик и галерею из локальных материалов проекта, а затем смягчили резкие пересечения, из-за которых появлялись визуальные артефакты. В итоге страница стала чище, богаче и намного ближе к премиальной презентации техники.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4 md:gap-5">
+        {% for image in about_gallery_images|slice:":4" %}
+          <figure class="photo-tile deck-card rounded-[2rem] border border-white/55 dark:border-gray-700/65 bg-white/60 dark:bg-gray-950/45 {% if forloop.first or forloop.last %}col-span-2 aspect-[16/10]{% else %}aspect-[4/5]{% endif %}">
+            <img src="{{ image }}" alt="Кадр галереи BuildBox {{ forloop.counter }}" loading="lazy">
+            <figcaption class="gallery-caption">
+              <div class="text-[11px] uppercase tracking-[0.28em] text-white/72">
+                {% if forloop.first %}Главная атмосфера{% elif forloop.last %}Деталь компонента{% else %}Студийный кадр 0{{ forloop.counter }}{% endif %}
+              </div>
+              <p class="mt-2 text-sm leading-6">
+                {% if forloop.first %}Широкая визуальная сцена, которая задает настроение еще до того, как начинаются детали о товарах.{% elif forloop.last %}Крупные планы железа удерживают страницу в реальных продуктах, а не только в декоре.{% else %}Дополнительные кадры делают страницу похожей на собранную презентацию, а не на статичный макет.{% endif %}
+              </p>
+            </figcaption>
+          </figure>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="relative max-w-7xl mx-auto px-6 py-16 md:py-24">
+    <div class="flex items-end justify-between gap-6 flex-wrap mb-10">
+      <div>
+        <div class="text-[11px] uppercase tracking-[0.32em] text-gray-500 dark:text-gray-400">Ключевые принципы</div>
+        <h2 class="mt-3 text-3xl md:text-5xl font-black tracking-[-0.05em]">Мы строили BuildBox вокруг уверенности, а не шума.</h2>
+      </div>
+      <div class="max-w-xl text-gray-600 dark:text-gray-300 leading-7">
+        Даже сильные магазины техники могут пугать, а даже хорошие инструменты для сборки могут казаться холодными. Мы хотели сделать острее: платформу с выразительной визуальной подачей и логикой, на которую реально можно опереться.
+      </div>
+    </div>
+
+    <div class="slide-track flex gap-5 overflow-x-auto pb-3">
+      {% for principle in principles %}
+        <article class="slide-card story-card deck-card glass-panel min-w-[20rem] md:min-w-[24rem] lg:min-w-[28rem] rounded-[2rem] p-7 md:p-8">
+          <div class="text-[11px] uppercase tracking-[0.28em] text-gray-500 dark:text-gray-400">{{ principle.eyebrow }}</div>
+          <h3 class="mt-4 text-2xl md:text-3xl font-black tracking-[-0.04em] leading-tight">{{ principle.title }}</h3>
+          <p class="mt-5 text-base leading-7 text-gray-600 dark:text-gray-300">{{ principle.copy }}</p>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="relative py-16 md:py-24 border-y border-white/30 dark:border-gray-800/80 bg-white/35 dark:bg-gray-950/20">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid lg:grid-cols-[0.85fr_1.15fr] gap-10 items-start">
+        <div class="glass-panel rounded-[2rem] p-8 md:p-10">
+          <div class="text-[11px] uppercase tracking-[0.3em] text-gray-500 dark:text-gray-400">История бренда</div>
+          <p class="mt-6 text-3xl md:text-4xl font-black tracking-[-0.04em] leading-tight">
+            «Кастомный ПК должен ощущаться как цельный инструмент, а не как куча несвязанных решений».
+          </p>
+          <p class="mt-6 text-base leading-7 text-gray-600 dark:text-gray-300">
+            Эта идея повлияла на всё: на глубину каталога, логику конфигуратора, то, как показывается совместимость, и даже на то, как визуальный язык сайта передает ощущение уверенности. BuildBox не пытается быть нейтральным. Он пытается сделать правильную сборку очевидной.
+          </p>
+        </div>
+
+        <div class="grid gap-5">
+          {% for chapter in chapters %}
+            <article class="chapter-card glass-panel rounded-[2rem] p-6 md:p-7">
+              <div class="flex items-start gap-5">
+                <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-accent text-gray-900 grid place-items-center text-lg font-black shadow-[0_14px_30px_rgba(251,191,36,0.28)]">
+                  {{ chapter.index }}
+                </div>
+                <div>
+                  <h3 class="text-2xl font-black tracking-[-0.04em]">{{ chapter.title }}</h3>
+                  <p class="mt-3 text-base leading-7 text-gray-600 dark:text-gray-300">{{ chapter.copy }}</p>
+                </div>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="relative max-w-7xl mx-auto px-6 py-16 md:py-24">
+    <div class="flex items-end justify-between gap-6 flex-wrap mb-10">
+      <div>
+        <div class="text-[11px] uppercase tracking-[0.32em] text-gray-500 dark:text-gray-400">Процесс</div>
+        <h2 class="mt-3 text-3xl md:text-5xl font-black tracking-[-0.05em]">Как мы мыслим, когда сборка начинает формироваться.</h2>
+      </div>
+      <div class="max-w-xl text-gray-600 dark:text-gray-300 leading-7">
+        Мы смотрим на каждую сборку как на систему с собственным движением. Это не просто «выбрал, выбрал, выбрал». Это задать основу, придать форму, довести до ума и только потом уверенно запускать.
+      </div>
+    </div>
+
+    <div class="grid lg:grid-cols-[80px_1fr] gap-6">
+      <div class="hidden lg:flex justify-center">
+        <div class="workflow-line w-1 rounded-full"></div>
+      </div>
+      <div class="grid md:grid-cols-3 gap-5">
+        {% for item in workflow %}
+          <article class="deck-card glass-panel rounded-[2rem] p-7 md:p-8">
+            <div class="inline-flex items-center px-3 py-1 rounded-full bg-gray-950 text-white dark:bg-accent dark:text-gray-900 text-[11px] font-semibold uppercase tracking-[0.26em]">
+              {{ item.step }}
+            </div>
+            <h3 class="mt-5 text-2xl font-black tracking-[-0.04em] leading-tight">{{ item.title }}</h3>
+            <p class="mt-4 text-base leading-7 text-gray-600 dark:text-gray-300">{{ item.copy }}</p>
+          </article>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="relative py-20 md:py-28">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="glass-panel rounded-[2.5rem] p-8 md:p-12 lg:p-14 overflow-hidden relative">
+        <div class="absolute inset-y-0 right-0 w-[38%] bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.25),transparent_70%)] pointer-events-none"></div>
+        <div class="relative z-10 grid lg:grid-cols-[1.1fr_.9fr] gap-8 items-center">
+          <div>
+            <div class="text-[11px] uppercase tracking-[0.32em] text-gray-500 dark:text-gray-400">Старт</div>
+            <h2 class="mt-4 text-4xl md:text-5xl font-black tracking-[-0.05em] leading-[0.98]">
+              Если сам компьютер имеет значение, то и путь его выбора тоже должен иметь значение.
+            </h2>
+            <p class="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300 max-w-2xl">
+              BuildBox это место, где глубина каталога, логика совместимости и энергия подачи наконец перестают конфликтовать друг с другом. В этом и состоит весь смысл бренда.
+            </p>
+          </div>
+          <div class="flex flex-col sm:flex-row lg:flex-col gap-4 lg:items-end">
+            <a href="{% url 'configurator' %}" class="motion-btn inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-accent text-gray-900 font-semibold shadow-[0_18px_40px_rgba(251,191,36,0.3)]">
+              Начать сборку
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </a>
+            <a href="{% url 'explore_all' %}" class="motion-btn inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white bg-white/50 dark:bg-gray-900/40 font-semibold">
+              Посмотреть комплектующие
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  (() => {
+    const canvas = document.getElementById('about-canvas');
+    if (canvas) {
+      const setSpotlight = (event) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width) * 100;
+        const y = ((event.clientY - rect.top) / rect.height) * 100;
+        canvas.style.setProperty('--spot-x', `${x}%`);
+        canvas.style.setProperty('--spot-y', `${y}%`);
+      };
+
+      canvas.addEventListener('mousemove', setSpotlight);
+      canvas.addEventListener('touchmove', (event) => {
+        const touch = event.touches[0];
+        if (touch) setSpotlight(touch);
+      }, { passive: true });
+    }
+
+    const counters = document.querySelectorAll('.about-counter');
+    if (!counters.length) return;
+
+    const animateCounter = (element) => {
+      const target = Number(element.dataset.target || '0');
+      const start = performance.now();
+      const duration = 1400;
+
+      const frame = (now) => {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        element.textContent = Math.round(target * eased).toLocaleString();
+        if (progress < 1) requestAnimationFrame(frame);
+      };
+
+      requestAnimationFrame(frame);
+    };
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        animateCounter(entry.target);
+        obs.unobserve(entry.target);
+      });
+    }, { threshold: 0.45 });
+
+    counters.forEach((counter) => observer.observe(counter));
+  })();
+</script>
+{% endblock %}

@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 
-from my_site_app.models import Case, GPU, Motherboard, PowerSupply, Processor, RAM, Storage
+from my_site_app.models import Case, Cooler, GPU, Motherboard, PowerSupply, Processor, RAM, Storage
 from my_site_register.permissions import get_logged_in_user
 
 from .models import PCConfiguration
@@ -29,6 +29,7 @@ def _build_from_request(request):
     gpu = GPU.objects.filter(pk=_selected_id(request, "gpu")).first()
     motherboard = Motherboard.objects.filter(pk=_selected_id(request, "motherboard")).first()
     ram = RAM.objects.filter(pk=_selected_id(request, "ram")).first()
+    cooler = Cooler.objects.filter(pk=_selected_id(request, "cooler")).first()
     power_supply = PowerSupply.objects.filter(pk=_selected_id(request, "power_supply")).first()
     case = Case.objects.filter(pk=_selected_id(request, "case")).first()
     storage = Storage.objects.filter(pk=_selected_id(request, "storage")).first()
@@ -37,6 +38,7 @@ def _build_from_request(request):
         "gpu": gpu,
         "motherboard": motherboard,
         "ram": ram,
+        "cooler": cooler,
         "power_supply": power_supply,
         "case": case,
         "storage": storage,
@@ -51,29 +53,40 @@ def _recommended_psu(total_power):
     return 1500
 
 
+def _price_as_decimal(value):
+    return Decimal(str(value or 0))
+
+
+def _cooler_type_label(cooler):
+    return "Liquid Cooling" if cooler.cooler_type == "AIO" else "Air Cooler"
+
+
 def _calc_preview(build):
     total_power = 0
     total_price = Decimal("0")
 
     if build["processor"]:
         total_power += int(build["processor"].tdp_max or 0)
-        total_price += build["processor"].price
+        total_price += _price_as_decimal(build["processor"].price)
     if build["gpu"]:
         total_power += int(build["gpu"].power_consumption or 0)
-        total_price += build["gpu"].price
+        total_price += _price_as_decimal(build["gpu"].price)
     if build["motherboard"]:
         total_power += int(build["motherboard"].power_consumption or 0)
-        total_price += build["motherboard"].price
+        total_price += _price_as_decimal(build["motherboard"].price)
     if build["ram"]:
         total_power += int((build["ram"].power_per_module or 0) * (build["ram"].modules or 1))
-        total_price += build["ram"].price
+        total_price += _price_as_decimal(build["ram"].price)
+    if build["cooler"]:
+        total_power += int(build["cooler"].tdp_capacity or 0)
+        total_price += _price_as_decimal(build["cooler"].price)
     if build["storage"]:
         total_power += int(build["storage"].power_consumption or 0)
-        total_price += build["storage"].price
+        total_price += _price_as_decimal(build["storage"].price)
     if build["power_supply"]:
-        total_price += build["power_supply"].price
+        total_price += _price_as_decimal(build["power_supply"].price)
     if build["case"]:
-        total_price += build["case"].price
+        total_price += _price_as_decimal(build["case"].price)
 
     recommended_psu = _recommended_psu(total_power)
     issues = []
@@ -83,10 +96,32 @@ def _calc_preview(build):
     if build["ram"] and build["motherboard"]:
         if build["ram"].memory_type != build["motherboard"].ram_type:
             issues.append(f"RAM incompatibility: RAM {build['ram'].memory_type} != MB {build['motherboard'].ram_type}")
+    if build["processor"] and build["cooler"]:
+        if not build["cooler"].supports_socket(build["processor"].socket):
+            issues.append(
+                f"Несовместимый сокет кулера: кулер поддерживает {build['cooler'].supported_sockets}, "
+                f"а процессору нужен {build['processor'].socket}"
+            )
+        if build["processor"].tdp_max > build["cooler"].tdp_capacity:
+            issues.append(
+                f"AI-анализ охлаждения: кулер рассчитан до {build['cooler'].tdp_capacity}Вт, "
+                f"но процессор может потреблять до {build['processor'].tdp_max}Вт"
+            )
     if build["power_supply"] and build["power_supply"].wattage < recommended_psu:
         issues.append(f"Insufficient PSU power: {build['power_supply'].wattage}W < {recommended_psu}W")
     if build["gpu"] and build["case"] and build["gpu"].length > build["case"].max_gpu_length:
         issues.append(f"GPU won't fit in case: {build['gpu'].length}mm > {build['case'].max_gpu_length}mm")
+    if build["cooler"] and build["case"]:
+        if build["cooler"].cooler_type == "AIO" and build["cooler"].radiator_length_mm:
+            if build["cooler"].radiator_length_mm > build["case"].max_gpu_length:
+                issues.append(
+                    f"Радиатор СЖО слишком длинный для корпуса: "
+                    f"{build['cooler'].radiator_length_mm}mm > {build['case'].max_gpu_length}mm"
+                )
+        elif build["cooler"].height_mm and build["cooler"].height_mm > build["case"].max_cpu_cooler_height:
+            issues.append(
+                f"Кулер не помещается в корпус: {build['cooler'].height_mm}mm > {build['case'].max_cpu_cooler_height}mm"
+            )
 
     tax = total_price * TAX_RATE
     grand_total = total_price + tax
@@ -122,6 +157,8 @@ def _component_payload():
                 "image": _image_url(x),
                 "subtitle": f"{x.socket} / {x.cores}C {x.threads}T",
                 "power": int(x.tdp_max or 0),
+                "socket": x.socket,
+                "tdp_max": int(x.tdp_max or 0),
             }
             for x in Processor.objects.all()
         ],
@@ -144,6 +181,8 @@ def _component_payload():
                 "image": _image_url(x),
                 "subtitle": f"{x.socket} / {x.get_form_factor_display()}",
                 "power": int(x.power_consumption or 0),
+                "socket": x.socket,
+                "ram_type": x.ram_type,
             }
             for x in Motherboard.objects.all()
         ],
@@ -155,8 +194,25 @@ def _component_payload():
                 "image": _image_url(x),
                 "subtitle": f"{x.total_capacity}GB {x.memory_type}",
                 "power": int((x.power_per_module or 0) * (x.modules or 1)),
+                "memory_type": x.memory_type,
             }
             for x in RAM.objects.all()
+        ],
+        "cooler": [
+            {
+                "id": x.id,
+                "name": x.name,
+                "price": float(x.price),
+                "image": _image_url(x),
+                "subtitle": f"{_cooler_type_label(x)} / TDP {x.tdp_capacity} W",
+                "power": int(x.tdp_capacity or 0),
+                "cooler_type": x.cooler_type,
+                "supported_sockets": x.supported_sockets_list,
+                "tdp_capacity": int(x.tdp_capacity or 0),
+                "height_mm": int(x.height_mm or 0),
+                "radiator_length_mm": int(x.radiator_length_mm or 0),
+            }
+            for x in Cooler.objects.all()
         ],
         "storage": [
             {
@@ -177,6 +233,7 @@ def _component_payload():
                 "image": _image_url(x),
                 "subtitle": f"{x.wattage}W {x.get_efficiency_display()}",
                 "power": 0,
+                "wattage": int(x.wattage or 0),
             }
             for x in PowerSupply.objects.all()
         ],
@@ -188,6 +245,8 @@ def _component_payload():
                 "image": _image_url(x),
                 "subtitle": f"{x.get_form_factor_display()} / {x.max_gpu_length}mm GPU",
                 "power": 0,
+                "max_gpu_length": int(x.max_gpu_length or 0),
+                "max_cpu_cooler_height": int(x.max_cpu_cooler_height or 0),
             }
             for x in Case.objects.all()
         ],
@@ -226,6 +285,7 @@ class ConfiguratorView(View):
             "gpu": loaded.gpu if loaded else None,
             "motherboard": loaded.motherboard if loaded else None,
             "ram": loaded.ram if loaded else None,
+            "cooler": loaded.cooler if loaded else None,
             "power_supply": loaded.power_supply if loaded else None,
             "case": loaded.case if loaded else None,
             "storage": loaded.storage_devices.first() if loaded else None,
@@ -236,6 +296,7 @@ class ConfiguratorView(View):
             "gpus": GPU.objects.all(),
             "motherboards": Motherboard.objects.all(),
             "ram_modules": RAM.objects.all(),
+            "coolers": Cooler.objects.all(),
             "storages": Storage.objects.all(),
             "power_supplies": PowerSupply.objects.all(),
             "cases": Case.objects.all(),
@@ -256,6 +317,7 @@ class ConfiguratorView(View):
             "gpus": GPU.objects.all(),
             "motherboards": Motherboard.objects.all(),
             "ram_modules": RAM.objects.all(),
+            "coolers": Cooler.objects.all(),
             "storages": Storage.objects.all(),
             "power_supplies": PowerSupply.objects.all(),
             "cases": Case.objects.all(),
@@ -279,6 +341,7 @@ class SaveConfigurationView(View):
             gpu=selected["gpu"],
             motherboard=selected["motherboard"],
             ram=selected["ram"],
+            cooler=selected["cooler"],
             power_supply=selected["power_supply"],
             case=selected["case"],
         )
@@ -333,6 +396,7 @@ class AddSavedConfigurationToCartView(View):
             cfg.gpu,
             cfg.motherboard,
             cfg.ram,
+            cfg.cooler,
             cfg.power_supply,
             cfg.case,
             *list(cfg.storage_devices.all()),

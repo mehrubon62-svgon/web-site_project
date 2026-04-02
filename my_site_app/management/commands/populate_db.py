@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from my_site_app.models import Processor, GPU, RAM, Motherboard, Storage, PowerSupply, Case, Laptop
+from my_site_app.models import Processor, GPU, RAM, Motherboard, Storage, PowerSupply, Case, Cooler, Laptop
 from faker import Faker
 import random
 
@@ -17,6 +17,7 @@ class Command(BaseCommand):
         parser.add_argument('--storage', type=int, default=10, help='Number of storage devices to create')
         parser.add_argument('--psu', type=int, default=10, help='Number of power supplies to create')
         parser.add_argument('--cases', type=int, default=10, help='Number of cases to create')
+        parser.add_argument('--coolers', type=int, default=10, help='Number of coolers to create')
         parser.add_argument('--laptops', type=int, default=10, help='Number of laptops to create')
         parser.add_argument('--clear', action='store_true', help='Clear existing data before creating new')
         parser.add_argument('--all', type=int, help='Create N of each type')
@@ -31,6 +32,7 @@ class Command(BaseCommand):
             Storage.objects.all().delete()
             PowerSupply.objects.all().delete()
             Case.objects.all().delete()
+            Cooler.objects.all().delete()
             Laptop.objects.all().delete()
             self.stdout.write(self.style.SUCCESS('✓ Data cleared'))
 
@@ -43,6 +45,7 @@ class Command(BaseCommand):
             options['storage'] = count
             options['psu'] = count
             options['cases'] = count
+            options['coolers'] = count
             options['laptops'] = count
 
         self.stdout.write(self.style.SUCCESS('\nCreating test data...'))
@@ -68,6 +71,9 @@ class Command(BaseCommand):
         
         # Create Cases
         self.create_cases(options['cases'])
+
+        # Create Coolers
+        self.create_coolers(options['coolers'])
         
         # Create Laptops
         self.create_laptops(options['laptops'])
@@ -75,7 +81,7 @@ class Command(BaseCommand):
         total = sum([
             options['processors'], options['gpus'], options['ram'],
             options['motherboards'], options['storage'], options['psu'],
-            options['cases'], options['laptops']
+            options['cases'], options['coolers'], options['laptops']
         ])
 
         self.stdout.write('━' * 50)
@@ -344,6 +350,50 @@ class Command(BaseCommand):
             )
         
         self.stdout.write(self.style.SUCCESS(f'✓ Created {count} Cases'))
+
+    def create_coolers(self, count):
+        manufacturers = ['Noctua', 'DeepCool', 'Corsair', 'Arctic', 'Cooler Master']
+        socket_sets = ['AM5, LGA1700', 'AM4, AM5, LGA1700', 'LGA1700', 'AM5']
+
+        for i in range(count):
+            manufacturer = random.choice(manufacturers)
+            cooler_type = random.choice(['AIR', 'AIR', 'AIO'])
+            tdp_capacity = random.choice([150, 180, 220, 250, 280, 320])
+            supported_sockets = random.choice(socket_sets)
+            stock = 0 if random.random() < 0.2 else random.randint(5, 35)
+            price = round(random.uniform(45, 220), 2)
+
+            if cooler_type == 'AIO':
+                height_mm = None
+                radiator_length_mm = random.choice([240, 280, 360])
+                name = f"{manufacturer} СЖО {radiator_length_mm} мм"
+                description = (
+                    f"{manufacturer} жидкостное охлаждение с радиатором {radiator_length_mm} мм "
+                    f"и поддержкой процессоров до {tdp_capacity} Вт TDP."
+                )
+            else:
+                height_mm = random.choice([145, 155, 165, 170])
+                radiator_length_mm = None
+                name = f"{manufacturer} башенный кулер"
+                description = (
+                    f"{manufacturer} воздушный кулер высотой {height_mm} мм "
+                    f"и поддержкой процессоров до {tdp_capacity} Вт TDP."
+                )
+
+            Cooler.objects.create(
+                name=name,
+                manufacturer=manufacturer,
+                cooler_type=cooler_type,
+                supported_sockets=supported_sockets,
+                tdp_capacity=tdp_capacity,
+                height_mm=height_mm,
+                radiator_length_mm=radiator_length_mm,
+                description=description,
+                price=price,
+                stock=stock
+            )
+
+        self.stdout.write(self.style.SUCCESS(f'✓ Created {count} Coolers'))
 
     def create_laptops(self, count):
         manufacturers = ['Dell', 'HP', 'Lenovo', 'ASUS', 'MSI', 'Acer']

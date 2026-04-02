@@ -19,10 +19,6 @@
         Dec: 'дек',
     };
 
-    function translateKnownValue(text) {
-        return Object.prototype.hasOwnProperty.call(exactRu, text) ? exactRu[text] : text;
-    }
-
     const exactRu = {
         'Language': 'Язык',
         'Home': 'Главная',
@@ -124,6 +120,11 @@
         'Memory (RAM)': 'Оперативная память (RAM)',
         'Motherboards': 'Материнские платы',
         'Storage': 'Накопители',
+        'Coolers': 'Кулеры',
+        'Cooler': 'Кулер',
+        'CPU Cooler': 'Кулер процессора',
+        'Air Cooler': 'Воздушный кулер',
+        'Liquid Cooling': 'Жидкостное охлаждение',
         'Power Supplies': 'Блоки питания',
         'Cases': 'Корпуса',
         'In Stock': 'В наличии',
@@ -262,6 +263,7 @@
         'Select Graphics Card': 'Выберите видеокарту',
         'Select Motherboard': 'Выберите материнскую плату',
         'Select RAM': 'Выберите оперативную память',
+        'Select CPU Cooler': 'Выберите кулер процессора',
         'Select Storage': 'Выберите накопитель',
         'Select Power Supply': 'Выберите блок питания',
         'Select Case': 'Выберите корпус',
@@ -271,9 +273,12 @@
         'No Graphics Card': 'Видеокарта не выбрана',
         'No Motherboard': 'Материнская плата не выбрана',
         'No RAM': 'Оперативная память не выбрана',
+        'No CPU Cooler': 'Кулер процессора не выбран',
         'No Storage': 'Накопитель не выбран',
         'No Power Supply': 'Блок питания не выбран',
         'No Case': 'Корпус не выбран',
+        'BuildBox AI Analysis': 'BuildBox AI Анализ',
+        'AI analyzed the build and found no compatibility issues.': 'AI проверил сборку и не нашел проблем с совместимостью.',
         'Order History': 'История заказов',
         'Delivered': 'Доставлен',
         'Shipped': 'Отправлен',
@@ -437,7 +442,111 @@
         '734000': '734000',
         'Gaming PC Setup': 'Игровая сборка ПК',
         '123 Tech Street, Silicon Valley, CA': '123 Tech Street, Silicon Valley, CA',
+        'О нас - BuildBox': 'About Us - BuildBox',
+        'Собирайте ПК мечты с уверенностью. Экспертные рекомендации и выгодные цены.': 'Build your dream PC with confidence. Expert guidance and great prices.',
+        'Быстрые ссылки': 'Quick Links',
+        'Главная': 'Home',
+        'Комплектующие': 'Components',
+        'Ноутбуки': 'Laptops',
+        'Конфигуратор ПК': 'PC Configurator',
+        'О нас': 'About Us',
+        'Контакты': 'Contact',
+        'Поддержка клиентов': 'Customer Service',
+        'Связаться с нами': 'Contact Us',
+        'Информация о доставке': 'Shipping Information',
+        'Возвраты и возврат средств': 'Returns & Refunds',
+        'Отследить заказ': 'Track Order',
+        'Центр поддержки': 'Support Center',
+        'О BuildBox': 'About BuildBox',
+        'Мы превращаем хаос железа в цельную и эффектную систему.': 'We turn hardware chaos into a cohesive and striking system.',
+        'BuildBox создан для тех, кто хочет получить компьютер с характером, мощностью и без постоянных сомнений. Мы объединили понятную витрину, умную проверку совместимости и сильную подачу в одном опыте.': 'BuildBox was created for people who want a computer with character, power, and no constant doubt. We combined a clear storefront, smart compatibility checks, and strong presentation into one experience.',
+        'Открыть конфигуратор': 'Open Configurator',
+        'Перейти в каталог': 'Go to Catalog',
+        'Направление': 'Direction',
+        'Сборки с понятным сценарием и движением вперед': 'Builds with a clear scenario and forward momentum',
+        'Система': 'System',
+        'Совместимость до того, как появятся проблемы на заказе': 'Compatibility before order problems appear',
+        'Энергия': 'Energy',
+        'Витрина, которая ощущается как студия, а не как склад': 'A storefront that feels like a studio, not a warehouse',
+        'Анимированный ролик BuildBox': 'Animated BuildBox reel',
+        'Студийный ролик': 'Studio Reel',
+        'Собрано из реальных материалов проекта': 'Built from real project materials',
+        'Слой презентации': 'Presentation Layer',
+        'Живое движение, настоящее железо и витрина, которая наконец выглядит живой.': 'Live motion, real hardware, and a storefront that finally feels alive.',
+        'Мы заменили абстрактные заглушки на визуальный ролик из реальных материалов проекта, поэтому страница теперь одновременно продает атмосферу, движение и ощущение настоящего продукта.': 'We replaced abstract placeholders with a visual reel made from real project materials, so the page now sells atmosphere, motion, and the feeling of a real product at the same time.',
+        'Живой сигнал': 'Live Signal',
+        'сборок проходят проверку совместимости уже на первой серьезной версии.': 'of builds pass compatibility checks on the first serious version.',
+        'Атмосфера продуктов BuildBox': 'BuildBox product atmosphere',
+        'Кадр 02': 'Frame 02',
+        'Визуальная презентация': 'Visual Presentation',
+        'Бренд теперь ощущается как снятая и поставленная презентация, а не просто набор декоративных блоков.': 'The brand now feels like a directed presentation, not just a set of decorative blocks.',
+        'Мы добавили движущийся ролик и галерею из локальных материалов проекта, а затем смягчили резкие пересечения, из-за которых появлялись визуальные артефакты. В итоге страница стала чище, богаче и намного ближе к премиальной презентации техники.': 'We added a moving reel and a gallery from local project materials, then softened harsh overlaps that caused visual artifacts. As a result, the page became cleaner, richer, and much closer to a premium hardware presentation.',
+        'Кадр галереи BuildBox': 'BuildBox gallery frame',
+        'Главная атмосфера': 'Main Atmosphere',
+        'Деталь компонента': 'Component Detail',
+        'Студийный кадр 03': 'Studio Frame 03',
+        'Широкая визуальная сцена, которая задает настроение еще до того, как начинаются детали о товарах.': 'A wide visual scene that sets the tone before product details even begin.',
+        'Крупные планы железа удерживают страницу в реальных продуктах, а не только в декоре.': 'Close-up hardware shots keep the page rooted in real products, not just decoration.',
+        'Дополнительные кадры делают страницу похожей на собранную презентацию, а не на статичный макет.': 'Additional shots make the page feel like a produced presentation instead of a static mockup.',
+        'Ключевые принципы': 'Core Principles',
+        'Мы строили BuildBox вокруг уверенности, а не шума.': 'We built BuildBox around confidence, not noise.',
+        'Даже сильные магазины техники могут пугать, а даже хорошие инструменты для сборки могут казаться холодными. Мы хотели сделать острее: платформу с выразительной визуальной подачей и логикой, на которую реально можно опереться.': 'Even strong tech stores can feel intimidating, and even good build tools can seem cold. We wanted something sharper: a platform with expressive visual presentation and logic you can truly rely on.',
+        'История бренда': 'Brand Story',
+        '«Кастомный ПК должен ощущаться как цельный инструмент, а не как куча несвязанных решений».': '"A custom PC should feel like a complete instrument, not a pile of disconnected decisions."',
+        'Эта идея повлияла на всё: на глубину каталога, логику конфигуратора, то, как показывается совместимость, и даже на то, как визуальный язык сайта передает ощущение уверенности. BuildBox не пытается быть нейтральным. Он пытается сделать правильную сборку очевидной.': 'That idea shaped everything: the depth of the catalog, the logic of the configurator, how compatibility is shown, and even how the site’s visual language conveys confidence. BuildBox is not trying to be neutral. It is trying to make the right build feel obvious.',
+        'Процесс': 'Process',
+        'Как мы мыслим, когда сборка начинает формироваться.': 'How we think when a build starts taking shape.',
+        'Мы смотрим на каждую сборку как на систему с собственным движением. Это не просто «выбрал, выбрал, выбрал». Это задать основу, придать форму, довести до ума и только потом уверенно запускать.': 'We look at every build as a system with its own momentum. It is not just "pick, pick, pick." It is about setting the foundation, shaping it, refining it, and only then launching with confidence.',
+        'Старт': 'Start',
+        'Если сам компьютер имеет значение, то и путь его выбора тоже должен иметь значение.': 'If the computer itself matters, then the path to choosing it should matter too.',
+        'BuildBox это место, где глубина каталога, логика совместимости и энергия подачи наконец перестают конфликтовать друг с другом. В этом и состоит весь смысл бренда.': 'BuildBox is where catalog depth, compatibility logic, and presentation energy finally stop competing with each other. That is the whole point of the brand.',
+        'Начать сборку': 'Start Building',
+        'Посмотреть комплектующие': 'View Components',
+        'builders launched with BuildBox': 'собрали систему с BuildBox',
+        'configurations checked every hour': 'конфигураций проверяются каждый час',
+        'average compatibility signal time': 'среднее время сигнала совместимости',
+        'support rhythm for urgent questions': 'ритм поддержки для срочных вопросов',
+        'Precision': 'Точность',
+        'Every recommendation has to survive reality.': 'Каждая рекомендация должна выдерживать проверку реальностью.',
+        'We treat component compatibility like an engineering problem, not a guess. Power, fit, thermals, sockets, and upgrade paths are part of the same conversation.': 'Мы относимся к совместимости комплектующих как к инженерной задаче, а не к догадке. Мощность, размеры, температуры, сокеты и пути апгрейда для нас часть одного разговора.',
+        'Clarity': 'Ясность',
+        'Complex builds should still feel obvious.': 'Сложные сборки все равно должны ощущаться понятными.',
+        'The best tools remove anxiety. We design flows that turn a thousand tiny decisions into a system you can trust in minutes.': 'Лучшие инструменты убирают тревогу. Мы проектируем сценарии, которые превращают тысячу маленьких решений в систему, которой можно доверять уже через несколько минут.',
+        'Momentum': 'Движение',
+        'A great setup should feel inevitable, not intimidating.': 'Отличная система должна ощущаться естественной, а не пугающей.',
+        'BuildBox is meant to keep people moving, from first idea to final checkout, without forcing them to become hardware experts overnight.': 'BuildBox создан, чтобы вести человека вперед от первой идеи до финального заказа, не заставляя его за ночь становиться экспертом по железу.',
+        'Signal Before Specs': 'Сигнал важнее спецификаций',
+        'We start with what the machine needs to do, then shape the hardware around that goal. Performance only matters when it is attached to purpose.': 'Мы начинаем с того, что именно должна делать машина, а затем подбираем железо под эту цель. Производительность имеет смысл только тогда, когда она связана с задачей.',
+        'Compatibility as Confidence': 'Совместимость как уверенность',
+        'The configurator is not a gimmick. It is the moment where uncertainty drops and the build starts to feel real.': 'Конфигуратор не просто эффектная функция. Это момент, когда неопределенность уходит, а сборка начинает ощущаться реальной.',
+        'A Store That Feels Like a Studio': 'Магазин, который ощущается как студия',
+        'Catalog, guidance, and storytelling should feel like one continuous experience, not a pile of disconnected product pages.': 'Каталог, подсказки и подача должны ощущаться как единый цельный опыт, а не как куча разрозненных товарных страниц.',
+        'Frame': 'Основа',
+        'We frame the mission first.': 'Сначала мы задаем миссию.',
+        'Gaming, editing, streaming, workstations, compact desks, silent builds. Every system starts with context.': 'Игры, монтаж, стриминг, рабочие станции, компактные столы, тихие сборки. Каждая система начинается с контекста.',
+        'Shape': 'Форма',
+        'We shape a system, not a shopping list.': 'Мы формируем систему, а не список покупок.',
+        'The right board changes the right PSU. The right case changes cooling. We design around relationships, not isolated parts.': 'Правильная плата меняет выбор блока питания. Правильный корпус меняет охлаждение. Мы проектируем вокруг связей, а не отдельных деталей.',
+        'Refine': 'Точная настройка',
+        'We refine until the build feels intentional.': 'Мы дорабатываем, пока сборка не станет ощущаться осознанной.',
+        'A finished BuildBox setup should look coherent, perform hard, and still leave room for the next upgrade.': 'Готовая сборка BuildBox должна выглядеть цельной, выдавать мощный результат и при этом оставлять место для следующего апгрейда.',
     };
+
+    const exactEn = Object.fromEntries(
+        Object.entries(exactRu).map(function ([en, ru]) {
+            return [ru, en];
+        })
+    );
+
+    function translateKnownValue(text, lang) {
+        if (lang === 'ru') {
+            return Object.prototype.hasOwnProperty.call(exactRu, text) ? exactRu[text] : text;
+        }
+        if (lang === 'en') {
+            return Object.prototype.hasOwnProperty.call(exactEn, text) ? exactEn[text] : text;
+        }
+        return text;
+    }
 
     const keyedMessages = {
         language_changed: {
@@ -590,6 +699,22 @@
                 transform: (m) => `Страница ${m[1]} / ${m[2]}`,
             },
             {
+                regex: /^(?:•\s*)?Cooler socket mismatch: (.+) does not support (.+)$/,
+                transform: (m) => `Несовместимый сокет кулера: ${m[1]} не поддерживает ${m[2]}`,
+            },
+            {
+                regex: /^(?:•\s*)?Cooling capacity issue detected: (.+) is rated for (\d+)W, but (.+) can reach (\d+)W\. AI recommendation: choose a cooler with at least (\d+)W TDP support\.$/,
+                transform: (m) => `Обнаружена нехватка охлаждения: ${m[1]} рассчитан на ${m[2]}Вт, но ${m[3]} может достигать ${m[4]}Вт. Рекомендация AI: выберите кулер с TDP не ниже ${m[5]}Вт.`,
+            },
+            {
+                regex: /^(?:•\s*)?Case clearance risk detected: (\d+)mm AIO radiator exceeds the case limit of (\d+)mm\. AI recommendation: choose a shorter AIO or a larger case\.$/,
+                transform: (m) => `Обнаружен риск по совместимости корпуса: радиатор СЖО ${m[1]}мм длиннее лимита корпуса ${m[2]}мм. Рекомендация AI: выберите более короткую СЖО или корпус побольше.`,
+            },
+            {
+                regex: /^(?:•\s*)?Cooler too tall: (\d+)mm > (\d+)mm allowed height$/,
+                transform: (m) => `Кулер слишком высокий: ${m[1]}мм > ${m[2]}мм допустимой высоты`,
+            },
+            {
                 regex: /^(?:•\s*)?Socket mismatch: CPU (.+) \/ MB (.+)$/,
                 transform: (m) => `Несовпадение сокета: CPU ${m[1]} / MB ${m[2]}`,
             },
@@ -710,6 +835,10 @@
                 transform: (m) => `${m[1]} Вт ${translateKnownValue(m[2])}`,
             },
             {
+                regex: /^(Air Cooler|Liquid Cooling) \/ TDP ([0-9]+(?:\.[0-9]+)?) W$/,
+                transform: (m) => `${translateKnownValue(m[1])} / TDP ${m[2]} Вт`,
+            },
+            {
                 regex: /^(.+?) \/ (ATX|Micro-ATX|Mini-ITX|E-ATX|MICRO_ATX|MINI_ITX|E_ATX)$/,
                 transform: (m) => `${m[1]} / ${translateKnownValue(m[2])}`,
             },
@@ -728,18 +857,19 @@
     }
 
     function translateCore(text, lang) {
-        if (!text || lang === 'en') return text;
-        if (Object.prototype.hasOwnProperty.call(exactRu, text)) {
-            return exactRu[text];
+        if (!text) return text;
+        const exactMatch = translateKnownValue(text, lang);
+        if (exactMatch !== text) return exactMatch;
+        if (lang === 'ru') {
+            const dateTranslation = translateDateString(text);
+            if (dateTranslation !== text) return dateTranslation;
+            return translatePattern(text);
         }
-        const dateTranslation = translateDateString(text);
-        if (dateTranslation !== text) return dateTranslation;
-        return translatePattern(text);
+        return text;
     }
 
     function translateLoose(text, lang = currentLanguage) {
         if (typeof text !== 'string') return text;
-        if (lang === 'en') return text;
         const match = text.match(/^(\s*)([\s\S]*?)(\s*)$/);
         if (!match) return translateCore(text, lang);
         const translated = translateCore(match[2], lang);

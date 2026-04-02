@@ -3,6 +3,7 @@ from django.views import View
 from django.core.paginator import Paginator
 from django.contrib.contenttypes.models import ContentType
 from django.urls import reverse
+from django.templatetags.static import static
 from .models import *
 from .filters import *
 from my_site_register.permissions import get_logged_in_user 
@@ -23,7 +24,12 @@ PRODUCT_MODEL_MAP = {
     "storage": Storage,
     "powersupply": PowerSupply,
     "case": Case,
+    "cooler": Cooler,
     "laptop": Laptop,
+}
+
+CATEGORY_DISPLAY_MAP = {
+    "cooler": "Cooler",
 }
 
 
@@ -129,12 +135,17 @@ def _detail_url_for_product(product):
         "storage": "storage_detail",
         "powersupply": "power_supply_detail",
         "case": "case_detail",
+        "cooler": "cooler_detail",
         "laptop": "laptop_detail",
     }
     route_name = name_map.get(product._meta.model_name)
     if not route_name:
         return "#"
     return reverse(route_name, kwargs={"pk": product.pk})
+
+
+def _product_category_label(product):
+    return CATEGORY_DISPLAY_MAP.get(product._meta.model_name, product._meta.model_name.replace("_", " ").title())
 
 
 class Home(View):
@@ -147,6 +158,7 @@ class Home(View):
             list(Storage.objects.all()[:2]),
             list(PowerSupply.objects.all()[:2]),
             list(Case.objects.all()[:2]),
+            list(Cooler.objects.all()[:2]),
         ]
         cards = []
         for bucket in pools:
@@ -161,7 +173,7 @@ class Home(View):
                         "name": getattr(product, "name", "Product"),
                         "price": getattr(product, "price", 0),
                         "image": image,
-                        "category": product._meta.model_name.replace("_", " ").title(),
+                        "category": _product_category_label(product),
                         "detail_url": _detail_url_for_product(product),
                     }
                 )
@@ -178,6 +190,97 @@ class Home(View):
                 "popular_components": cards[:4],
                 "hero_image_urls": hero_image_urls,
                 "hero_image_initial": hero_image_urls[0],
+            },
+        )
+
+
+class AboutUsView(View):
+    def get(self, request):
+        gallery_images = []
+        hero_images = list(HomeHeroImage.objects.filter(is_active=True).order_by("order", "-created_at"))
+        for hero in hero_images:
+            if getattr(hero, "image", None):
+                gallery_images.append(hero.image.url)
+
+        fallback_gallery = [
+            "/media/home_hero/28d7079a65186eb90873ede6ddda9715.jpg",
+            "/media/home_hero/2bc97ccd8f79571592dc05e408386ba1.jpg",
+            "/media/home_hero/441b7509d792cba6bcc8f150270856be.jpg",
+            "/media/home_hero/dad43e9f0ea2d832ecc332bfc9cad4a5.jpg",
+            "/media/processors/processor_55.jpg",
+            "/media/gpus/0783077cf860895ce4d2d105c675df02a8e49ca2e3787a2c2cba6899ee131331.jpg.webp",
+        ]
+        for image_url in fallback_gallery:
+            if image_url not in gallery_images:
+                gallery_images.append(image_url)
+
+        stats = [
+            {"value": 12000, "suffix": "+", "label": "builders launched with BuildBox"},
+            {"value": 980, "suffix": "", "label": "configurations checked every hour"},
+            {"value": 42, "suffix": "ms", "label": "average compatibility signal time"},
+            {"value": 24, "suffix": "/7", "label": "support rhythm for urgent questions"},
+        ]
+        principles = [
+            {
+                "eyebrow": "Precision",
+                "title": "Every recommendation has to survive reality.",
+                "copy": "We treat component compatibility like an engineering problem, not a guess. Power, fit, thermals, sockets, and upgrade paths are part of the same conversation.",
+            },
+            {
+                "eyebrow": "Clarity",
+                "title": "Complex builds should still feel obvious.",
+                "copy": "The best tools remove anxiety. We design flows that turn a thousand tiny decisions into a system you can trust in minutes.",
+            },
+            {
+                "eyebrow": "Momentum",
+                "title": "A great setup should feel inevitable, not intimidating.",
+                "copy": "BuildBox is meant to keep people moving, from first idea to final checkout, without forcing them to become hardware experts overnight.",
+            },
+        ]
+        chapters = [
+            {
+                "index": "01",
+                "title": "Signal Before Specs",
+                "copy": "We start with what the machine needs to do, then shape the hardware around that goal. Performance only matters when it is attached to purpose.",
+            },
+            {
+                "index": "02",
+                "title": "Compatibility as Confidence",
+                "copy": "The configurator is not a gimmick. It is the moment where uncertainty drops and the build starts to feel real.",
+            },
+            {
+                "index": "03",
+                "title": "A Store That Feels Like a Studio",
+                "copy": "Catalog, guidance, and storytelling should feel like one continuous experience, not a pile of disconnected product pages.",
+            },
+        ]
+        workflow = [
+            {
+                "step": "Frame",
+                "title": "We frame the mission first.",
+                "copy": "Gaming, editing, streaming, workstations, compact desks, silent builds. Every system starts with context.",
+            },
+            {
+                "step": "Shape",
+                "title": "We shape a system, not a shopping list.",
+                "copy": "The right board changes the right PSU. The right case changes cooling. We design around relationships, not isolated parts.",
+            },
+            {
+                "step": "Refine",
+                "title": "We refine until the build feels intentional.",
+                "copy": "A finished BuildBox setup should look coherent, perform hard, and still leave room for the next upgrade.",
+            },
+        ]
+        return render(
+            request,
+            "about_us.html",
+            {
+                "stats": stats,
+                "principles": principles,
+                "chapters": chapters,
+                "workflow": workflow,
+                "about_reel_src": static("about/buildbox-reel.webp"),
+                "about_gallery_images": gallery_images[:6],
             },
         )
 
@@ -661,6 +764,34 @@ class CaseListView(View):
         return render(request, 'catalog/cases.html', context)
 
 
+class CoolerListView(View):
+    def get(self, request):
+        coolers = Cooler.objects.all()
+        cooler_filter = CoolerFilter(request.GET, queryset=coolers)
+
+        paginator = Paginator(cooler_filter.qs, 12)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        user_wishlist = []
+        user = get_logged_in_user(request)
+        if user:
+            content_type = ContentType.objects.get_for_model(Cooler)
+            user_wishlist = list(Wishlist.objects.filter(
+                user=user,
+                content_type=content_type
+            ).values_list('object_id', flat=True))
+
+        context = {
+            'filter': cooler_filter,
+            'page_obj': page_obj,
+            'category': 'Coolers',
+            'category_slug': 'coolers',
+            'user_wishlist': user_wishlist
+        }
+        return render(request, 'catalog/coolers.html', context)
+
+
 class LaptopListView(View):
     def get(self, request):
         laptops = Laptop.objects.all()
@@ -901,6 +1032,36 @@ class CaseDetailView(View):
         return render(request, 'catalog/product_detail.html', context)
 
 
+class CoolerDetailView(View):
+    def get(self, request, pk):
+        cooler = get_object_or_404(Cooler, pk=pk)
+
+        user = get_logged_in_user(request)
+        in_wishlist = False
+        if user:
+            content_type = ContentType.objects.get_for_model(Cooler)
+            in_wishlist = Wishlist.objects.filter(
+                user=user,
+                content_type=content_type,
+                object_id=pk
+            ).exists()
+            additional_images = ProductImage.objects.filter(content_type=content_type, object_id=pk).order_by('order')
+        else:
+            content_type = ContentType.objects.get_for_model(Cooler)
+            additional_images = ProductImage.objects.filter(content_type=content_type, object_id=pk).order_by('order')
+
+        context = {
+            'product': cooler,
+            'product_model': cooler._meta.model_name,
+            'category': 'Cooler',
+            'wishlist_url': reverse('add_wish_cooler', kwargs={'pk': pk}),
+            'in_wishlist': in_wishlist,
+            'additional_images': additional_images,
+            **_get_reviews_context(cooler, user),
+        }
+        return render(request, 'catalog/product_detail.html', context)
+
+
 class LaptopDetailView(View):
     def get(self, request, pk):
         laptop = get_object_or_404(Laptop, pk=pk)
@@ -1112,6 +1273,31 @@ class AddWishCase(View):
             return redirect('login_view')
 
 
+class AddWishCooler(View):
+    def post(self, request, pk):
+        user = get_logged_in_user(request)
+        if user:
+            cooler = get_object_or_404(Cooler, pk=pk)
+            content_type = ContentType.objects.get_for_model(Cooler)
+
+            wishlist_item, created = Wishlist.objects.get_or_create(
+                user=user,
+                content_type=content_type,
+                object_id=pk
+            )
+
+            if not created:
+                wishlist_item.delete()
+                messages.success(request, 'Removed from wishlist!')
+            else:
+                messages.success(request, 'Added to wishlist!')
+
+            return redirect(request.META.get('HTTP_REFERER', 'home'))
+        else:
+            messages.error(request, 'First you need to login to add wishes to wishlist')
+            return redirect('login_view')
+
+
 class AddWishLaptop(View):
     def post(self, request, pk):
         user = get_logged_in_user(request)
@@ -1228,6 +1414,7 @@ class ExploreAllView(View):
             "storage",
             "powersupply",
             "case",
+            "cooler",
         }
         showcase_items = ExploreShowcaseItem.objects.filter(is_active=True).select_related("content_type")
         cards = []
@@ -1251,7 +1438,7 @@ class ExploreAllView(View):
                         "manufacturer": getattr(product, "manufacturer", ""),
                         "price": getattr(product, "price", 0),
                         "image": image,
-                        "category": item.content_type.model.replace("_", " ").title(),
+                        "category": CATEGORY_DISPLAY_MAP.get(item.content_type.model, item.content_type.model.replace("_", " ").title()),
                         "content_type_id": item.content_type_id,
                         "object_id": product.pk,
                         "detail_url": _detail_url_for_product(product),
@@ -1266,6 +1453,7 @@ class ExploreAllView(View):
                 list(Storage.objects.all()[:4]),
                 list(PowerSupply.objects.all()[:4]),
                 list(Case.objects.all()[:4]),
+                list(Cooler.objects.all()[:4]),
             ]
             for bucket in pools:
                 for product in bucket:
@@ -1281,7 +1469,7 @@ class ExploreAllView(View):
                             "manufacturer": getattr(product, "manufacturer", ""),
                             "price": getattr(product, "price", 0),
                             "image": image,
-                            "category": product._meta.model_name.replace("_", " ").title(),
+                            "category": _product_category_label(product),
                             "content_type_id": ContentType.objects.get_for_model(product.__class__).id,
                             "object_id": product.pk,
                             "detail_url": _detail_url_for_product(product),
@@ -1338,6 +1526,7 @@ class ExploreAllView(View):
             "storage": "add_wish_storage",
             "powersupply": "add_wish_power_supply",
             "case": "add_wish_case",
+            "cooler": "add_wish_cooler",
         }
 
         for c in page_cards:

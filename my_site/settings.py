@@ -72,7 +72,8 @@ INSTALLED_APPS = [
     'ai_consultant' , 
     'configurator' ,
     'orders' , 
-    'reviews'
+    'reviews',
+    'telegram_order_bot.apps.TelegramOrderBotConfig',
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
@@ -177,3 +178,6 @@ EMAIL_USE_TLS = True
 
 # Gmail SMTP is most reliable when the sender matches the authenticated account.
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+TELEGRAM_ORDER_BOT_TOKEN = os.getenv('TELEGRAM_ORDER_BOT_TOKEN', '')
+TELEGRAM_ORDER_BOT_POLL_INTERVAL = int(os.getenv('TELEGRAM_ORDER_BOT_POLL_INTERVAL', '5'))

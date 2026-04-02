@@ -25,6 +25,7 @@
       <input type="hidden" name="gpu" id="input-gpu" value="{% if selected.gpu %}{{ selected.gpu.id }}{% endif %}">
       <input type="hidden" name="motherboard" id="input-motherboard" value="{% if selected.motherboard %}{{ selected.motherboard.id }}{% endif %}">
       <input type="hidden" name="ram" id="input-ram" value="{% if selected.ram %}{{ selected.ram.id }}{% endif %}">
+      <input type="hidden" name="cooler" id="input-cooler" value="{% if selected.cooler %}{{ selected.cooler.id }}{% endif %}">
       <input type="hidden" name="storage" id="input-storage" value="{% if selected.storage %}{{ selected.storage.id }}{% endif %}">
       <input type="hidden" name="power_supply" id="input-power_supply" value="{% if selected.power_supply %}{{ selected.power_supply.id }}{% endif %}">
       <input type="hidden" name="case" id="input-case" value="{% if selected.case %}{{ selected.case.id }}{% endif %}">
@@ -95,6 +96,108 @@
 
 <script>
 (() => {
+  const CONFIG_LANG_KEY = 'buildbox-language';
+
+  function currentLang() {
+    const stored = localStorage.getItem(CONFIG_LANG_KEY);
+    if (stored === 'ru' || stored === 'en') return stored;
+    const htmlLang = document.documentElement.lang;
+    return htmlLang === 'ru' ? 'ru' : 'en';
+  }
+
+  function tr(text) {
+    if (typeof text !== 'string') return text;
+    if (currentLang() === 'en') return text;
+
+    const exactRu = {
+      'Processor': 'Процессор',
+      'Graphics Card': 'Видеокарта',
+      'Motherboard': 'Материнская плата',
+      'RAM': 'ОЗУ',
+      'CPU Cooler': 'Кулер процессора',
+      'Storage': 'Накопитель',
+      'Power Supply': 'Блок питания',
+      'Case': 'Корпус',
+      'Click to choose': 'Нажмите, чтобы выбрать',
+      'Change': 'Изменить',
+      'Select': 'Выбрать',
+      'Add components to check compatibility': 'Добавьте комплектующие, чтобы проверить совместимость',
+      'BuildBox AI Analysis': 'BuildBox AI Анализ',
+      'AI analyzed the build and found no compatibility issues.': 'AI проверил сборку и не нашел проблем с совместимостью.',
+      'No Processor': 'Процессор не выбран',
+      'No Graphics Card': 'Видеокарта не выбрана',
+      'No Motherboard': 'Материнская плата не выбрана',
+      'No RAM': 'ОЗУ не выбрана',
+      'No CPU Cooler': 'Кулер процессора не выбран',
+      'No Storage': 'Накопитель не выбран',
+      'No Power Supply': 'Блок питания не выбран',
+      'No Case': 'Корпус не выбран',
+      'Air Cooler': 'Воздушный кулер',
+      'Liquid Cooling': 'Жидкостное охлаждение',
+    };
+
+    if (Object.prototype.hasOwnProperty.call(exactRu, text)) {
+      return exactRu[text];
+    }
+
+    const patterns = [
+      {
+        regex: /^Page (\d+) \/ (\d+)$/,
+        transform: (m) => `Страница ${m[1]} / ${m[2]}`,
+      },
+      {
+        regex: /^Select (.+)$/,
+        transform: (m) => `Выберите ${tr(m[1])}`,
+      },
+      {
+        regex: /^No (.+)$/,
+        transform: (m) => {
+          const translated = `No ${m[1]}`;
+          return exactRu[translated] || `${tr(m[1])} не выбран`;
+        },
+      },
+      {
+        regex: /^(Air Cooler|Liquid Cooling) \/ TDP ([0-9]+(?:\.[0-9]+)?) W$/,
+        transform: (m) => `${tr(m[1])} / TDP ${m[2]} Вт`,
+      },
+      {
+        regex: /^Socket mismatch: CPU (.+) \/ MB (.+)$/,
+        transform: (m) => `Несовпадение сокета: CPU ${m[1]} / MB ${m[2]}`,
+      },
+      {
+        regex: /^RAM mismatch: (.+) RAM with (.+) motherboard$/,
+        transform: (m) => `Несовместимость RAM: память ${m[1]} с материнской платой ${m[2]}`,
+      },
+      {
+        regex: /^Cooler socket mismatch: (.+) does not support (.+)$/,
+        transform: (m) => `Несовместимый сокет кулера: ${m[1]} не поддерживает ${m[2]}`,
+      },
+      {
+        regex: /^Cooling capacity issue detected: (.+) is rated for (\d+)W, but (.+) can reach (\d+)W\. AI recommendation: choose a cooler with at least (\d+)W TDP support\.$/,
+        transform: (m) => `Обнаружена нехватка охлаждения: ${m[1]} рассчитан на ${m[2]}Вт, но ${m[3]} может достигать ${m[4]}Вт. Рекомендация AI: выберите кулер с TDP не ниже ${m[5]}Вт.`,
+      },
+      {
+        regex: /^PSU too weak: (\d+)W selected, (\d+)W recommended$/,
+        transform: (m) => `Слишком слабый БП: выбрано ${m[1]}W, рекомендуется ${m[2]}W`,
+      },
+      {
+        regex: /^Case clearance risk detected: (\d+)mm AIO radiator exceeds the case limit of (\d+)mm\. AI recommendation: choose a shorter AIO or a larger case\.$/,
+        transform: (m) => `Обнаружен риск по совместимости корпуса: радиатор СЖО ${m[1]}мм длиннее лимита корпуса ${m[2]}мм. Рекомендация AI: выберите более короткую СЖО или корпус побольше.`,
+      },
+      {
+        regex: /^Cooler too tall: (\d+)mm > (\d+)mm allowed height$/,
+        transform: (m) => `Кулер слишком высокий: ${m[1]}мм > ${m[2]}мм допустимой высоты`,
+      },
+    ];
+
+    for (const pattern of patterns) {
+      const match = text.match(pattern.regex);
+      if (match) return pattern.transform(match);
+    }
+
+    return text;
+  }
+
   function getPalette() {
     const isDark = document.documentElement.classList.contains('dark');
     return isDark
@@ -119,6 +222,7 @@
     { key: 'gpu', label: 'Graphics Card', empty: 'Click to choose' },
     { key: 'motherboard', label: 'Motherboard', empty: 'Click to choose' },
     { key: 'ram', label: 'RAM', empty: 'Click to choose' },
+    { key: 'cooler', label: 'CPU Cooler', empty: 'Click to choose' },
     { key: 'storage', label: 'Storage', empty: 'Click to choose' },
     { key: 'power_supply', label: 'Power Supply', empty: 'Click to choose' },
     { key: 'case', label: 'Case', empty: 'Click to choose' },
@@ -146,6 +250,15 @@
     return tiers.find(v => v >= need) || 1500;
   }
 
+  function escapeHtml(value) {
+    return String(value || '')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
   function recalc() {
     const palette = getPalette();
     let subtotal = 0;
@@ -169,36 +282,72 @@
     totalEl.textContent = `$${total.toFixed(2)}`;
 
     const issues = [];
+    const aiIssues = [];
     const cpu = selected.processor;
     const mb = selected.motherboard;
     const ram = selected.ram;
+    const cooler = selected.cooler;
     const psu = selected.power_supply;
+    const buildCase = selected.case;
     if (cpu && mb) {
-      const cs = (cpu.subtitle || '').split('/')[0].trim();
-      const ms = (mb.subtitle || '').split('/')[0].trim();
+      const cs = cpu.socket || (cpu.subtitle || '').split('/')[0].trim();
+      const ms = mb.socket || (mb.subtitle || '').split('/')[0].trim();
       if (cs && ms && cs !== ms) issues.push(`Socket mismatch: CPU ${cs} / MB ${ms}`);
     }
     if (ram && mb) {
-      const rt = (ram.subtitle || '').toUpperCase().includes('DDR5') ? 'DDR5' : ((ram.subtitle || '').toUpperCase().includes('DDR4') ? 'DDR4' : '');
-      const mt = (mb.subtitle || '').toUpperCase().includes('DDR5') ? 'DDR5' : ((mb.subtitle || '').toUpperCase().includes('DDR4') ? 'DDR4' : '');
+      const rt = ram.memory_type || ((ram.subtitle || '').toUpperCase().includes('DDR5') ? 'DDR5' : ((ram.subtitle || '').toUpperCase().includes('DDR4') ? 'DDR4' : ''));
+      const mt = mb.ram_type || ((mb.subtitle || '').toUpperCase().includes('DDR5') ? 'DDR5' : ((mb.subtitle || '').toUpperCase().includes('DDR4') ? 'DDR4' : ''));
       if (rt && mt && rt !== mt) issues.push(`RAM mismatch: ${rt} RAM with ${mt} motherboard`);
     }
+    if (cpu && cooler) {
+      const sockets = Array.isArray(cooler.supported_sockets) ? cooler.supported_sockets.map(s => String(s).toLowerCase()) : [];
+      if (cpu.socket && sockets.length && !sockets.includes(String(cpu.socket).toLowerCase())) {
+        issues.push(`Cooler socket mismatch: ${cooler.name} does not support ${cpu.socket}`);
+      }
+      if (cooler.tdp_capacity && cpu.tdp_max && Number(cpu.tdp_max) > Number(cooler.tdp_capacity)) {
+        aiIssues.push(
+          `Cooling capacity issue detected: ${cooler.name} is rated for ${cooler.tdp_capacity}W, ` +
+          `but ${cpu.name} can reach ${cpu.tdp_max}W. AI recommendation: choose a cooler with at least ${cpu.tdp_max}W TDP support.`
+        );
+      }
+    }
     if (psu) {
-      const w = Number((psu.subtitle || '').split('W')[0]);
+      const w = Number(psu.wattage || (psu.subtitle || '').split('W')[0]);
       if (w && w < rec) issues.push(`PSU too weak: ${w}W selected, ${rec}W recommended`);
+    }
+    if (cooler && buildCase) {
+      if (cooler.cooler_type === 'AIO' && cooler.radiator_length_mm && buildCase.max_gpu_length && Number(cooler.radiator_length_mm) > Number(buildCase.max_gpu_length)) {
+        aiIssues.push(
+          `Case clearance risk detected: ${cooler.radiator_length_mm}mm AIO radiator exceeds the case limit of ${buildCase.max_gpu_length}mm. ` +
+          `AI recommendation: choose a shorter AIO or a larger case.`
+        );
+      } else if (cooler.height_mm && buildCase.max_cpu_cooler_height && Number(cooler.height_mm) > Number(buildCase.max_cpu_cooler_height)) {
+        issues.push(`Cooler too tall: ${cooler.height_mm}mm > ${buildCase.max_cpu_cooler_height}mm allowed height`);
+      }
     }
     if (!Object.values(selected).some(Boolean)) {
       compatEl.style.background = palette.compatEmptyBg;
       compatEl.style.color = palette.compatEmptyText;
-      compatEl.textContent = 'Add components to check compatibility';
-    } else if (issues.length) {
+      compatEl.textContent = tr('Add components to check compatibility');
+    } else if (issues.length || aiIssues.length) {
       compatEl.style.background = '#FEE2E2';
       compatEl.style.color = '#991B1B';
-      compatEl.innerHTML = issues.map(i => `• ${i}`).join('<br>');
+      compatEl.innerHTML = `
+        <div class="space-y-2">
+          <div class="text-xs font-semibold uppercase tracking-wide">${escapeHtml(tr('BuildBox AI Analysis'))}</div>
+          ${aiIssues.length ? `<div class="space-y-1">${aiIssues.map(i => `<p class="text-sm leading-5">• ${escapeHtml(tr(i))}</p>`).join('')}</div>` : ''}
+          ${issues.length ? `<div class="space-y-1">${issues.map(i => `<p class="text-sm leading-5">• ${escapeHtml(tr(i))}</p>`).join('')}</div>` : ''}
+        </div>
+      `;
     } else {
       compatEl.style.background = '#D1FAE5';
       compatEl.style.color = '#065F46';
-      compatEl.textContent = '✓ All components compatible';
+      compatEl.innerHTML = `
+        <div class="space-y-1">
+          <div class="text-xs font-semibold uppercase tracking-wide">${escapeHtml(tr('BuildBox AI Analysis'))}</div>
+          <p class="text-sm">${escapeHtml(tr('AI analyzed the build and found no compatibility issues.'))}</p>
+        </div>
+      `;
     }
   }
 
@@ -209,6 +358,7 @@
       gpu: `<svg ${common}><rect x="3" y="5" width="18" height="12" rx="2"></rect><path d="M8 21h8"></path></svg>`,
       motherboard: `<svg ${common}><rect x="4" y="4" width="16" height="16" rx="2"></rect><path d="M8 8h8M8 12h4M8 16h6"></path></svg>`,
       ram: `<svg ${common}><rect x="3" y="9" width="18" height="6" rx="1"></rect><path d="M7 15v2M10 15v2M14 15v2M17 15v2"></path></svg>`,
+      cooler: `<svg ${common}><circle cx="12" cy="12" r="4"></circle><path d="M12 2v3M12 19v3M22 12h-3M5 12H2M19.07 4.93l-2.12 2.12M7.05 16.95l-2.12 2.12M19.07 19.07l-2.12-2.12M7.05 7.05 4.93 4.93"></path></svg>`,
       storage: `<svg ${common}><rect x="3" y="6" width="18" height="12" rx="2"></rect><path d="M7 10h10M7 14h6"></path></svg>`,
       power_supply: `<svg ${common}><path d="M13 3 5 14h6l-1 7 8-11h-6z"></path></svg>`,
       case: `<svg ${common}><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>`,
@@ -233,14 +383,14 @@
             <div class="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0" style="background:#374151">${slotIcon(s.key, '#FBBF24')}</div>
             <div class="flex-1 min-w-0">
               <div class="flex items-center gap-2 mb-0.5">
-                <span class="text-xs font-medium" style="color:${palette.muted}">${s.label}</span>
+                <span class="text-xs font-medium" style="color:${palette.muted}">${escapeHtml(tr(s.label))}</span>
               </div>
               <p class="text-sm font-semibold truncate" style="color:${palette.title}">${it.name}</p>
-              <p class="text-xs truncate" style="color:${palette.dim}">${it.subtitle || ''}</p>
+              <p class="text-xs truncate" style="color:${palette.dim}">${escapeHtml(tr(it.subtitle || ''))}</p>
             </div>
             <div class="flex items-center gap-3 flex-shrink-0">
               <span class="font-bold" style="color:${palette.title}">$${Number(it.price).toFixed(2)}</span>
-              <button type="button" data-slot="${s.key}" class="open-modal text-xs" style="color:#FBBF24">Change</button>
+              <button type="button" data-slot="${s.key}" class="open-modal text-xs" style="color:#FBBF24">${escapeHtml(tr('Change'))}</button>
               <button type="button" data-remove="${s.key}" style="color:${palette.muted};font-size:16px;line-height:1;">×</button>
             </div>
           </div>
@@ -250,8 +400,8 @@
           <button type="button" data-slot="${s.key}" class="open-modal w-full flex items-center gap-3 group">
             <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background:${palette.iconBg}">${slotIcon(s.key, '#9CA3AF')}</div>
             <div class="flex-1 text-left">
-              <p class="text-sm font-medium" style="color:${palette.muted}">${s.label}</p>
-              <p class="text-xs" style="color:${palette.dim}">${s.empty}</p>
+              <p class="text-sm font-medium" style="color:${palette.muted}">${escapeHtml(tr(s.label))}</p>
+              <p class="text-xs" style="color:${palette.dim}">${escapeHtml(tr(s.empty))}</p>
             </div>
             <div class="flex items-center justify-center w-7 h-7 rounded-full" style="background:#FBBF24;color:#111827"><span style="display:block;line-height:1;font-size:16px;transform:translateY(-0.5px)">+</span></div>
           </button>
@@ -262,7 +412,7 @@
       const li = document.createElement('div');
       li.className = 'flex items-center justify-between py-1.5 border-b';
       li.style.borderColor = '#374151';
-      li.innerHTML = `<span class="text-xs" style="color:${it ? palette.title : palette.muted}">${it ? it.name : `No ${s.label}`}</span><span class="text-xs" style="color:${palette.dim}">${it ? `$${Number(it.price).toFixed(0)}` : '—'}</span>`;
+      li.innerHTML = `<span class="text-xs" style="color:${it ? palette.title : palette.muted}">${it ? it.name : escapeHtml(tr(`No ${s.label}`))}</span><span class="text-xs" style="color:${palette.dim}">${it ? `$${Number(it.price).toFixed(0)}` : '—'}</span>`;
       summaryEl.appendChild(li);
     });
     recalc();
@@ -356,11 +506,11 @@
           </div>
           <div class="flex-1 min-w-0">
             <p class="text-sm font-semibold mb-1 line-clamp-2" style="color:${palette.title}">${it.name}</p>
-            <p class="text-xs mb-2" style="color:${palette.dim}">${it.subtitle || ''}</p>
+            <p class="text-xs mb-2" style="color:${palette.dim}">${escapeHtml(tr(it.subtitle || ''))}</p>
             <p class="text-sm font-bold" style="color:${palette.title}">$${Number(it.price).toFixed(2)}</p>
           </div>
         </div>
-        <button type="button" class="pick mt-3 w-full py-1.5 rounded text-sm font-medium" style="background:#FBBF24;color:#111827">Select</button>
+        <button type="button" class="pick mt-3 w-full py-1.5 rounded text-sm font-medium" style="background:#FBBF24;color:#111827">${escapeHtml(tr('Select'))}</button>
       `;
       card.querySelector('.pick').addEventListener('click', () => {
         selected[activeSlot] = it;
@@ -370,7 +520,7 @@
       });
       modalGrid.appendChild(card);
     });
-    modalPage.textContent = `Page ${page} / ${pages}`;
+    modalPage.textContent = tr(`Page ${page} / ${pages}`);
     document.getElementById('modal-prev').disabled = page <= 1;
     document.getElementById('modal-next').disabled = page >= pages;
   }
@@ -382,7 +532,7 @@
     page = 1;
     modalSearch.value = '';
     const slot = slots.find(x => x.key === activeSlot);
-    modalTitle.textContent = `Select ${slot.label}`;
+    modalTitle.textContent = tr(`Select ${slot.label}`);
     modal.classList.remove('hidden');
     renderModal();
   });
@@ -404,6 +554,11 @@
     if (!modal.classList.contains('hidden') && activeSlot) renderModal();
   });
   themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+  document.addEventListener('buildbox:languagechange', () => {
+    render();
+    if (!modal.classList.contains('hidden') && activeSlot) renderModal();
+  });
 
   render();
 })();

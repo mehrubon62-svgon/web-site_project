@@ -538,7 +538,7 @@
         })
     );
 
-    function translateKnownValue(text, lang) {
+    function translateKnownValue(text, lang = 'ru') {
         if (lang === 'ru') {
             return Object.prototype.hasOwnProperty.call(exactRu, text) ? exactRu[text] : text;
         }
@@ -880,7 +880,6 @@
         if (!source) return false;
         if (currentValue === source) return true;
         for (const lang of SUPPORTED_LANGUAGES) {
-            if (lang === 'en') continue;
             if (currentValue === translateLoose(source, lang)) {
                 return true;
             }
@@ -915,7 +914,7 @@
         }
 
         const source = originalTextNodes.get(node);
-        const nextValue = currentLanguage === 'en' ? source : translateLoose(source, currentLanguage);
+        const nextValue = translateLoose(source, currentLanguage);
         if (currentValue !== nextValue) {
             node.textContent = nextValue;
         }
@@ -929,7 +928,7 @@
             stored[attrName] = currentValue;
             originalAttributes.set(element, stored);
         }
-        const nextValue = currentLanguage === 'en' ? stored[attrName] : translateLoose(stored[attrName], currentLanguage);
+        const nextValue = translateLoose(stored[attrName], currentLanguage);
         if (currentValue !== nextValue) {
             element.setAttribute(attrName, nextValue);
         }
@@ -973,7 +972,7 @@
     }
 
     function syncDocumentTitle() {
-        const nextTitle = currentLanguage === 'en' ? originalTitle : translateLoose(originalTitle, currentLanguage);
+        const nextTitle = translateLoose(originalTitle, currentLanguage);
         if (document.title === nextTitle) return;
         document.title = nextTitle;
     }

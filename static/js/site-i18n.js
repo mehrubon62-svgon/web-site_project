@@ -540,7 +540,13 @@
 
     function translateKnownValue(text, lang = 'ru') {
         if (lang === 'ru') {
-            return Object.prototype.hasOwnProperty.call(exactRu, text) ? exactRu[text] : text;
+            if (Object.prototype.hasOwnProperty.call(exactRu, text)) {
+                return exactRu[text];
+            }
+            if (Object.prototype.hasOwnProperty.call(exactEn, text)) {
+                return exactEn[text];
+            }
+            return text;
         }
         if (lang === 'en') {
             return Object.prototype.hasOwnProperty.call(exactEn, text) ? exactEn[text] : text;
@@ -697,6 +703,14 @@
             {
                 regex: /^Page (\d+) \/ (\d+)$/,
                 transform: (m) => `Страница ${m[1]} / ${m[2]}`,
+            },
+            {
+                regex: /^BuildBox gallery frame (\d+)$/,
+                transform: (m) => `Кадр галереи BuildBox ${m[1]}`,
+            },
+            {
+                regex: /^Studio Frame (\d+)$/,
+                transform: (m) => `Студийный кадр ${m[1]}`,
             },
             {
                 regex: /^(?:•\s*)?Cooler socket mismatch: (.+) does not support (.+)$/,

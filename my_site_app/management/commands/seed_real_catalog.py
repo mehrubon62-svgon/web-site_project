@@ -364,7 +364,7 @@ class Command(BaseCommand):
                     "tdp_capacity": tdp_capacity,
                     "height_mm": height_mm,
                     "radiator_length_mm": radiator_length_mm,
-                    "description": f"{name} кулер для процессора.",
+                    "description": f"{name} CPU cooler.",
                     "price": price,
                     "stock": random.randint(6, 25),
                 },

@@ -1,0 +1,1889 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: BuildBox\n"
+"POT-Creation-Date: 2026-04-03 00:00+0000\n"
+"PO-Revision-Date: 2026-04-03 00:00+0000\n"
+"Last-Translator: Codex\n"
+"Language-Team: Russian\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+
+msgid "%(avg)s/5 (%(count)s reviews)"
+msgstr "%(avg)s/5 (%(count)s отзывов)"
+
+msgid "%(count)s items"
+msgstr "%(count)s товаров"
+
+msgid "%(count)s products"
+msgstr "%(count)s товаров"
+
+msgid "%(count)s saved items"
+msgstr "%(count)s сохраненных товаров"
+
+msgid "+992 90 000 00 00"
+msgstr "+992 90 000 00 00"
+
+msgid "1 use per user"
+msgstr "1 использование на пользователя"
+
+msgid "123 Tech Street, Silicon Valley, CA"
+msgstr "123 Tech Street, Silicon Valley, CA"
+
+msgid "734000"
+msgstr "734000"
+
+msgid "80 Plus"
+msgstr "80 Plus"
+
+msgid "80 Plus Bronze"
+msgstr "80 Plus Bronze"
+
+msgid "80 Plus Gold"
+msgstr "80 Plus Gold"
+
+msgid "80 Plus Platinum"
+msgstr "80 Plus Platinum"
+
+msgid "80 Plus Silver"
+msgstr "80 Plus Silver"
+
+msgid "80 Plus Titanium"
+msgstr "80 Plus Titanium"
+
+msgid "A Store That Feels Like a Studio"
+msgstr "Магазин, который ощущается как студия"
+
+msgid "A finished BuildBox setup should look coherent, perform hard, and still leave room for the next upgrade."
+msgstr "Готовая сборка BuildBox должна выглядеть цельной, выдавать мощный результат и при этом оставлять место для следующего апгрейда."
+
+msgid "A great setup should feel inevitable, not intimidating."
+msgstr "Отличная система должна ощущаться естественной, а не пугающей."
+
+msgid "A storefront that feels like a studio, not a warehouse"
+msgstr "Витрина, которая ощущается как студия, а не как склад"
+
+msgid "A wide visual scene that sets the tone before product details even begin."
+msgstr "Широкая визуальная сцена, которая задает настроение еще до того, как начинаются детали о товарах."
+
+msgid "AI analyzed the build and found no compatibility issues."
+msgstr "AI проверил сборку и не нашел проблем с совместимостью."
+
+msgid "ATX"
+msgstr "ATX"
+
+msgid "About BuildBox"
+msgstr "О BuildBox"
+
+msgid "About Us"
+msgstr "О нас"
+
+msgid "About Us - BuildBox"
+msgstr "О нас - BuildBox"
+
+msgid "Add $%(amount)s more to unlock free shipping."
+msgstr "Добавьте еще $%(amount)s для бесплатной доставки."
+
+msgid "Add Build to Cart"
+msgstr "Добавить сборку в корзину"
+
+msgid "Add a reply..."
+msgstr "Добавить ответ..."
+
+msgid "Add components to check compatibility"
+msgstr "Добавьте комплектующие для проверки совместимости"
+
+msgid "Add some components or build a custom PC to get started."
+msgstr "Добавьте комплектующие или соберите кастомный ПК, чтобы начать."
+
+msgid "Add to Cart"
+msgstr "В корзину"
+
+msgid "Add to Wishlist"
+msgstr "Добавить в избранное"
+
+msgid "Add your review"
+msgstr "Добавить отзыв"
+
+msgid "Added to cart!"
+msgstr "Добавлено в корзину!"
+
+msgid "Added to wishlist!"
+msgstr "Добавлено в избранное!"
+
+msgid "Additional shots make the page feel like a produced presentation instead of a static mockup."
+msgstr "Дополнительные кадры делают страницу похожей на собранную презентацию, а не на статичный макет."
+
+msgid "Address Line 1 *"
+msgstr "Адрес, строка 1 *"
+
+msgid "Address Line 2 (optional)"
+msgstr "Адрес, строка 2 (необязательно)"
+
+msgid "Air Cooler"
+msgstr "Воздушный кулер"
+
+msgid "All categories"
+msgstr "Все категории"
+
+msgid "All fields are required."
+msgstr "Все поля обязательны."
+
+msgid "Already have an account?"
+msgstr "Уже есть аккаунт?"
+
+msgid "Animated BuildBox reel"
+msgstr "Анимированный ролик BuildBox"
+
+msgid "Answers only about %(product_name)s"
+msgstr "Отвечает только о товаре %(product_name)s"
+
+msgid "Apartment, office, floor"
+msgstr "Квартира, офис, этаж"
+
+msgid "Apply"
+msgstr "Применить"
+
+msgid "Apply Filters"
+msgstr "Применить фильтры"
+
+msgid "Ask about PC builds..."
+msgstr "Спросите о сборках ПК..."
+
+msgid "At least 8 characters"
+msgstr "Минимум 8 символов"
+
+msgid "Automatic verification ensures all components work perfectly together before you buy."
+msgstr "Автоматическая проверка гарантирует, что все комплектующие идеально подходят друг к другу еще до покупки."
+
+msgid "Avatar"
+msgstr "Аватар"
+
+msgid "BUILD NAME"
+msgstr "НАЗВАНИЕ СБОРКИ"
+
+msgid "Back Home"
+msgstr "Назад на главную"
+
+msgid "Back to Login"
+msgstr "Назад ко входу"
+
+msgid "Back to home"
+msgstr "Назад на главную"
+
+msgid "Back to login"
+msgstr "Назад ко входу"
+
+msgid "Base Clock"
+msgstr "Базовая частота"
+
+msgid "Be the first to post one."
+msgstr "Станьте первым, кто оставит отзыв."
+
+msgid "Best Prices"
+msgstr "Лучшие цены"
+
+msgid "Bio"
+msgstr "О себе"
+
+msgid "Bokhtar"
+msgstr "Бохтар"
+
+msgid "Boost Clock"
+msgstr "Boost частота"
+
+msgid "Brand Story"
+msgstr "История бренда"
+
+msgid "Browse Components"
+msgstr "Каталог комплектующих"
+
+msgid "Browse Products"
+msgstr "Смотреть товары"
+
+msgid "Build Your"
+msgstr "Собери свой"
+
+msgid "Build Your PC"
+msgstr "Соберите свой ПК"
+
+msgid "Build a PC"
+msgstr "Собрать ПК"
+
+msgid "Build added to cart."
+msgstr "Сборка добавлена в корзину."
+
+msgid "Build your dream PC with confidence. Expert guidance and best prices."
+msgstr "Соберите ПК мечты уверенно. Экспертные подсказки и лучшие цены."
+
+msgid "BuildBox - Build Your Dream PC"
+msgstr "BuildBox - ПК твоей мечты"
+
+msgid "BuildBox AI Analysis"
+msgstr "BuildBox AI Анализ"
+
+msgid "BuildBox AI for This Product"
+msgstr "BuildBox AI для этого товара"
+
+msgid "BuildBox is meant to keep people moving, from first idea to final checkout, without forcing them to become hardware experts overnight."
+msgstr "BuildBox создан, чтобы вести человека вперед от первой идеи до финального заказа, не заставляя его за ночь становиться экспертом по железу."
+
+msgid "BuildBox is where catalog depth, compatibility logic, and presentation energy finally stop competing with each other. That is the whole point of the brand."
+msgstr "BuildBox это место, где глубина каталога, логика совместимости и энергия подачи наконец перестают конфликтовать друг с другом. В этом и состоит весь смысл бренда."
+
+msgid "BuildBox product atmosphere"
+msgstr "Атмосфера продуктов BuildBox"
+
+msgid "BuildBox was created for people who want a computer with character, power, and no constant doubt. We combined a clear storefront, smart compatibility checks, and strong presentation into one experience."
+msgstr "BuildBox создан для тех, кто хочет получить компьютер с характером, мощностью и без постоянных сомнений. Мы объединили понятную витрину, умную проверку совместимости и сильную подачу в одном опыте."
+
+msgid "BuildBox создан для тех, кто хочет получить компьютер с характером, мощностью и без постоянных сомнений. Мы объединили понятную витрину, умную проверку совместимости и сильную подачу в одном опыте."
+msgstr "BuildBox was created for people who want a computer with character, power, and no constant doubt. We combined a clear storefront, smart compatibility checks, and strong presentation into one experience."
+
+msgid "BuildBox это место, где глубина каталога, логика совместимости и энергия подачи наконец перестают конфликтовать друг с другом. В этом и состоит весь смысл бренда."
+msgstr "BuildBox is where catalog depth, compatibility logic, and presentation energy finally stop competing with each other. That is the whole point of the brand."
+
+msgid "Builds with a clear scenario and forward momentum"
+msgstr "Сборки с понятным сценарием и движением вперед"
+
+msgid "Built from real project materials"
+msgstr "Собрано из реальных материалов проекта"
+
+msgid "CPU Cooler"
+msgstr "Кулер процессора"
+
+msgid "CPU:"
+msgstr "CPU:"
+
+msgid "CVV"
+msgstr "CVV"
+
+msgid "Cancel"
+msgstr "Отмена"
+
+msgid "Cancelled"
+msgstr "Отменен"
+
+msgid "Capacity"
+msgstr "Объем"
+
+msgid "Card Number"
+msgstr "Номер карты"
+
+msgid "Cardholder Name"
+msgstr "Имя владельца карты"
+
+msgid "Cart"
+msgstr "Корзина"
+
+msgid "Case"
+msgstr "Корпус"
+
+msgid "Cases"
+msgstr "Корпуса"
+
+msgid "Cash on Delivery"
+msgstr "Оплата при получении"
+
+msgid "Catalog, guidance, and storytelling should feel like one continuous experience, not a pile of disconnected product pages."
+msgstr "Каталог, подсказки и подача должны ощущаться как единый цельный опыт, а не как куча разрозненных товарных страниц."
+
+msgid "Category"
+msgstr "Категория"
+
+msgid "Change"
+msgstr "Изменить"
+
+msgid "Change Password"
+msgstr "Изменить пароль"
+
+msgid "Change Password - BuildBox"
+msgstr "Изменить пароль - BuildBox"
+
+msgid "Chat history deleted. Start a new conversation anytime."
+msgstr "История чата удалена. Можете начать новый диалог в любой момент."
+
+msgid "Chat is temporarily unavailable. Please try again."
+msgstr "Чат временно недоступен. Попробуйте еще раз."
+
+msgid "Chat reset. Ask anything about this product."
+msgstr "Чат сброшен. Спросите что угодно об этом товаре."
+
+msgid "Check Your Email"
+msgstr "Проверьте почту"
+
+msgid "Check compatibility with your build."
+msgstr "Проверьте совместимость с вашей сборкой."
+
+msgid "Check your spam folder or make sure you entered the correct email address during registration."
+msgstr "Проверьте папку спам или убедитесь, что при регистрации вы указали правильный email."
+
+msgid "Checkout"
+msgstr "Оформление заказа"
+
+msgid "Checkout - BuildBox"
+msgstr "Оформление заказа - BuildBox"
+
+msgid "Chipset"
+msgstr "Чипсет"
+
+msgid "Choose a username"
+msgstr "Придумайте имя пользователя"
+
+msgid "City *"
+msgstr "Город *"
+
+msgid "Clarity"
+msgstr "Ясность"
+
+msgid "Clear"
+msgstr "Очистить"
+
+msgid "Clear All"
+msgstr "Сбросить все"
+
+msgid "Clear Cart"
+msgstr "Очистить корзину"
+
+msgid "Clear filters"
+msgstr "Сбросить фильтры"
+
+msgid "Click to choose"
+msgstr "Нажмите, чтобы выбрать"
+
+msgid "Close chat"
+msgstr "Закрыть чат"
+
+msgid "Close-up hardware shots keep the page rooted in real products, not just decoration."
+msgstr "Крупные планы железа удерживают страницу в реальных продуктах, а не только в декоре."
+
+msgid "Compatibility"
+msgstr "Совместимость"
+
+msgid "Compatibility Check"
+msgstr "Проверка совместимости"
+
+msgid "Compatibility as Confidence"
+msgstr "Совместимость как уверенность"
+
+msgid "Compatibility before order problems appear"
+msgstr "Совместимость до того, как появятся проблемы на заказе"
+
+msgid "Compatible"
+msgstr "Совместимо"
+
+msgid "Competitive pricing with real-time tracking to make sure you always get the best deal."
+msgstr "Конкурентные цены и отслеживание в реальном времени, чтобы вы всегда получали лучшее предложение."
+
+msgid "Complex builds should still feel obvious."
+msgstr "Сложные сборки все равно должны ощущаться понятными."
+
+msgid "Component Detail"
+msgstr "Деталь компонента"
+
+msgid "Components"
+msgstr "Комплектующие"
+
+msgid "Configuration saved."
+msgstr "Конфигурация сохранена."
+
+msgid "Configurator"
+msgstr "Конфигуратор"
+
+msgid "Configurator - BuildBox"
+msgstr "Конфигуратор - BuildBox"
+
+msgid "Configure, customize, and create the perfect computer with our intelligent compatibility system and expert guidance."
+msgstr "Настраивайте, комбинируйте и собирайте идеальный компьютер с нашей умной системой совместимости и экспертными подсказками."
+
+msgid "Confirm New Password"
+msgstr "Подтвердите новый пароль"
+
+msgid "Confirm Password"
+msgstr "Подтвердите пароль"
+
+msgid "Confirm new password"
+msgstr "Подтвердите новый пароль"
+
+msgid "Confirm your password"
+msgstr "Подтвердите пароль"
+
+msgid "Contact"
+msgstr "Контакты"
+
+msgid "Contact Us"
+msgstr "Связаться с нами"
+
+msgid "Continue Browsing"
+msgstr "Продолжить просмотр"
+
+msgid "Continue Shopping"
+msgstr "Продолжить покупки"
+
+msgid "Continue to Payment →"
+msgstr "Перейти к оплате →"
+
+msgid "Continue →"
+msgstr "Продолжить →"
+
+msgid "Cooler"
+msgstr "Кулер"
+
+msgid "Cooler Type"
+msgstr "Тип кулера"
+
+msgid "Cooler:"
+msgstr "Кулер:"
+
+msgid "Coolers"
+msgstr "Кулеры"
+
+msgid "Core Principles"
+msgstr "Ключевые принципы"
+
+msgid "Cores"
+msgstr "Ядра"
+
+msgid "Could not clear chat."
+msgstr "Не удалось очистить чат."
+
+msgid "Could not delete chat history. Please retry."
+msgstr "Не удалось удалить историю чата. Попробуйте еще раз."
+
+msgid "Country *"
+msgstr "Страна *"
+
+msgid "Create Account"
+msgstr "Создать аккаунт"
+
+msgid "Create New"
+msgstr "Создать новую"
+
+msgid "Create a password"
+msgstr "Создайте пароль"
+
+msgid "Create first build"
+msgstr "Создать первую сборку"
+
+msgid "Credit/Debit Card"
+msgstr "Банковская карта"
+
+msgid "Current Password"
+msgstr "Текущий пароль"
+
+msgid "Customer Service"
+msgstr "Поддержка клиентов"
+
+msgid "Delete"
+msgstr "Удалить"
+
+msgid "Delivered"
+msgstr "Доставлен"
+
+msgid "Description"
+msgstr "Описание"
+
+msgid "Direction"
+msgstr "Направление"
+
+msgid "Dock"
+msgstr "Закрепить"
+
+msgid "Dream PC"
+msgstr "ПК мечты"
+
+msgid "Dushanbe"
+msgstr "Душанбе"
+
+msgid "E-ATX"
+msgstr "E-ATX"
+
+msgid "E_ATX"
+msgstr "E-ATX"
+
+msgid "Edit"
+msgstr "Изменить"
+
+msgid "Edit Profile"
+msgstr "Редактировать профиль"
+
+msgid "Edit Profile - BuildBox"
+msgstr "Редактировать профиль - BuildBox"
+
+msgid "Edit your review"
+msgstr "Редактировать отзыв"
+
+msgid "Efficiency"
+msgstr "Эффективность"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Email *"
+msgstr "Email *"
+
+msgid "Email Address"
+msgstr "Email адрес"
+
+msgid "Email Sent - BuildBox"
+msgstr "Письмо отправлено - BuildBox"
+
+msgid "Energy"
+msgstr "Энергия"
+
+msgid "English"
+msgstr "Английский"
+
+msgid "Enter code"
+msgstr "Введите код"
+
+msgid "Enter current password"
+msgstr "Введите текущий пароль"
+
+msgid "Enter new password"
+msgstr "Введите новый пароль"
+
+msgid "Enter your email"
+msgstr "Введите email"
+
+msgid "Enter your email address"
+msgstr "Введите ваш email адрес"
+
+msgid "Enter your email to reset password"
+msgstr "Введите email для сброса пароля"
+
+msgid "Enter your new password"
+msgstr "Введите новый пароль"
+
+msgid "Enter your password"
+msgstr "Введите пароль"
+
+msgid "Enter your username"
+msgstr "Введите имя пользователя"
+
+msgid "Even strong tech stores can feel intimidating, and even good build tools can seem cold. We wanted something sharper: a platform with expressive visual presentation and logic you can truly rely on."
+msgstr "Даже сильные магазины техники могут пугать, а даже хорошие инструменты для сборки могут казаться холодными. Мы хотели сделать острее: платформу с выразительной визуальной подачей и логикой, на которую реально можно опереться."
+
+msgid "Every recommendation has to survive reality."
+msgstr "Каждая рекомендация должна выдерживать проверку реальностью."
+
+msgid "Everything you need to build the perfect PC"
+msgstr "Все, что нужно для идеальной сборки ПК"
+
+msgid "Expiration (MM/YY)"
+msgstr "Срок действия (ММ/ГГ)"
+
+msgid "Explore"
+msgstr "Каталог"
+
+msgid "Explore All - BuildBox"
+msgstr "Каталог - BuildBox"
+
+msgid "Extra permissions"
+msgstr "Дополнительные разрешения"
+
+msgid "FAQ"
+msgstr "Частые вопросы"
+
+msgid "Fair password"
+msgstr "Нормальный пароль"
+
+msgid "Filters"
+msgstr "Фильтры"
+
+msgid "First Name"
+msgstr "Имя"
+
+msgid "Forgot Password"
+msgstr "Забыли пароль"
+
+msgid "Forgot Password - BuildBox"
+msgstr "Забыли пароль - BuildBox"
+
+msgid "Forgot password?"
+msgstr "Забыли пароль?"
+
+msgid "Form Factor"
+msgstr "Форм-фактор"
+
+msgid "Frame"
+msgstr "Основа"
+
+msgid "Frame 02"
+msgstr "Кадр 02"
+
+msgid "Free"
+msgstr "Бесплатно"
+
+msgid "Full Name *"
+msgstr "Полное имя *"
+
+msgid "GAMING"
+msgstr "Игровой"
+
+msgid "GPU"
+msgstr "Видеокарта"
+
+msgid "GPU:"
+msgstr "GPU:"
+
+msgid "Gaming"
+msgstr "Игровой"
+
+msgid "Gaming PC Setup"
+msgstr "Игровая сборка ПК"
+
+msgid "Gaming, editing, streaming, workstations, compact desks, silent builds. Every system starts with context."
+msgstr "Игры, монтаж, стриминг, рабочие станции, компактные столы, тихие сборки. Каждая система начинается с контекста."
+
+msgid "Get Started Now"
+msgstr "Начать сейчас"
+
+msgid "Go to Catalog"
+msgstr "Перейти в каталог"
+
+msgid "Good password"
+msgstr "Хороший пароль"
+
+msgid "Graphics Card"
+msgstr "Видеокарта"
+
+msgid "Graphics Cards"
+msgstr "Видеокарты"
+
+msgid "HDD"
+msgstr "HDD"
+
+msgid "Have a promo code?"
+msgstr "Есть промокод?"
+
+msgid "Height"
+msgstr "Высота"
+
+msgid "Hero image %(index)s"
+msgstr "Изображение баннера %(index)s"
+
+msgid "Hisor"
+msgstr "Гиссар"
+
+msgid "Home"
+msgstr "Главная"
+
+msgid "How we think when a build starts taking shape."
+msgstr "Как мы мыслим, когда сборка начинает формироваться."
+
+msgid "I agree to the"
+msgstr "Я принимаю"
+
+msgid "I agree to the Terms of Service and Privacy Policy"
+msgstr "Я принимаю Условия использования и Политику конфиденциальности"
+
+msgid "I am BuildBox AI for this product page. Ask me about specs, compatibility, performance, or usage of this item."
+msgstr "Я BuildBox AI для этой страницы товара. Спрашивайте о характеристиках, совместимости, производительности или использовании этого товара."
+
+msgid "I can only answer about this product."
+msgstr "Я могу отвечать только про этот товар."
+
+msgid "I could not process your message."
+msgstr "Я не смог обработать ваше сообщение."
+
+msgid "If the computer itself matters, then the path to choosing it should matter too."
+msgstr "Если сам компьютер имеет значение, то и путь его выбора тоже должен иметь значение."
+
+msgid "If the email exists, a password reset link has been sent."
+msgstr "Если email существует, ссылка для сброса уже отправлена."
+
+msgid "In Stock"
+msgstr "В наличии"
+
+msgid "In Stock (%(stock)s available)"
+msgstr "В наличии (%(stock)s доступно)"
+
+msgid "In Stock Only"
+msgstr "Только в наличии"
+
+msgid "Invalid promo code."
+msgstr "Неверный промокод."
+
+msgid "Invalid review route."
+msgstr "Неверный маршрут для отзыва."
+
+msgid "Isfara"
+msgstr "Исфара"
+
+msgid "Issues"
+msgstr "Есть проблемы"
+
+msgid "Istaravshan"
+msgstr "Истаравшан"
+
+msgid "Join BuildBox today"
+msgstr "Присоединяйтесь к BuildBox уже сегодня"
+
+msgid "Join thousands who built their dream PC with BuildBox"
+msgstr "Присоединяйтесь к тысячам людей, которые собрали ПК мечты с BuildBox"
+
+msgid "Khujand"
+msgstr "Худжанд"
+
+msgid "Kulob"
+msgstr "Куляб"
+
+msgid "Language"
+msgstr "Язык"
+
+msgid "Laptop"
+msgstr "Ноутбук"
+
+msgid "Laptops"
+msgstr "Ноутбуки"
+
+msgid "Last Name"
+msgstr "Фамилия"
+
+msgid "Length"
+msgstr "Длина"
+
+msgid "Liquid Cooling"
+msgstr "Жидкостное охлаждение"
+
+msgid "Live Signal"
+msgstr "Живой сигнал"
+
+msgid "Live motion, real hardware, and a storefront that finally feels alive."
+msgstr "Живое движение, настоящее железо и витрина, которая наконец выглядит живой."
+
+msgid "Log Out"
+msgstr "Выйти"
+
+msgid "Login - BuildBox"
+msgstr "Вход - BuildBox"
+
+msgid "Login successful."
+msgstr "Вход выполнен успешно."
+
+msgid "MB:"
+msgstr "MB:"
+
+msgid "MICRO_ATX"
+msgstr "Микро-ATX"
+
+msgid "MINI_ITX"
+msgstr "Мини-ITX"
+
+msgid "Main Atmosphere"
+msgstr "Главная атмосфера"
+
+msgid "Manage your BuildBox profile information."
+msgstr "Управляйте данными своего профиля BuildBox."
+
+msgid "Manufacturer"
+msgstr "Производитель"
+
+msgid "Max"
+msgstr "Макс"
+
+msgid "Max GPU Length"
+msgstr "Макс. длина GPU"
+
+msgid "Max RAM"
+msgstr "Макс. RAM"
+
+msgid "Max price"
+msgstr "Макс. цена"
+
+msgid "Maximum stock reached for this item."
+msgstr "Достигнут максимальный остаток для этого товара."
+
+msgid "Memory (RAM)"
+msgstr "Оперативная память (RAM)"
+
+msgid "Memory Type"
+msgstr "Тип памяти"
+
+msgid "Micro-ATX"
+msgstr "Микро-ATX"
+
+msgid "Min"
+msgstr "Мин"
+
+msgid "Min price"
+msgstr "Мин. цена"
+
+msgid "Mini-ITX"
+msgstr "Мини-ITX"
+
+msgid "Mix of letters and numbers"
+msgstr "Смешайте буквы и цифры"
+
+msgid "Mixed picks from PC components only"
+msgstr "Подборка только из комплектующих для ПК"
+
+msgid "Modular"
+msgstr "Модульный"
+
+msgid "Momentum"
+msgstr "Движение"
+
+msgid "Motherboard"
+msgstr "Материнская плата"
+
+msgid "Motherboards"
+msgstr "Материнские платы"
+
+msgid "Muhammad Ali"
+msgstr "Мухаммад Али"
+
+msgid "My Build"
+msgstr "Моя сборка"
+
+msgid "My Configurations"
+msgstr "Мои конфигурации"
+
+msgid "My Configurations - BuildBox"
+msgstr "Мои конфигурации - BuildBox"
+
+msgid "My Gaming Build"
+msgstr "Моя игровая сборка"
+
+msgid "My Profile"
+msgstr "Мой профиль"
+
+msgid "My Profile - BuildBox"
+msgstr "Мой профиль - BuildBox"
+
+msgid "My Wishlist"
+msgstr "Мое избранное"
+
+msgid "NVME"
+msgstr "NVMe SSD"
+
+msgid "NVMe SSD"
+msgstr "NVMe SSD"
+
+msgid "Name: A-Z"
+msgstr "Название: A-Z"
+
+msgid "Network error. Please try again."
+msgstr "Ошибка сети. Попробуйте еще раз."
+
+msgid "New Password"
+msgstr "Новый пароль"
+
+msgid "New passwords do not match."
+msgstr "Новые пароли не совпадают."
+
+msgid "Next"
+msgstr "Далее"
+
+msgid "Nickname (Username)"
+msgstr "Никнейм (Username)"
+
+msgid "No"
+msgstr "Нет"
+
+msgid "No CPU Cooler"
+msgstr "Кулер процессора не выбран"
+
+msgid "No Case"
+msgstr "Корпус не выбран"
+
+msgid "No Graphics Card"
+msgstr "Видеокарта не выбрана"
+
+msgid "No Motherboard"
+msgstr "Материнская плата не выбрана"
+
+msgid "No Power Supply"
+msgstr "Блок питания не выбран"
+
+msgid "No Processor"
+msgstr "Процессор не выбран"
+
+msgid "No RAM"
+msgstr "Оперативная память не выбрана"
+
+msgid "No Storage"
+msgstr "Накопитель не выбран"
+
+msgid "No configurations yet"
+msgstr "Пока нет конфигураций"
+
+msgid "No items for showcase yet."
+msgstr "Пока нет товаров для показа."
+
+msgid "No orders yet"
+msgstr "Пока нет заказов"
+
+msgid "No products found"
+msgstr "Товары не найдены"
+
+msgid "No reviews yet"
+msgstr "Пока нет отзывов"
+
+msgid "Not applied"
+msgstr "Не применен"
+
+msgid "Not provided"
+msgstr "Не указано"
+
+msgid "OFFICE"
+msgstr "Офисный"
+
+msgid "Office"
+msgstr "Офисный"
+
+msgid "Online"
+msgstr "Онлайн"
+
+msgid "Open Configurator"
+msgstr "Открыть конфигуратор"
+
+msgid "Open Configurator →"
+msgstr "Открыть конфигуратор →"
+
+msgid "Order History"
+msgstr "История заказов"
+
+msgid "Order Notes (optional)"
+msgstr "Комментарий к заказу (необязательно)"
+
+msgid "Order Summary"
+msgstr "Сводка заказа"
+
+msgid "Order note"
+msgstr "Комментарий к заказу"
+
+msgid "Order placed successfully."
+msgstr "Заказ успешно оформлен."
+
+msgid "Out of Stock"
+msgstr "Нет в наличии"
+
+msgid "Out of stock"
+msgstr "Нет в наличии"
+
+msgid "PC Configurator"
+msgstr "Конфигуратор ПК"
+
+msgid "PSU:"
+msgstr "PSU:"
+
+msgid "Panjakent"
+msgstr "Пенджикент"
+
+msgid "Password"
+msgstr "Пароль"
+
+msgid "Passwords do not match."
+msgstr "Пароли не совпадают."
+
+msgid "Payment"
+msgstr "Оплата"
+
+msgid "Payment Method"
+msgstr "Способ оплаты"
+
+msgid "Pending"
+msgstr "В ожидании"
+
+msgid "Phone"
+msgstr "Телефон"
+
+msgid "Placed on"
+msgstr "Оформлен"
+
+msgid "Placed on %(created_at)s"
+msgstr "Оформлен %(created_at)s"
+
+msgid "Please"
+msgstr "Пожалуйста"
+
+msgid "Please confirm your email first. We sent a new confirmation email."
+msgstr "Сначала подтвердите email. Мы отправили новое письмо с подтверждением."
+
+msgid "Please log in first."
+msgstr "Пожалуйста, сначала войдите в систему."
+
+msgid "Please log in to manage your wishlist."
+msgstr "Пожалуйста, войдите, чтобы управлять избранным."
+
+msgid "Please log in to view your wishlist."
+msgstr "Пожалуйста, войдите, чтобы посмотреть избранное."
+
+msgid "Please sign in to leave a review."
+msgstr "Пожалуйста, войдите, чтобы оставить отзыв."
+
+msgid "Popular Components"
+msgstr "Популярные комплектующие"
+
+msgid "Post"
+msgstr "Отправить"
+
+msgid "Postal Code *"
+msgstr "Почтовый индекс *"
+
+msgid "Power Calculator"
+msgstr "Калькулятор мощности"
+
+msgid "Power Consumption"
+msgstr "Потребление энергии"
+
+msgid "Power Supplies"
+msgstr "Блоки питания"
+
+msgid "Power Supply"
+msgstr "Блок питания"
+
+msgid "Precision"
+msgstr "Точность"
+
+msgid "Presentation Layer"
+msgstr "Слой презентации"
+
+msgid "Prev"
+msgstr "Назад"
+
+msgid "Price ($)"
+msgstr "Цена ($)"
+
+msgid "Price Summary"
+msgstr "Сводка цен"
+
+msgid "Price: High to Low"
+msgstr "Цена: по убыванию"
+
+msgid "Price: Low to High"
+msgstr "Цена: по возрастанию"
+
+msgid "Privacy Policy"
+msgstr "Политика конфиденциальности"
+
+msgid "Proceed to Checkout"
+msgstr "Перейти к оформлению"
+
+msgid "Process"
+msgstr "Процесс"
+
+msgid "Processing"
+msgstr "Обрабатывается"
+
+msgid "Processing your order..."
+msgstr "Обрабатываем ваш заказ..."
+
+msgid "Processor"
+msgstr "Процессор"
+
+msgid "Processors"
+msgstr "Процессоры"
+
+msgid "Product assistant is unavailable right now."
+msgstr "Помощник по товару сейчас недоступен."
+
+msgid "Product is unavailable."
+msgstr "Товар недоступен."
+
+msgid "Profile updated successfully."
+msgstr "Профиль успешно обновлен."
+
+msgid "Promo code applied: %(discount)s%% discount."
+msgstr "Промокод применен: скидка %(discount)s%%."
+
+msgid "Promo codes are unavailable until migrations are applied."
+msgstr "Промокоды недоступны, пока не применены миграции."
+
+msgid "Promo discount (%(discount)s%)"
+msgstr "Скидка по промокоду (%(discount)s%)"
+
+msgid "Promocode"
+msgstr "Промокод"
+
+msgid "Qty:"
+msgstr "Кол-во:"
+
+msgid "Quantity"
+msgstr "Количество"
+
+msgid "Quick Links"
+msgstr "Быстрые ссылки"
+
+msgid "RAM"
+msgstr "ОЗУ"
+
+msgid "RAM Slots"
+msgstr "Слоты RAM"
+
+msgid "RAM Type"
+msgstr "Тип RAM"
+
+msgid "RAM:"
+msgstr "RAM:"
+
+msgid "Radiator Length"
+msgstr "Длина радиатора"
+
+msgid "Rate %(rating)s"
+msgstr "Оценить на %(rating)s"
+
+msgid "Rating"
+msgstr "Рейтинг"
+
+msgid "Rating must be between 1 and 5"
+msgstr "Оценка должна быть от 1 до 5"
+
+msgid "Read Speed"
+msgstr "Скорость чтения"
+
+msgid "Ready to Build?"
+msgstr "Готовы к сборке?"
+
+msgid "Recommended PSU"
+msgstr "Рекомендуемый БП"
+
+msgid "Recommended PSU:"
+msgstr "Рекомендуемый БП:"
+
+msgid "Refine"
+msgstr "Точная настройка"
+
+msgid "Register"
+msgstr "Регистрация"
+
+msgid "Registration completed. Please confirm your email before login."
+msgstr "Регистрация завершена. Подтвердите email перед входом."
+
+msgid "Remember me"
+msgstr "Запомнить меня"
+
+msgid "Remove"
+msgstr "Удалить"
+
+msgid "Remove from Wishlist"
+msgstr "Убрать из избранного"
+
+msgid "Removed from wishlist!"
+msgstr "Удалено из избранного!"
+
+msgid "Replies are not ready yet. Run migrations and try again."
+msgstr "Ответы пока недоступны. Примените миграции и попробуйте снова."
+
+msgid "Reply"
+msgstr "Ответить"
+
+msgid "Reply added."
+msgstr "Ответ добавлен."
+
+msgid "Reply cannot be empty."
+msgstr "Ответ не может быть пустым."
+
+msgid "Reply deleted."
+msgstr "Ответ удален."
+
+msgid "Reset"
+msgstr "Сбросить"
+
+msgid "Reset Password"
+msgstr "Сброс пароля"
+
+msgid "Reset Password - BuildBox"
+msgstr "Сброс пароля - BuildBox"
+
+msgid "Resize chat"
+msgstr "Изменить размер чата"
+
+msgid "Resolution"
+msgstr "Разрешение"
+
+msgid "Returns & Refunds"
+msgstr "Возврат и возмещение"
+
+msgid "Review"
+msgstr "Проверка"
+
+msgid "Review Your Order"
+msgstr "Проверьте ваш заказ"
+
+msgid "Review added successfully."
+msgstr "Отзыв успешно добавлен."
+
+msgid "Review deleted."
+msgstr "Отзыв удален."
+
+msgid "Review text cannot be empty."
+msgstr "Текст отзыва не может быть пустым."
+
+msgid "Reviews"
+msgstr "Отзывы"
+
+msgid "Roles"
+msgstr "Роли"
+
+msgid "Rudaki Avenue 10"
+msgstr "проспект Рудаки 10"
+
+msgid "Russian"
+msgstr "Русский"
+
+msgid "SATA SSD"
+msgstr "SATA SSD"
+
+msgid "SATA_SSD"
+msgstr "SATA SSD"
+
+msgid "Save"
+msgstr "Сохранить"
+
+msgid "Save Changes"
+msgstr "Сохранить изменения"
+
+msgid "Save Configuration"
+msgstr "Сохранить конфигурацию"
+
+msgid "Save address for future orders"
+msgstr "Сохранить адрес для будущих заказов"
+
+msgid "Save card for future purchases"
+msgstr "Сохранить карту для будущих покупок"
+
+msgid "Saved Builds"
+msgstr "Сохраненные сборки"
+
+msgid "Screen Size"
+msgstr "Размер экрана"
+
+msgid "Search by Name"
+msgstr "Поиск по названию"
+
+msgid "Search products..."
+msgstr "Поиск товаров..."
+
+msgid "Search..."
+msgstr "Поиск..."
+
+msgid "Secure checkout"
+msgstr "Безопасное оформление заказа"
+
+msgid "Select"
+msgstr "Выбрать"
+
+msgid "Select CPU Cooler"
+msgstr "Выберите кулер процессора"
+
+msgid "Select Case"
+msgstr "Выберите корпус"
+
+msgid "Select Graphics Card"
+msgstr "Выберите видеокарту"
+
+msgid "Select Motherboard"
+msgstr "Выберите материнскую плату"
+
+msgid "Select Power Supply"
+msgstr "Выберите блок питания"
+
+msgid "Select Processor"
+msgstr "Выберите процессор"
+
+msgid "Select RAM"
+msgstr "Выберите оперативную память"
+
+msgid "Select Storage"
+msgstr "Выберите накопитель"
+
+msgid "Select city"
+msgstr "Выберите город"
+
+msgid "Send Reset Link"
+msgstr "Отправить ссылку для сброса"
+
+msgid "Shape"
+msgstr "Форма"
+
+msgid "Shipped"
+msgstr "Отправлен"
+
+msgid "Shipping"
+msgstr "Доставка"
+
+msgid "Shipping Address"
+msgstr "Адрес доставки"
+
+msgid "Shipping Information"
+msgstr "Информация о доставке"
+
+msgid "Shopping Cart"
+msgstr "Корзина"
+
+msgid "Shopping Cart - BuildBox"
+msgstr "Корзина - BuildBox"
+
+msgid "Sign In"
+msgstr "Войти"
+
+msgid "Sign In / Register"
+msgstr "Войти / Регистрация"
+
+msgid "Sign Up - BuildBox"
+msgstr "Регистрация - BuildBox"
+
+msgid "Sign in to your account"
+msgstr "Войдите в свой аккаунт"
+
+msgid "Sign up"
+msgstr "Зарегистрироваться"
+
+msgid "Signal Before Specs"
+msgstr "Сигнал важнее спецификаций"
+
+msgid "Smart PSU recommendation based on your exact component selection and power needs."
+msgstr "Умная рекомендация блока питания на основе выбранных комплектующих и требуемой мощности."
+
+msgid "Socket"
+msgstr "Сокет"
+
+msgid "Sort"
+msgstr "Сортировка"
+
+msgid "Special instructions for your order..."
+msgstr "Особые инструкции к вашему заказу..."
+
+msgid "Specifications"
+msgstr "Характеристики"
+
+msgid "Speed"
+msgstr "Скорость"
+
+msgid "Start"
+msgstr "Старт"
+
+msgid "Start Building"
+msgstr "Начать сборку"
+
+msgid "Start Shopping"
+msgstr "Начать покупки"
+
+msgid "Storage"
+msgstr "Накопители"
+
+msgid "Storage Type"
+msgstr "Тип накопителя"
+
+msgid "Studio Reel"
+msgstr "Студийный ролик"
+
+msgid "Subtotal"
+msgstr "Подытог"
+
+msgid "Support Center"
+msgstr "Центр поддержки"
+
+msgid "Supported Sockets"
+msgstr "Поддерживаемые сокеты"
+
+msgid "Supported TDP"
+msgstr "Поддерживаемый TDP"
+
+msgid "System"
+msgstr "Система"
+
+msgid "TDP Base"
+msgstr "Базовый TDP"
+
+msgid "TDP Max"
+msgstr "Макс. TDP"
+
+msgid "Tajikistan"
+msgstr "Таджикистан"
+
+msgid "Tax (1%)"
+msgstr "Налог (1%)"
+
+msgid "Tell others something about yourself"
+msgstr "Расскажите немного о себе"
+
+msgid "Terms of Service"
+msgstr "Условия использования"
+
+msgid "That idea shaped everything: the depth of the catalog, the logic of the configurator, how compatibility is shown, and even how the site’s visual language conveys confidence. BuildBox is not trying to be neutral. It is trying to make the right build feel obvious."
+msgstr "Эта идея повлияла на всё: на глубину каталога, логику конфигуратора, то, как показывается совместимость, и даже на то, как визуальный язык сайта передает ощущение уверенности. BuildBox не пытается быть нейтральным. Он пытается сделать правильную сборку очевидной."
+
+msgid "The best tools remove anxiety. We design flows that turn a thousand tiny decisions into a system you can trust in minutes."
+msgstr "Лучшие инструменты убирают тревогу. Мы проектируем сценарии, которые превращают тысячу маленьких решений в систему, которой можно доверять уже через несколько минут."
+
+msgid "The brand now feels like a directed presentation, not just a set of decorative blocks."
+msgstr "Бренд теперь ощущается как снятая и поставленная презентация, а не просто набор декоративных блоков."
+
+msgid "The configurator is not a gimmick. It is the moment where uncertainty drops and the build starts to feel real."
+msgstr "Конфигуратор не просто эффектная функция. Это момент, когда неопределенность уходит, а сборка начинает ощущаться реальной."
+
+msgid "The old confirmation link expired. A new confirmation email was sent."
+msgstr "Старая ссылка подтверждения истекла. Новое письмо уже отправлено."
+
+msgid "The right board changes the right PSU. The right case changes cooling. We design around relationships, not isolated parts."
+msgstr "Правильная плата меняет выбор блока питания. Правильный корпус меняет охлаждение. Мы проектируем вокруг связей, а не отдельных деталей."
+
+msgid "This confirmation link is invalid."
+msgstr "Эта ссылка подтверждения недействительна."
+
+msgid "This email is already registered."
+msgstr "Этот email уже зарегистрирован."
+
+msgid "This product is out of stock."
+msgstr "Товара нет в наличии."
+
+msgid "This promo code has reached its usage limit."
+msgstr "Этот промокод исчерпал лимит использования."
+
+msgid "This reset link is invalid or expired."
+msgstr "Ссылка для сброса недействительна или истекла."
+
+msgid "This username already exists."
+msgstr "Это имя пользователя уже существует."
+
+msgid "This username is already taken."
+msgstr "Это имя пользователя уже занято."
+
+msgid "Threads"
+msgstr "Потоки"
+
+msgid "Toggle AI chat"
+msgstr "Открыть AI-чат"
+
+msgid "Total"
+msgstr "Итого"
+
+msgid "Track Order"
+msgstr "Отследить заказ"
+
+msgid "Tursunzoda"
+msgstr "Турсунзаде"
+
+msgid "ULTRABOOK"
+msgstr "Ультрабук"
+
+msgid "Ultrabook"
+msgstr "Ультрабук"
+
+msgid "Unexpected server error while adding reply."
+msgstr "Непредвиденная ошибка сервера при добавлении ответа."
+
+msgid "Unknown product"
+msgstr "Неизвестный товар"
+
+msgid "Unsupported product type for review."
+msgstr "Неподдерживаемый тип товара для отзыва."
+
+msgid "Unsupported product type."
+msgstr "Неподдерживаемый тип товара."
+
+msgid "Up to 500 characters."
+msgstr "До 500 символов."
+
+msgid "Update Password"
+msgstr "Обновить пароль"
+
+msgid "Update your avatar and bio."
+msgstr "Обновите аватар и описание профиля."
+
+msgid "Update your password"
+msgstr "Обновите свой пароль"
+
+msgid "Updated"
+msgstr "Обновлен"
+
+msgid "Updated %(updated_at)s"
+msgstr "Обновлен %(updated_at)s"
+
+msgid "Username"
+msgstr "Имя пользователя"
+
+msgid "Username cannot be empty."
+msgstr "Имя пользователя не может быть пустым."
+
+msgid "Username or password is incorrect."
+msgstr "Имя пользователя или пароль неверны."
+
+msgid "VRAM"
+msgstr "Видеопамять"
+
+msgid "VRAM Type"
+msgstr "Тип видеопамяти"
+
+msgid "Vahdat"
+msgstr "Вахдат"
+
+msgid "View All →"
+msgstr "Смотреть все →"
+
+msgid "View Components"
+msgstr "Посмотреть комплектующие"
+
+msgid "View Details"
+msgstr "Подробнее"
+
+msgid "View →"
+msgstr "Открыть →"
+
+msgid "Visual Presentation"
+msgstr "Визуальная презентация"
+
+msgid "WORKSTATION"
+msgstr "Рабочая станция"
+
+msgid "Wattage"
+msgstr "Мощность"
+
+msgid "We added a moving reel and a gallery from local project materials, then softened harsh overlaps that caused visual artifacts. As a result, the page became cleaner, richer, and much closer to a premium hardware presentation."
+msgstr "Мы добавили движущийся ролик и галерею из локальных материалов проекта, а затем смягчили резкие пересечения, из-за которых появлялись визуальные артефакты. В итоге страница стала чище, богаче и намного ближе к премиальной презентации техники."
+
+msgid "We built BuildBox around confidence, not noise."
+msgstr "Мы строили BuildBox вокруг уверенности, а не шума."
+
+msgid "We frame the mission first."
+msgstr "Сначала мы задаем миссию."
+
+msgid "We refine until the build feels intentional."
+msgstr "Мы дорабатываем, пока сборка не станет ощущаться осознанной."
+
+msgid "We replaced abstract placeholders with a visual reel made from real project materials, so the page now sells atmosphere, motion, and the feeling of a real product at the same time."
+msgstr "Мы заменили абстрактные заглушки на визуальный ролик из реальных материалов проекта, поэтому страница теперь одновременно продает атмосферу, движение и ощущение настоящего продукта."
+
+msgid "We shape a system, not a shopping list."
+msgstr "Мы формируем систему, а не список покупок."
+
+msgid "We start with what the machine needs to do, then shape the hardware around that goal. Performance only matters when it is attached to purpose."
+msgstr "Мы начинаем с того, что именно должна делать машина, а затем подбираем железо под эту цель. Производительность имеет смысл только тогда, когда она связана с задачей."
+
+msgid "We treat component compatibility like an engineering problem, not a guess. Power, fit, thermals, sockets, and upgrade paths are part of the same conversation."
+msgstr "Мы относимся к совместимости комплектующих как к инженерной задаче, а не к догадке. Мощность, размеры, температуры, сокеты и пути апгрейда для нас часть одного разговора."
+
+msgid "We turn hardware chaos into a cohesive and striking system."
+msgstr "Мы превращаем хаос железа в цельную и эффектную систему."
+
+msgid "Weak password"
+msgstr "Слабый пароль"
+
+msgid "Weight"
+msgstr "Вес"
+
+msgid "Welcome Back"
+msgstr "С возвращением"
+
+msgid "Why Choose BuildBox?"
+msgstr "Почему BuildBox?"
+
+msgid "Wishlist - BuildBox"
+msgstr "Избранное - BuildBox"
+
+msgid "Workstation"
+msgstr "Рабочая станция"
+
+msgid "Write Speed"
+msgstr "Скорость записи"
+
+msgid "Write your thoughts..."
+msgstr "Поделитесь своим мнением..."
+
+msgid "Yes"
+msgstr "Да"
+
+msgid "You already used this promo code."
+msgstr "Вы уже использовали этот промокод."
+
+msgid "You can delete only your own reply."
+msgstr "Вы можете удалить только свой ответ."
+
+msgid "You can delete only your own review."
+msgstr "Вы можете удалить только свой отзыв."
+
+msgid "You have been logged out."
+msgstr "Вы вышли из системы."
+
+msgid "Your Build"
+msgstr "Ваша сборка"
+
+msgid "Your cart is empty"
+msgstr "Ваша корзина пуста"
+
+msgid "Your cart is empty."
+msgstr "Ваша корзина пуста."
+
+msgid "Your current password is incorrect."
+msgstr "Текущий пароль указан неверно."
+
+msgid "Your email was confirmed. You can now log in."
+msgstr "Ваш email подтвержден. Теперь вы можете войти."
+
+msgid "Your first name"
+msgstr "Ваше имя"
+
+msgid "Your last name"
+msgstr "Ваша фамилия"
+
+msgid "Your password has been reset. Please log in."
+msgstr "Пароль сброшен. Пожалуйста, войдите."
+
+msgid "Your password was changed successfully."
+msgstr "Пароль успешно изменен."
+
+msgid "Your placed orders will appear here."
+msgstr "Здесь появятся ваши оформленные заказы."
+
+msgid "Your review was updated."
+msgstr "Ваш отзыв обновлен."
+
+msgid "Your unique nickname"
+msgstr "Ваш уникальный никнейм"
+
+msgid "Your wishlist is empty."
+msgstr "Ваше избранное пусто."
+
+msgid "and"
+msgstr "и"
+
+msgid "average compatibility signal time"
+msgstr "среднее время сигнала совместимости"
+
+msgid "builders launched with BuildBox"
+msgstr "сборок запущено с BuildBox"
+
+msgid "configurations checked every hour"
+msgstr "конфигураций проверяется каждый час"
+
+msgid "e.g. Core i9, Ryzen 9"
+msgstr "напр. Core i9, Ryzen 9"
+
+msgid "e.g. H510"
+msgstr "напр. H510"
+
+msgid "e.g. H510, Meshify"
+msgstr "напр. H510, Meshify"
+
+msgid "e.g. NH-D15, Liquid Freezer"
+msgstr "напр. NH-D15, Liquid Freezer"
+
+msgid "e.g. Noctua, Corsair"
+msgstr "напр. Noctua, Corsair"
+
+msgid "e.g. RTX 4090"
+msgstr "напр. RTX 4090"
+
+msgid "e.g. RTX 4090, RX 7900"
+msgstr "напр. RTX 4090, RX 7900"
+
+msgid "e.g. Vengeance"
+msgstr "напр. Vengeance"
+
+msgid "e.g. Vengeance, Trident"
+msgstr "напр. Vengeance, Trident"
+
+msgid "e.g. XPS"
+msgstr "напр. XPS"
+
+msgid "e.g. XPS, ThinkPad"
+msgstr "напр. XPS, ThinkPad"
+
+msgid "each"
+msgstr "за шт."
+
+msgid "estimated"
+msgstr "оценочно"
+
+msgid "of builds pass compatibility checks on the first serious version."
+msgstr "сборок проходят проверку совместимости уже на первой серьезной версии."
+
+msgid "sign in"
+msgstr "войдите"
+
+msgid "support rhythm for urgent questions"
+msgstr "ритм поддержки для срочных вопросов"
+
+msgid "you@example.com"
+msgstr "you@example.com"
+
+msgid "Анимированный ролик BuildBox"
+msgstr "Animated BuildBox reel"
+
+msgid "Атмосфера продуктов BuildBox"
+msgstr "BuildBox product atmosphere"
+
+msgid "Бренд теперь ощущается как снятая и поставленная презентация, а не просто набор декоративных блоков."
+msgstr "The brand now feels like a directed presentation, not just a set of decorative blocks."
+
+msgid "Быстрые ссылки"
+msgstr "Quick Links"
+
+msgid "Визуальная презентация"
+msgstr "Visual Presentation"
+
+msgid "Витрина, которая ощущается как студия, а не как склад"
+msgstr "A storefront that feels like a studio, not a warehouse"
+
+msgid "Возвраты и возврат средств"
+msgstr "Returns & Refunds"
+
+msgid "Главная"
+msgstr "Home"
+
+msgid "Главная атмосфера"
+msgstr "Main Atmosphere"
+
+msgid "Даже сильные магазины техники могут пугать, а даже хорошие инструменты для сборки могут казаться холодными. Мы хотели сделать острее: платформу с выразительной визуальной подачей и логикой, на которую реально можно опереться."
+msgstr "Even strong tech stores can feel intimidating, and even good build tools can seem cold. We wanted something sharper: a platform with expressive visual presentation and logic you can truly rely on."
+
+msgid "Деталь компонента"
+msgstr "Component Detail"
+
+msgid "Дополнительные кадры делают страницу похожей на собранную презентацию, а не на статичный макет."
+msgstr "Additional shots make the page feel like a produced presentation instead of a static mockup."
+
+msgid "Если сам компьютер имеет значение, то и путь его выбора тоже должен иметь значение."
+msgstr "If the computer itself matters, then the path to choosing it should matter too."
+
+msgid "Живое движение, настоящее железо и витрина, которая наконец выглядит живой."
+msgstr "Live motion, real hardware, and a storefront that finally feels alive."
+
+msgid "Живой сигнал"
+msgstr "Live Signal"
+
+msgid "Информация о доставке"
+msgstr "Shipping Information"
+
+msgid "История бренда"
+msgstr "Brand Story"
+
+msgid "Кадр 02"
+msgstr "Frame 02"
+
+msgid "Кадр галереи BuildBox"
+msgstr "BuildBox gallery frame"
+
+msgid "Как мы мыслим, когда сборка начинает формироваться."
+msgstr "How we think when a build starts taking shape."
+
+msgid "Ключевые принципы"
+msgstr "Core Principles"
+
+msgid "Комплектующие"
+msgstr "Components"
+
+msgid "Контакты"
+msgstr "Contact"
+
+msgid "Конфигуратор ПК"
+msgstr "PC Configurator"
+
+msgid "Крупные планы железа удерживают страницу в реальных продуктах, а не только в декоре."
+msgstr "Close-up hardware shots keep the page rooted in real products, not just decoration."
+
+msgid "Мы добавили движущийся ролик и галерею из локальных материалов проекта, а затем смягчили резкие пересечения, из-за которых появлялись визуальные артефакты. В итоге страница стала чище, богаче и намного ближе к премиальной презентации техники."
+msgstr "We added a moving reel and a gallery from local project materials, then softened harsh overlaps that caused visual artifacts. As a result, the page became cleaner, richer, and much closer to a premium hardware presentation."
+
+msgid "Мы заменили абстрактные заглушки на визуальный ролик из реальных материалов проекта, поэтому страница теперь одновременно продает атмосферу, движение и ощущение настоящего продукта."
+msgstr "We replaced abstract placeholders with a visual reel made from real project materials, so the page now sells atmosphere, motion, and the feeling of a real product at the same time."
+
+msgid "Мы превращаем хаос железа в цельную и эффектную систему."
+msgstr "We turn hardware chaos into a cohesive and striking system."
+
+msgid "Мы строили BuildBox вокруг уверенности, а не шума."
+msgstr "We built BuildBox around confidence, not noise."
+
+msgid "Направление"
+msgstr "Direction"
+
+msgid "Начать сборку"
+msgstr "Start Building"
+
+msgid "Ноутбуки"
+msgstr "Laptops"
+
+msgid "О BuildBox"
+msgstr "About BuildBox"
+
+msgid "О нас"
+msgstr "About Us"
+
+msgid "О нас - BuildBox"
+msgstr "About Us - BuildBox"
+
+msgid "Открыть конфигуратор"
+msgstr "Open Configurator"
+
+msgid "Отследить заказ"
+msgstr "Track Order"
+
+msgid "Перейти в каталог"
+msgstr "Go to Catalog"
+
+msgid "Поддержка клиентов"
+msgstr "Customer Service"
+
+msgid "Посмотреть комплектующие"
+msgstr "View Components"
+
+msgid "Процесс"
+msgstr "Process"
+
+msgid "Сборки с понятным сценарием и движением вперед"
+msgstr "Builds with a clear scenario and forward momentum"
+
+msgid "Связаться с нами"
+msgstr "Contact Us"
+
+msgid "Система"
+msgstr "System"
+
+msgid "Слой презентации"
+msgstr "Presentation Layer"
+
+msgid "Собирайте ПК мечты с уверенностью. Экспертные рекомендации и выгодные цены."
+msgstr "Build your dream PC with confidence. Expert guidance and great prices."
+
+msgid "Собрано из реальных материалов проекта"
+msgstr "Built from real project materials"
+
+msgid "Совместимость до того, как появятся проблемы на заказе"
+msgstr "Compatibility before order problems appear"
+
+msgid "Старт"
+msgstr "Start"
+
+msgid "Студийный кадр 03"
+msgstr "Studio Frame 03"
+
+msgid "Студийный ролик"
+msgstr "Studio Reel"
+
+msgid "Центр поддержки"
+msgstr "Support Center"
+
+msgid "Широкая визуальная сцена, которая задает настроение еще до того, как начинаются детали о товарах."
+msgstr "A wide visual scene that sets the tone before product details even begin."
+
+msgid "Энергия"
+msgstr "Energy"
+
+msgid "Эта идея повлияла на всё: на глубину каталога, логику конфигуратора, то, как показывается совместимость, и даже на то, как визуальный язык сайта передает ощущение уверенности. BuildBox не пытается быть нейтральным. Он пытается сделать правильную сборку очевидной."
+msgstr "That idea shaped everything: the depth of the catalog, the logic of the configurator, how compatibility is shown, and even how the site’s visual language conveys confidence. BuildBox is not trying to be neutral. It is trying to make the right build feel obvious."
+
+msgid "сборок проходят проверку совместимости уже на первой серьезной версии."
+msgstr "of builds pass compatibility checks on the first serious version."
+
+msgid "← Back"
+msgstr "← Назад"
+
+msgid "← Continue Shopping"
+msgstr "← Продолжить покупки"
+
+msgid "✓ All components compatible"
+msgstr "✓ Все компоненты совместимы"
+
+msgid "✓ Passwords match"
+msgstr "✓ Пароли совпадают"
+
+msgid "✗ Passwords do not match"
+msgstr "✗ Пароли не совпадают"
+
+

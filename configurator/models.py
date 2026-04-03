@@ -120,13 +120,13 @@ class PCConfiguration(models.Model):
         if self.processor and self.cooler:
             if not self.cooler.supports_socket(self.processor.socket):
                 issues.append(
-                    f"⚠️ Несовместимый сокет кулера: кулер поддерживает {self.cooler.supported_sockets}, "
-                    f"а процессору нужен {self.processor.socket}"
+                    f"⚠️ Cooler socket mismatch: {self.cooler.name} does not support {self.processor.socket}"
                 )
             if self.processor.tdp_max > self.cooler.tdp_capacity:
                 issues.append(
-                    f"❌ AI-анализ охлаждения: кулер рассчитан до {self.cooler.tdp_capacity}Вт, "
-                    f"но процессор может потреблять до {self.processor.tdp_max}Вт"
+                    f"❌ Cooling capacity issue detected: {self.cooler.name} is rated for {self.cooler.tdp_capacity}W, "
+                    f"but {self.processor.name} can reach {self.processor.tdp_max}W. "
+                    f"AI recommendation: choose a cooler with at least {self.processor.tdp_max}W TDP support."
                 )
 
         # Проверка мощности БП
@@ -146,12 +146,13 @@ class PCConfiguration(models.Model):
             if self.cooler.cooler_type == "AIO" and self.cooler.radiator_length_mm:
                 if self.cooler.radiator_length_mm > self.case.max_gpu_length:
                     issues.append(
-                        f"⚠️ Радиатор СЖО слишком длинный для корпуса: "
-                        f"{self.cooler.radiator_length_mm}mm > {self.case.max_gpu_length}mm"
+                        f"⚠️ Case clearance risk detected: {self.cooler.radiator_length_mm}mm AIO radiator exceeds "
+                        f"the case limit of {self.case.max_gpu_length}mm. "
+                        f"AI recommendation: choose a shorter AIO or a larger case."
                     )
             elif self.cooler.height_mm and self.cooler.height_mm > self.case.max_cpu_cooler_height:
                 issues.append(
-                    f"⚠️ Кулер не помещается в корпус: {self.cooler.height_mm}mm > {self.case.max_cpu_cooler_height}mm"
+                    f"⚠️ Cooler too tall: {self.cooler.height_mm}mm > {self.case.max_cpu_cooler_height}mm allowed height"
                 )
 
         # Проверка форм-фактора материнской платы и корпуса

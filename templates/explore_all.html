@@ -13,6 +13,9 @@
     </div>
 
     <form method="get" class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-3 rounded-2xl p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600">
+      {% if search_query %}
+        <input type="hidden" name="q" value="{{ search_query }}">
+      {% endif %}
       <select name="category" class="px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white">
         <option value="">All categories</option>
         {% for cat in categories %}
@@ -55,7 +58,17 @@
             {% endif %}
           </div>
           <div class="p-4">
-            <span class="text-xs font-medium px-2 py-0.5 rounded bg-amber-50 text-amber-600">{{ card.category }}</span>
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-xs font-medium px-2 py-0.5 rounded bg-amber-50 text-amber-600">{{ card.category }}</span>
+              <span class="inline-flex items-center gap-1.5 text-xs {% if card.stock > 0 %}text-green-600 dark:text-green-400{% else %}text-red-600 dark:text-red-400{% endif %}">
+                <span class="w-1.5 h-1.5 rounded-full {% if card.stock > 0 %}bg-green-500{% else %}bg-red-500{% endif %}"></span>
+                {% if card.stock > 0 %}
+                  <span data-i18n-key="In Stock">In Stock</span>
+                {% else %}
+                  <span data-i18n-key="Out of Stock">Out of Stock</span>
+                {% endif %}
+              </span>
+            </div>
             <h4 class="mt-2 mb-1 text-sm font-semibold text-gray-900 dark:text-white line-clamp-2">{{ card.name }}</h4>
             <p class="text-xs text-gray-500 dark:text-gray-300 mb-3">{{ card.manufacturer }}</p>
             <div class="flex items-center justify-between">

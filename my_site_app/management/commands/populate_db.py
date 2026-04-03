@@ -366,18 +366,18 @@ class Command(BaseCommand):
             if cooler_type == 'AIO':
                 height_mm = None
                 radiator_length_mm = random.choice([240, 280, 360])
-                name = f"{manufacturer} СЖО {radiator_length_mm} мм"
+                name = f"{manufacturer} {radiator_length_mm}mm Liquid Cooling"
                 description = (
-                    f"{manufacturer} жидкостное охлаждение с радиатором {radiator_length_mm} мм "
-                    f"и поддержкой процессоров до {tdp_capacity} Вт TDP."
+                    f"{manufacturer} liquid cooling with a {radiator_length_mm} mm radiator "
+                    f"and support for CPUs up to {tdp_capacity}W TDP."
                 )
             else:
                 height_mm = random.choice([145, 155, 165, 170])
                 radiator_length_mm = None
-                name = f"{manufacturer} башенный кулер"
+                name = f"{manufacturer} Air Cooler"
                 description = (
-                    f"{manufacturer} воздушный кулер высотой {height_mm} мм "
-                    f"и поддержкой процессоров до {tdp_capacity} Вт TDP."
+                    f"{manufacturer} air cooler with a height of {height_mm} mm "
+                    f"and support for CPUs up to {tdp_capacity}W TDP."
                 )
 
             Cooler.objects.create(

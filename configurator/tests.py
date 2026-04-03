@@ -67,7 +67,7 @@ class CoolerCompatibilityTests(TestCase):
 
         issues = config.check_compatibility()
 
-        self.assertTrue(any("AI-анализ охлаждения" in issue for issue in issues))
+        self.assertTrue(any("Cooling capacity issue detected" in issue for issue in issues))
 
     def test_preview_detects_aio_radiator_longer_than_case(self):
         processor = self.create_processor()
@@ -93,7 +93,7 @@ class CoolerCompatibilityTests(TestCase):
         )
 
         self.assertEqual(preview["total_power"], processor.tdp_max + cooler.tdp_capacity)
-        self.assertTrue(any("Радиатор СЖО слишком длинный" in issue for issue in preview["issues"]))
+        self.assertTrue(any("Case clearance risk detected" in issue for issue in preview["issues"]))
 
     def test_save_configuration_persists_selected_cooler(self):
         processor = self.create_processor()

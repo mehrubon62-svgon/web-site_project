@@ -29,13 +29,13 @@
             </div>
         {% else %}
             <h1 class="mb-8 text-[32px] font-bold text-gray-900 dark:text-white" style="letter-spacing:-0.01em;">
-                Shopping Cart <span class="text-base font-normal text-gray-500 dark:text-gray-400">({{ items_count }} items)</span>
+                Shopping Cart <span id="cart-items-count" class="text-base font-normal text-gray-500 dark:text-gray-400">({{ items_count }} items)</span>
             </h1>
 
             <div class="flex flex-col lg:flex-row gap-6">
                 <div class="flex-1 space-y-4">
                     {% for item in cart_items %}
-                        <div class="rounded-lg p-4 flex gap-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md">
+                        <div data-cart-item-id="{{ item.id }}" class="rounded-lg p-4 flex gap-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md">
                             <div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100 dark:bg-gray-700">
                                 {% if item.image %}
                                     <img src="{{ item.image }}" alt="{{ item.name }}" class="w-full h-full object-cover">
@@ -50,7 +50,7 @@
                                         <p class="text-xs font-medium mb-0.5 text-accent">{{ item.category }}</p>
                                         <h4 class="text-sm font-semibold text-gray-900 dark:text-white">{{ item.name }}</h4>
                                     </div>
-                                    <form method="post">
+                                    <form method="post" class="js-cart-action-form">
                                         {% csrf_token %}
                                         <input type="hidden" name="action" value="remove">
                                         <input type="hidden" name="item_id" value="{{ item.id }}">
@@ -64,7 +64,7 @@
 
                                 <div class="flex items-center justify-between mt-3 gap-3">
                                     <div class="inline-flex items-center rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700">
-                                        <form method="post">
+                                        <form method="post" class="js-cart-action-form">
                                             {% csrf_token %}
                                             <input type="hidden" name="action" value="decrease">
                                             <input type="hidden" name="item_id" value="{{ item.id }}">
@@ -74,14 +74,14 @@
                                                 </svg>
                                             </button>
                                         </form>
-                                        <span class="w-16 h-9 flex items-center justify-center text-sm font-medium text-gray-900 dark:text-white">
-                                            {{ item.quantity }}{% if item.stock %}/{{ item.stock }}{% endif %}
+                                        <span data-role="qty" class="w-16 h-9 flex items-center justify-center text-sm font-medium text-gray-900 dark:text-white">
+                                            {{ item.quantity }}
                                         </span>
-                                        <form method="post">
+                                        <form method="post" class="js-cart-action-form">
                                             {% csrf_token %}
                                             <input type="hidden" name="action" value="increase">
                                             <input type="hidden" name="item_id" value="{{ item.id }}">
-                                            <button type="submit" {% if not item.can_increase %}disabled{% endif %} class="w-9 h-9 flex items-center justify-center hover:opacity-70 transition-opacity text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 disabled:opacity-40 disabled:cursor-not-allowed">
+                                            <button data-role="increase-btn" type="submit" {% if not item.can_increase %}disabled{% endif %} class="w-9 h-9 flex items-center justify-center hover:opacity-70 transition-opacity text-gray-500 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 disabled:opacity-40 disabled:cursor-not-allowed">
                                                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                                                 </svg>
@@ -90,8 +90,10 @@
                                     </div>
 
                                     <div class="text-right shrink-0">
-                                        <p class="text-sm text-gray-500 dark:text-gray-400">${{ item.price|floatformat:2 }} each</p>
-                                        <p class="font-bold text-[18px] text-gray-900 dark:text-white">${{ item.line_total|floatformat:2 }}</p>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                                            ${{ item.price|floatformat:2 }} <span data-i18n-key="each">each</span>
+                                        </p>
+                                        <p data-role="line-total" class="font-bold text-[18px] text-gray-900 dark:text-white">${{ item.line_total|floatformat:2 }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -100,7 +102,7 @@
 
                     <div class="flex items-center justify-between">
                         <a href="{% url 'explore_all' %}" class="text-sm text-accent hover:opacity-70 transition-opacity">← Continue Shopping</a>
-                        <form method="post">
+                        <form method="post" class="js-cart-action-form">
                             {% csrf_token %}
                             <input type="hidden" name="action" value="clear">
                             <button type="submit" class="text-sm text-red-500 hover:opacity-70 transition-opacity">Clear Cart</button>
@@ -125,17 +127,17 @@
                         <div class="space-y-3 mb-4">
                             <div class="flex justify-between text-sm">
                                 <span class="text-gray-500 dark:text-gray-400">Subtotal</span>
-                                <span class="text-gray-900 dark:text-white">${{ subtotal|floatformat:2 }}</span>
+                                <span id="summary-subtotal" class="text-gray-900 dark:text-white">${{ subtotal|floatformat:2 }}</span>
                             </div>
                             <div class="flex justify-between text-sm">
                                 <span class="text-gray-500 dark:text-gray-400">Shipping</span>
-                                <span class="{% if shipping == 0 %}text-green-500{% else %}text-gray-900 dark:text-white{% endif %}">
+                                <span id="summary-shipping" class="{% if shipping == 0 %}text-green-500{% else %}text-gray-900 dark:text-white{% endif %}">
                                     {% if shipping == 0 %}Free{% else %}${{ shipping|floatformat:2 }}{% endif %}
                                 </span>
                             </div>
                             <div class="flex justify-between text-sm">
                                 <span class="text-gray-500 dark:text-gray-400">Tax (1%)</span>
-                                <span class="text-gray-900 dark:text-white">${{ tax|floatformat:2 }}</span>
+                                <span id="summary-tax" class="text-gray-900 dark:text-white">${{ tax|floatformat:2 }}</span>
                             </div>
                             <div class="flex justify-between text-sm">
                                 <span class="text-gray-500 dark:text-gray-400">Promocode</span>
@@ -147,8 +149,8 @@
                             </div>
                             {% if promo_applied %}
                                 <div class="flex justify-between text-sm">
-                                    <span class="text-green-500">Promo discount ({{ discount_percent }}%)</span>
-                                    <span class="text-green-500">-${{ discount|floatformat:2 }}</span>
+                                    <span id="summary-discount-label" class="text-green-500">Promo discount ({{ discount_percent }}%)</span>
+                                    <span id="summary-discount-value" class="text-green-500">-${{ discount|floatformat:2 }}</span>
                                 </div>
                             {% endif %}
                         </div>
@@ -162,7 +164,7 @@
                         <div class="pt-3 mb-5 border-t border-gray-200 dark:border-gray-700">
                             <div class="flex justify-between">
                                 <span class="font-semibold text-gray-900 dark:text-white">Total</span>
-                                <span class="text-[22px] font-bold text-gray-900 dark:text-white">${{ total|floatformat:2 }}</span>
+                                <span id="summary-total" class="text-[22px] font-bold text-gray-900 dark:text-white">${{ total|floatformat:2 }}</span>
                             </div>
                         </div>
 
@@ -173,11 +175,11 @@
                                 </svg>
                                 Have a promo code?
                             </button>
-                            <form id="promo-form" method="post" class="hidden flex gap-2">
+                            <form id="promo-form" method="post" class="hidden flex flex-col sm:flex-row gap-2">
                                 {% csrf_token %}
                                 <input type="hidden" name="action" value="apply_promo">
-                                <input type="text" name="promo_code" value="{{ promo_code }}" placeholder="Enter code" class="flex-1 px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white text-sm outline-none focus:border-accent">
-                                <button type="submit" class="px-3 py-2 rounded-lg text-sm font-medium bg-accent text-gray-900 hover:opacity-90 transition-opacity">Apply</button>
+                                <input type="text" name="promo_code" value="{{ promo_code }}" placeholder="Enter code" class="w-full sm:flex-1 px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white text-sm outline-none focus:border-accent">
+                                <button type="submit" class="w-full sm:w-auto sm:min-w-[110px] sm:shrink-0 px-4 py-2 rounded-lg text-sm font-medium bg-accent text-gray-900 hover:opacity-90 transition-opacity whitespace-nowrap text-center">Apply</button>
                             </form>
                         </div>
 
@@ -191,6 +193,21 @@
 </section>
 <script>
     (() => {
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
         const toggleBtn = document.getElementById('promo-toggle');
         const promoForm = document.getElementById('promo-form');
         if (!toggleBtn || !promoForm) return;
@@ -201,6 +218,107 @@
 
         toggleBtn.addEventListener('click', () => {
             promoForm.classList.toggle('hidden');
+        });
+
+        const csrfToken = getCookie('csrftoken');
+        const forms = document.querySelectorAll('.js-cart-action-form');
+        const money = (n) => `$${Number(n || 0).toFixed(2)}`;
+
+        function updateSummary(totals) {
+            const itemsCountNode = document.getElementById('cart-items-count');
+            const subtotalNode = document.getElementById('summary-subtotal');
+            const shippingNode = document.getElementById('summary-shipping');
+            const taxNode = document.getElementById('summary-tax');
+            const totalNode = document.getElementById('summary-total');
+            const discountLabel = document.getElementById('summary-discount-label');
+            const discountValue = document.getElementById('summary-discount-value');
+
+            if (itemsCountNode) itemsCountNode.textContent = `(${totals.items_count} items)`;
+            if (subtotalNode) subtotalNode.textContent = money(totals.subtotal);
+            if (taxNode) taxNode.textContent = money(totals.tax);
+            if (totalNode) totalNode.textContent = money(totals.total);
+
+            if (shippingNode) {
+                if (Number(totals.shipping) === 0) {
+                    shippingNode.textContent = 'Free';
+                    shippingNode.classList.remove('text-gray-900', 'dark:text-white');
+                    shippingNode.classList.add('text-green-500');
+                } else {
+                    shippingNode.textContent = money(totals.shipping);
+                    shippingNode.classList.remove('text-green-500');
+                    shippingNode.classList.add('text-gray-900', 'dark:text-white');
+                }
+            }
+
+                if (discountLabel && discountValue) {
+                    if (totals.promo_applied) {
+                        discountLabel.textContent = `Promo discount (${totals.discount_percent}%)`;
+                        discountValue.textContent = `-$${Number(totals.discount || 0).toFixed(2)}`;
+                    }
+                }
+            }
+
+        function updateItems(items) {
+            const map = new Map(items.map((item) => [item.id, item]));
+            document.querySelectorAll('[data-cart-item-id]').forEach((row) => {
+                const itemId = row.getAttribute('data-cart-item-id');
+                const item = map.get(itemId);
+                if (!item) {
+                    row.remove();
+                    return;
+                }
+
+                const qtyNode = row.querySelector('[data-role="qty"]');
+                const lineTotalNode = row.querySelector('[data-role="line-total"]');
+                const increaseBtn = row.querySelector('[data-role="increase-btn"]');
+
+                if (qtyNode) {
+                    qtyNode.textContent = `${item.quantity}`;
+                }
+                if (lineTotalNode) {
+                    lineTotalNode.textContent = money(item.line_total);
+                }
+                if (increaseBtn) {
+                    increaseBtn.disabled = !item.can_increase;
+                }
+            });
+        }
+
+        forms.forEach((form) => {
+            form.addEventListener('submit', async (event) => {
+                const action = form.querySelector('input[name="action"]')?.value;
+                if (!['increase', 'decrease', 'remove', 'clear'].includes(action)) return;
+                event.preventDefault();
+
+                const formData = new FormData(form);
+                const response = await fetch(window.location.pathname, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrfToken,
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    body: formData,
+                });
+
+                if (!response.ok) {
+                    form.submit();
+                    return;
+                }
+
+                const data = await response.json();
+                if (!data.ok) {
+                    form.submit();
+                    return;
+                }
+
+                if (data.cart_empty) {
+                    window.location.reload();
+                    return;
+                }
+
+                updateItems(data.items || []);
+                updateSummary(data.totals || {});
+            });
         });
     })();
 </script>

@@ -103,7 +103,7 @@
                     {% endif %}
                     {% if product.supported_sockets %}
                         <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
-                            <div class="w-1/3 px-3 py-2 font-medium bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300">Поддерживаемые сокеты</div>
+                            <div class="w-1/3 px-3 py-2 font-medium bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300">Supported Sockets</div>
                             <div class="flex-1 px-3 py-2 text-gray-900 dark:text-white">{{ product.supported_sockets }}</div>
                         </div>
                     {% endif %}
@@ -115,25 +115,25 @@
                     {% endif %}
                     {% if product.tdp_capacity %}
                         <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
-                            <div class="w-1/3 px-3 py-2 font-medium bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300">Поддерживаемый TDP</div>
+                            <div class="w-1/3 px-3 py-2 font-medium bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300">Supported TDP</div>
                             <div class="flex-1 px-3 py-2 text-gray-900 dark:text-white">{{ product.tdp_capacity }} W</div>
                         </div>
                     {% endif %}
                     {% if product.cooler_type %}
                         <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
-                            <div class="w-1/3 px-3 py-2 font-medium bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300">Тип кулера</div>
+                            <div class="w-1/3 px-3 py-2 font-medium bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300">Cooler Type</div>
                             <div class="flex-1 px-3 py-2 text-gray-900 dark:text-white">{{ product.get_cooler_type_display }}</div>
                         </div>
                     {% endif %}
                     {% if product.height_mm %}
                         <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
-                            <div class="w-1/3 px-3 py-2 font-medium bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300">Высота</div>
+                            <div class="w-1/3 px-3 py-2 font-medium bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300">Height</div>
                             <div class="flex-1 px-3 py-2 text-gray-900 dark:text-white">{{ product.height_mm }} mm</div>
                         </div>
                     {% endif %}
                     {% if product.radiator_length_mm %}
                         <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
-                            <div class="w-1/3 px-3 py-2 font-medium bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300">Длина радиатора</div>
+                            <div class="w-1/3 px-3 py-2 font-medium bg-gray-100 dark:bg-gray-900 text-gray-700 dark:text-gray-300">Radiator Length</div>
                             <div class="flex-1 px-3 py-2 text-gray-900 dark:text-white">{{ product.radiator_length_mm }} mm</div>
                         </div>
                     {% endif %}
@@ -296,35 +296,35 @@
 
                     {% if product.tdp_capacity %}
                         <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
-                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Поддерживаемый TDP</div>
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Supported TDP</div>
                             <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.tdp_capacity }} W</div>
                         </div>
                     {% endif %}
 
                     {% if product.cooler_type %}
                         <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
-                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Тип кулера</div>
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Cooler Type</div>
                             <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.get_cooler_type_display }}</div>
                         </div>
                     {% endif %}
 
                     {% if product.supported_sockets %}
                         <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
-                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Поддерживаемые сокеты</div>
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Supported Sockets</div>
                             <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.supported_sockets }}</div>
                         </div>
                     {% endif %}
 
                     {% if product.height_mm %}
                         <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
-                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Высота</div>
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Height</div>
                             <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.height_mm }} mm</div>
                         </div>
                     {% endif %}
 
                     {% if product.radiator_length_mm %}
                         <div class="flex text-sm border-b border-gray-200 dark:border-gray-700">
-                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Длина радиатора</div>
+                            <div class="w-1/3 px-4 py-3 font-medium bg-gray-100 dark:bg-gray-900 text-gray-500">Radiator Length</div>
                             <div class="flex-1 px-4 py-3 text-gray-900 dark:text-white">{{ product.radiator_length_mm }} mm</div>
                         </div>
                     {% endif %}

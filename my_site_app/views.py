@@ -11,6 +11,7 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.db import transaction
 from django.db.utils import ProgrammingError, OperationalError
+from django.utils.translation import gettext as _
 import random
 from reviews.models import Review
 
@@ -96,6 +97,49 @@ def _compute_cart_totals(cart, promo_obj=None):
         "discount_percent": discount_percent,
         "total": total,
         "items_count": sum(int(item.get("quantity", 1)) for item in cart),
+    }
+
+
+def _build_cart_view_state(request):
+    raw_items = _get_session_cart(request)
+    cart_items = []
+    for item in raw_items:
+        price = float(item.get("price", 0))
+        resolved_stock = _get_stock_for_cart_item(item.get("id", ""))
+        stock_limit = resolved_stock if resolved_stock is not None else int(item.get("stock", 0) or 0)
+        quantity = int(item.get("quantity", 1))
+        if stock_limit > 0:
+            quantity = min(quantity, stock_limit)
+        cart_items.append(
+            {
+                **item,
+                "price": price,
+                "stock": stock_limit,
+                "quantity": quantity,
+                "line_total": price * quantity,
+                "can_increase": True if resolved_stock is None and stock_limit == 0 else (quantity < stock_limit),
+            }
+        )
+
+    promo_code = request.session.get(SESSION_PROMO_KEY, "").upper()
+    try:
+        if promo_code == "BUILDBOX10":
+            PromoCode.objects.get_or_create(
+                code="BUILDBOX10",
+                defaults={"quantity": 500, "discount_percent": 5, "is_active": True},
+            )
+        promo_obj = PromoCode.objects.filter(code=promo_code, is_active=True).first() if promo_code else None
+    except (ProgrammingError, OperationalError):
+        promo_obj = None
+
+    totals = _compute_cart_totals(cart_items, promo_obj)
+    free_shipping_delta = max(0, 120 - totals["subtotal"])
+    return {
+        "cart_items": cart_items,
+        "promo_code": promo_code if promo_obj else "",
+        "promo_applied": bool(promo_obj),
+        "free_shipping_delta": free_shipping_delta,
+        **totals,
     }
 
 
@@ -287,47 +331,11 @@ class AboutUsView(View):
 
 class ShoppingCartView(View):
     def get(self, request):
-        raw_items = _get_session_cart(request)
-        cart_items = []
-        for item in raw_items:
-            price = float(item.get("price", 0))
-            resolved_stock = _get_stock_for_cart_item(item.get("id", ""))
-            stock_limit = resolved_stock if resolved_stock is not None else int(item.get("stock", 0) or 0)
-            quantity = int(item.get("quantity", 1))
-            if stock_limit > 0:
-                quantity = min(quantity, stock_limit)
-            cart_items.append(
-                {
-                    **item,
-                    "price": price,
-                    "stock": stock_limit,
-                    "quantity": quantity,
-                    "line_total": price * quantity,
-                    "can_increase": True if resolved_stock is None and stock_limit == 0 else (quantity < stock_limit),
-                }
-            )
-        promo_code = request.session.get(SESSION_PROMO_KEY, "").upper()
-        try:
-            if promo_code == "BUILDBOX10":
-                PromoCode.objects.get_or_create(
-                    code="BUILDBOX10",
-                    defaults={"quantity": 500, "discount_percent": 5, "is_active": True},
-                )
-            promo_obj = PromoCode.objects.filter(code=promo_code, is_active=True).first() if promo_code else None
-        except (ProgrammingError, OperationalError):
-            promo_obj = None
-        totals = _compute_cart_totals(cart_items, promo_obj)
-        free_shipping_delta = max(0, 120 - totals["subtotal"])
+        state = _build_cart_view_state(request)
         return render(
             request,
             "shopping_cart.html",
-            {
-                "cart_items": cart_items,
-                "promo_code": promo_code if promo_obj else "",
-                "promo_applied": bool(promo_obj),
-                "free_shipping_delta": free_shipping_delta,
-                **totals,
-            },
+            state,
         )
 
     def post(self, request):
@@ -335,6 +343,7 @@ class ShoppingCartView(View):
         item_id = request.POST.get("item_id", "")
         entered_code = request.POST.get("promo_code", "").strip().upper()
         cart_items = _get_session_cart(request)
+        is_ajax = request.headers.get("X-Requested-With") == "XMLHttpRequest"
 
         if action == "increase" and item_id:
             for item in cart_items:
@@ -342,7 +351,7 @@ class ShoppingCartView(View):
                     current_qty = int(item.get("quantity", 1))
                     stock_limit = _get_stock_for_cart_item(item_id)
                     if stock_limit is not None and current_qty >= stock_limit:
-                        messages.error(request, "Maximum stock reached for this item.")
+                        messages.error(request, _("Maximum stock reached for this item."))
                         break
                     item["quantity"] = current_qty + 1
                     break
@@ -378,25 +387,25 @@ class ShoppingCartView(View):
                 promo_obj = PromoCode.objects.filter(code=entered_code, is_active=True).first()
                 if not promo_obj:
                     request.session.pop(SESSION_PROMO_KEY, None)
-                    messages.error(request, "Invalid promo code.")
+                    messages.error(request, _("Invalid promo code."))
                     return redirect("shopping_cart")
 
                 user = get_logged_in_user(request)
                 with transaction.atomic():
                     promo_obj = PromoCode.objects.select_for_update().get(pk=promo_obj.pk)
                     if promo_obj.remaining_quantity <= 0:
-                        messages.error(request, "This promo code has reached its usage limit.")
+                        messages.error(request, _("This promo code has reached its usage limit."))
                         return redirect("shopping_cart")
 
                     if user:
                         if PromoCodeUsage.objects.filter(promo_code=promo_obj, user=user).exists():
-                            messages.error(request, "You already used this promo code.")
+                            messages.error(request, _("You already used this promo code."))
                             return redirect("shopping_cart")
                         PromoCodeUsage.objects.create(promo_code=promo_obj, user=user)
                     else:
                         anon_used = request.session.get("used_promo_codes", [])
                         if promo_obj.code in anon_used:
-                            messages.error(request, "You already used this promo code.")
+                            messages.error(request, _("You already used this promo code."))
                             return redirect("shopping_cart")
                         anon_used.append(promo_obj.code)
                         request.session["used_promo_codes"] = anon_used
@@ -404,10 +413,42 @@ class ShoppingCartView(View):
                 request.session[SESSION_PROMO_KEY] = promo_obj.code
                 messages.success(
                     request,
-                    f"Promo code applied: {promo_obj.discount_percent}% discount.",
+                    _("Promo code applied: %(discount)s%% discount.") % {"discount": promo_obj.discount_percent},
                 )
             except (ProgrammingError, OperationalError):
-                messages.error(request, "Promo codes are unavailable until migrations are applied.")
+                messages.error(request, _("Promo codes are unavailable until migrations are applied."))
+
+        if is_ajax and action in {"increase", "decrease", "remove", "clear"}:
+            state = _build_cart_view_state(request)
+            return JsonResponse(
+                {
+                    "ok": True,
+                    "action": action,
+                    "cart_empty": len(state["cart_items"]) == 0,
+                    "items": [
+                        {
+                            "id": item["id"],
+                            "quantity": item["quantity"],
+                            "stock": item.get("stock", 0),
+                            "line_total": round(float(item["line_total"]), 2),
+                            "can_increase": bool(item.get("can_increase", False)),
+                        }
+                        for item in state["cart_items"]
+                    ],
+                    "totals": {
+                        "subtotal": round(float(state["subtotal"]), 2),
+                        "shipping": round(float(state["shipping"]), 2),
+                        "tax": round(float(state["tax"]), 2),
+                        "discount": round(float(state["discount"]), 2),
+                        "discount_percent": int(state["discount_percent"]),
+                        "total": round(float(state["total"]), 2),
+                        "items_count": int(state["items_count"]),
+                        "promo_applied": bool(state["promo_applied"]),
+                        "promo_code": state["promo_code"],
+                        "free_shipping_delta": round(float(state["free_shipping_delta"]), 2),
+                    },
+                }
+            )
 
         return redirect("shopping_cart")
 
@@ -416,12 +457,12 @@ class CheckoutView(View):
     def get(self, request):
         user = get_logged_in_user(request)
         if not user:
-            messages.error(request, "Please log in first.")
+            messages.error(request, _("Please log in first."))
             return redirect("login_view")
 
         raw_items = _get_session_cart(request)
         if not raw_items:
-            messages.info(request, "Your cart is empty.")
+            messages.info(request, _("Your cart is empty."))
             return redirect("shopping_cart")
 
         cart_items = []
@@ -460,7 +501,7 @@ class CheckoutView(View):
     def post(self, request):
         user = get_logged_in_user(request)
         if not user:
-            messages.error(request, "Please log in first.")
+            messages.error(request, _("Please log in first."))
             return redirect("login_view")
 
         action = request.POST.get("action", "")
@@ -512,7 +553,7 @@ class CheckoutView(View):
                 )
             _save_session_cart(request, [])
             request.session.pop(SESSION_PROMO_KEY, None)
-            messages.success(request, "Order placed successfully.")
+            messages.success(request, _("Order placed successfully."))
             return redirect("home")
         return redirect("checkout")
 
@@ -523,7 +564,7 @@ class AddCatalogItemToCartView(View):
     def post(self, request, model_name, pk):
         model_class = self.model_map.get(model_name)
         if not model_class:
-            messages.error(request, "Unsupported product type.")
+            messages.error(request, _("Unsupported product type."))
             return redirect(request.META.get("HTTP_REFERER", "home"))
 
         product = get_object_or_404(model_class, pk=pk)
@@ -542,7 +583,7 @@ class AddCatalogItemToCartView(View):
         if stock_limit > 0:
             quantity = min(quantity, stock_limit)
         else:
-            messages.error(request, "This product is out of stock.")
+            messages.error(request, _("This product is out of stock."))
             return redirect(request.META.get("HTTP_REFERER", "home"))
 
         _add_to_session_cart(
@@ -557,7 +598,7 @@ class AddCatalogItemToCartView(View):
                 "stock": stock_limit,
             },
         )
-        messages.success(request, "Added to cart!")
+        messages.success(request, _("Added to cart!"))
         return redirect(request.META.get("HTTP_REFERER", "home"))
 
 
@@ -1398,7 +1439,7 @@ class AddWishlistItemToCartView(View):
                 "category": "Wishlist",
             },
         )
-        messages.success(request, 'Added to cart!')
+        messages.success(request, _('Added to cart!'))
         return redirect('wishlist')
 
 
@@ -1406,6 +1447,7 @@ class ExploreAllView(View):
     """Страница со смешанным набором товаров из разных категорий."""
     def get(self, request):
         user = get_logged_in_user(request)
+        search_query = (request.GET.get("q") or request.GET.get("search") or "").strip().lower()
         allowed_models = {
             "processor",
             "gpu",
@@ -1437,8 +1479,10 @@ class ExploreAllView(View):
                         "name": getattr(product, "name", "Product"),
                         "manufacturer": getattr(product, "manufacturer", ""),
                         "price": getattr(product, "price", 0),
+                        "stock": max(0, int(getattr(product, "stock", 0) or 0)),
                         "image": image,
                         "category": CATEGORY_DISPLAY_MAP.get(item.content_type.model, item.content_type.model.replace("_", " ").title()),
+                        "category_key": item.content_type.model,
                         "content_type_id": item.content_type_id,
                         "object_id": product.pk,
                         "detail_url": _detail_url_for_product(product),
@@ -1468,14 +1512,43 @@ class ExploreAllView(View):
                             "name": getattr(product, "name", "Product"),
                             "manufacturer": getattr(product, "manufacturer", ""),
                             "price": getattr(product, "price", 0),
+                            "stock": max(0, int(getattr(product, "stock", 0) or 0)),
                             "image": image,
                             "category": _product_category_label(product),
+                            "category_key": product._meta.model_name,
                             "content_type_id": ContentType.objects.get_for_model(product.__class__).id,
                             "object_id": product.pk,
                             "detail_url": _detail_url_for_product(product),
                         }
                     )
             cards.sort(key=lambda x: (x["category"].lower(), x["name"].lower()))
+
+        if search_query:
+            aliases = {
+                "processor": {"processor", "processors", "cpu", "процессор", "процессоры"},
+                "gpu": {"gpu", "graphics", "graphics card", "graphics cards", "video card", "videocard", "видеокарта", "видеокарты", "графика"},
+                "ram": {"ram", "memory", "оперативная память", "озу", "память"},
+                "motherboard": {"motherboard", "motherboards", "mainboard", "материнская плата", "материнка"},
+                "storage": {"storage", "ssd", "hdd", "накопитель", "диск", "хранилище"},
+                "powersupply": {"psu", "power supply", "power supplies", "блок питания", "питание"},
+                "case": {"case", "pc case", "корпус"},
+                "cooler": {"cooler", "cooling", "fan", "кулер", "охлаждение", "вентилятор"},
+                "laptop": {"laptop", "notebook", "ноутбук", "ноутбуки"},
+            }
+
+            def matches_query(card):
+                haystacks = [
+                    str(card.get("name", "")).lower(),
+                    str(card.get("manufacturer", "")).lower(),
+                    str(card.get("category", "")).lower(),
+                ]
+                if any(search_query in value for value in haystacks):
+                    return True
+                category_key = str(card.get("category_key", "")).lower()
+                alias_values = aliases.get(category_key, set())
+                return any(search_query in alias for alias in alias_values)
+
+            cards = [c for c in cards if matches_query(c)]
 
         # Filters
         q_category = (request.GET.get("category") or "").strip().lower()
@@ -1544,6 +1617,7 @@ class ExploreAllView(View):
                 "min_price": q_min or "",
                 "max_price": q_max or "",
                 "sort": q_sort,
+                "search_query": search_query,
             },
         )
 

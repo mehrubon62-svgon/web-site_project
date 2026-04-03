@@ -222,8 +222,8 @@ class Case(models.Model):
 class Cooler(models.Model):
     """Кулеры для процессора"""
     COOLER_TYPES = [
-        ("AIR", "Воздушный кулер"),
-        ("AIO", "Жидкостное охлаждение"),
+        ("AIR", "Air Cooler"),
+        ("AIO", "Liquid Cooling"),
     ]
 
     name = models.CharField(max_length=200, verbose_name="Название")

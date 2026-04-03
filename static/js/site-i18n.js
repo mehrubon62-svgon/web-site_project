@@ -35,6 +35,7 @@
         'Sign In': 'Войти',
         'Register': 'Регистрация',
         'Sign In / Register': 'Войти / Регистрация',
+        'Search': 'Поиск',
         'Search products...': 'Поиск товаров...',
         'Quick Links': 'Быстрые ссылки',
         'Browse Components': 'Каталог комплектующих',
@@ -100,10 +101,13 @@
         'Clear filters': 'Сбросить фильтры',
         'Search by Name': 'Поиск по названию',
         'Manufacturer': 'Производитель',
+        'Cooler Type': 'Тип кулера',
         'Price ($)': 'Цена ($)',
         'Min': 'Мин',
         'Max': 'Макс',
         'In Stock Only': 'Только в наличии',
+        'Supported Sockets': 'Поддерживаемые сокеты',
+        'Supported TDP': 'Поддерживаемый TDP',
         'Memory Type': 'Тип памяти',
         'Form Factor': 'Форм-фактор',
         'Category': 'Категория',
@@ -122,6 +126,7 @@
         'Storage': 'Накопители',
         'Coolers': 'Кулеры',
         'Cooler': 'Кулер',
+        'Cooler:': 'Кулер:',
         'CPU Cooler': 'Кулер процессора',
         'Air Cooler': 'Воздушный кулер',
         'Liquid Cooling': 'Жидкостное охлаждение',
@@ -392,6 +397,8 @@
         'VRAM Type': 'Тип видеопамяти',
         'Recommended PSU': 'Рекомендуемый БП',
         'Length': 'Длина',
+        'Height': 'Высота',
+        'Radiator Length': 'Длина радиатора',
         'Capacity': 'Объем',
         'Speed': 'Скорость',
         'RAM Type': 'Тип RAM',
@@ -425,9 +432,12 @@
         'Change Password - BuildBox': 'Изменить пароль - BuildBox',
         'Forgot Password - BuildBox': 'Забыли пароль - BuildBox',
         'Reset Password - BuildBox': 'Сброс пароля - BuildBox',
+        'About Us - BuildBox': 'О нас - BuildBox',
         'e.g. Core i9, Ryzen 9': 'напр. Core i9, Ryzen 9',
         'e.g. RTX 4090, RX 7900': 'напр. RTX 4090, RX 7900',
         'e.g. RTX 4090': 'напр. RTX 4090',
+        'e.g. NH-D15, Liquid Freezer': 'напр. NH-D15, Liquid Freezer',
+        'e.g. Noctua, Corsair': 'напр. Noctua, Corsair',
         'e.g. Vengeance, Trident': 'напр. Vengeance, Trident',
         'e.g. Vengeance': 'напр. Vengeance',
         'e.g. H510, Meshify': 'напр. H510, Meshify',
@@ -442,6 +452,73 @@
         '734000': '734000',
         'Gaming PC Setup': 'Игровая сборка ПК',
         '123 Tech Street, Silicon Valley, CA': '123 Tech Street, Silicon Valley, CA',
+        'Customer Service': 'Поддержка клиентов',
+        'About BuildBox': 'О BuildBox',
+        'We turn hardware chaos into a cohesive and striking system.': 'Мы превращаем хаос железа в цельную и эффектную систему.',
+        'BuildBox was created for people who want a computer with character, power, and no constant doubt. We combined a clear storefront, smart compatibility checks, and strong presentation into one experience.': 'BuildBox создан для тех, кто хочет получить компьютер с характером, мощностью и без постоянных сомнений. Мы объединили понятную витрину, умную проверку совместимости и сильную подачу в одном опыте.',
+        'Open Configurator': 'Открыть конфигуратор',
+        'Go to Catalog': 'Перейти в каталог',
+        'Direction': 'Направление',
+        'Builds with a clear scenario and forward momentum': 'Сборки с понятным сценарием и движением вперед',
+        'System': 'Система',
+        'Compatibility before order problems appear': 'Совместимость до того, как появятся проблемы на заказе',
+        'Energy': 'Энергия',
+        'A storefront that feels like a studio, not a warehouse': 'Витрина, которая ощущается как студия, а не как склад',
+        'Animated BuildBox reel': 'Анимированный ролик BuildBox',
+        'Studio Reel': 'Студийный ролик',
+        'Built from real project materials': 'Собрано из реальных материалов проекта',
+        'Presentation Layer': 'Слой презентации',
+        'Live motion, real hardware, and a storefront that finally feels alive.': 'Живое движение, настоящее железо и витрина, которая наконец выглядит живой.',
+        'We replaced abstract placeholders with a visual reel made from real project materials, so the page now sells atmosphere, motion, and the feeling of a real product at the same time.': 'Мы заменили абстрактные заглушки на визуальный ролик из реальных материалов проекта, поэтому страница теперь одновременно продает атмосферу, движение и ощущение настоящего продукта.',
+        'Live Signal': 'Живой сигнал',
+        'of builds pass compatibility checks on the first serious version.': 'сборок проходят проверку совместимости уже на первой серьезной версии.',
+        'BuildBox product atmosphere': 'Атмосфера продуктов BuildBox',
+        'Frame 02': 'Кадр 02',
+        'Visual Presentation': 'Визуальная презентация',
+        'The brand now feels like a directed presentation, not just a set of decorative blocks.': 'Бренд теперь ощущается как снятая и поставленная презентация, а не просто набор декоративных блоков.',
+        'We added a moving reel and a gallery from local project materials, then softened harsh overlaps that caused visual artifacts. As a result, the page became cleaner, richer, and much closer to a premium hardware presentation.': 'Мы добавили движущийся ролик и галерею из локальных материалов проекта, а затем смягчили резкие пересечения, из-за которых появлялись визуальные артефакты. В итоге страница стала чище, богаче и намного ближе к премиальной презентации техники.',
+        'Main Atmosphere': 'Главная атмосфера',
+        'Component Detail': 'Деталь компонента',
+        'A wide visual scene that sets the tone before product details even begin.': 'Широкая визуальная сцена, которая задает настроение еще до того, как начинаются детали о товарах.',
+        'Close-up hardware shots keep the page rooted in real products, not just decoration.': 'Крупные планы железа удерживают страницу в реальных продуктах, а не только в декоре.',
+        'Additional shots make the page feel like a produced presentation instead of a static mockup.': 'Дополнительные кадры делают страницу похожей на собранную презентацию, а не на статичный макет.',
+        'Core Principles': 'Ключевые принципы',
+        'We built BuildBox around confidence, not noise.': 'Мы строили BuildBox вокруг уверенности, а не шума.',
+        'Even strong tech stores can feel intimidating, and even good build tools can seem cold. We wanted something sharper: a platform with expressive visual presentation and logic you can truly rely on.': 'Даже сильные магазины техники могут пугать, а даже хорошие инструменты для сборки могут казаться холодными. Мы хотели сделать острее: платформу с выразительной визуальной подачей и логикой, на которую реально можно опереться.',
+        'Brand Story': 'История бренда',
+        '"A custom PC should feel like a complete instrument, not a pile of disconnected decisions."': '«Кастомный ПК должен ощущаться как цельный инструмент, а не как куча несвязанных решений».',
+        'That idea shaped everything: the depth of the catalog, the logic of the configurator, how compatibility is shown, and even how the site’s visual language conveys confidence. BuildBox is not trying to be neutral. It is trying to make the right build feel obvious.': 'Эта идея повлияла на всё: на глубину каталога, логику конфигуратора, то, как показывается совместимость, и даже на то, как визуальный язык сайта передает ощущение уверенности. BuildBox не пытается быть нейтральным. Он пытается сделать правильную сборку очевидной.',
+        'Process': 'Процесс',
+        'How we think when a build starts taking shape.': 'Как мы мыслим, когда сборка начинает формироваться.',
+        'We look at every build as a system with its own momentum. It is not just "pick, pick, pick." It is about setting the foundation, shaping it, refining it, and only then launching with confidence.': 'Мы смотрим на каждую сборку как на систему с собственным движением. Это не просто «выбрал, выбрал, выбрал». Это задать основу, придать форму, довести до ума и только потом уверенно запускать.',
+        'Start': 'Старт',
+        'If the computer itself matters, then the path to choosing it should matter too.': 'Если сам компьютер имеет значение, то и путь его выбора тоже должен иметь значение.',
+        'BuildBox is where catalog depth, compatibility logic, and presentation energy finally stop competing with each other. That is the whole point of the brand.': 'BuildBox это место, где глубина каталога, логика совместимости и энергия подачи наконец перестают конфликтовать друг с другом. В этом и состоит весь смысл бренда.',
+        'View Components': 'Посмотреть комплектующие',
+        'We help you choose compatible PC components quickly and confidently.': 'Мы помогаем быстро и уверенно подобрать совместимые комплектующие для ПК.',
+        'BuildBox combines a clear catalog, compatibility checks, and a practical configurator so you can build a reliable PC without guesswork.': 'BuildBox объединяет понятный каталог, проверки совместимости и практичный конфигуратор, чтобы вы собрали надежный ПК без догадок.',
+        'Goal': 'Цель',
+        'Builds based on your real tasks and budget': 'Сборки на основе ваших задач и бюджета',
+        'Checks': 'Проверки',
+        'Compatibility validation before checkout': 'Проверка совместимости до оформления заказа',
+        'Result': 'Результат',
+        'Clear choices, fewer mistakes, faster purchase': 'Понятный выбор, меньше ошибок, быстрее покупка',
+        'Real product visuals and clear structure on every section.': 'Реальные изображения товаров и понятная структура в каждом блоке.',
+        'This page uses real project media, so users see actual product context instead of generic placeholders.': 'На этой странице используются реальные материалы проекта, поэтому пользователи видят настоящий контекст товаров, а не шаблонные заглушки.',
+        'Quality Metric': 'Показатель качества',
+        'of configurations pass compatibility checks on the first complete draft.': 'конфигураций проходят проверку совместимости с первой полной версии.',
+        'What Changed': 'Что изменилось',
+        'We redesigned this page to be clearer, cleaner, and easier to read.': 'Мы переработали эту страницу, чтобы она стала понятнее, чище и легче для чтения.',
+        'We improved contrast, fixed overlapping elements, and used real project media. The page now communicates product value more directly.': 'Мы улучшили контраст, исправили наложение элементов и использовали реальные материалы проекта. Теперь страница напрямую показывает ценность продукта.',
+        'BuildBox is designed to make PC decisions simple and reliable.': 'BuildBox создан, чтобы делать выбор ПК простым и надежным.',
+        'Our focus is practical: understandable specs, compatibility checks, and a flow that helps users reach a final build faster.': 'Наш фокус практичный: понятные характеристики, проверки совместимости и сценарий, который помогает быстрее прийти к финальной сборке.',
+        'Product Approach': 'Подход к продукту',
+        'A custom PC should be selected as one system, not as random separate parts.': 'Кастомный ПК нужно подбирать как единую систему, а не как набор случайных отдельных деталей.',
+        'This principle defines our catalog, configurator logic, and compatibility rules. Users should quickly understand what to buy and why.': 'Этот принцип определяет наш каталог, логику конфигуратора и правила совместимости. Пользователь должен быстро понимать, что покупать и почему.',
+        'How we build recommendations.': 'Как мы формируем рекомендации.',
+        'We start from user tasks and budget, check compatibility at each step, and finish with a complete build that is ready to order.': 'Мы начинаем с задач пользователя и бюджета, проверяем совместимость на каждом шаге и завершаем готовой к заказу сборкой.',
+        'Good hardware starts with a clear selection process.': 'Хорошее железо начинается с понятного процесса выбора.',
+        'BuildBox brings catalog depth, compatibility logic, and a clean interface into one practical workflow.': 'BuildBox объединяет глубину каталога, логику совместимости и чистый интерфейс в один практичный рабочий сценарий.',
         'О нас - BuildBox': 'About Us - BuildBox',
         'Собирайте ПК мечты с уверенностью. Экспертные рекомендации и выгодные цены.': 'Build your dream PC with confidence. Expert guidance and great prices.',
         'Быстрые ссылки': 'Quick Links',
@@ -533,23 +610,63 @@
     };
 
     const exactEn = Object.fromEntries(
+        Object.entries(exactRu)
+            // Keep only canonical EN->RU entries; skip accidental RU->EN duplicates.
+            .filter(function ([en]) {
+                return !/[А-Яа-яЁё]/.test(String(en));
+            })
+            .map(function ([en, ru]) {
+                return [ru, en];
+            })
+    );
+
+    function normalizeI18nKey(text) {
+        return String(text || '').replace(/\s+/g, ' ').trim();
+    }
+
+    const normalizedExactRu = Object.fromEntries(
         Object.entries(exactRu).map(function ([en, ru]) {
-            return [ru, en];
+            return [normalizeI18nKey(en), ru];
+        })
+    );
+
+    const normalizedExactEn = Object.fromEntries(
+        Object.entries(exactEn).map(function ([ru, en]) {
+            return [normalizeI18nKey(ru), en];
         })
     );
 
     function translateKnownValue(text, lang = 'ru') {
+        const normalizedText = normalizeI18nKey(text);
         if (lang === 'ru') {
             if (Object.prototype.hasOwnProperty.call(exactRu, text)) {
                 return exactRu[text];
             }
             if (Object.prototype.hasOwnProperty.call(exactEn, text)) {
-                return exactEn[text];
+                return text;
+            }
+            if (Object.prototype.hasOwnProperty.call(normalizedExactRu, normalizedText)) {
+                return normalizedExactRu[normalizedText];
+            }
+            if (Object.prototype.hasOwnProperty.call(normalizedExactEn, normalizedText)) {
+                return text;
             }
             return text;
         }
         if (lang === 'en') {
-            return Object.prototype.hasOwnProperty.call(exactEn, text) ? exactEn[text] : text;
+            if (Object.prototype.hasOwnProperty.call(exactEn, text)) {
+                return exactEn[text];
+            }
+            if (Object.prototype.hasOwnProperty.call(exactRu, text)) {
+                return text;
+            }
+            if (Object.prototype.hasOwnProperty.call(normalizedExactEn, normalizedText)) {
+                return normalizedExactEn[normalizedText];
+            }
+            if (Object.prototype.hasOwnProperty.call(normalizedExactRu, normalizedText)) {
+                return text;
+            }
+            return text;
         }
         return text;
     }
@@ -611,9 +728,18 @@
         });
     }
 
+    function getPreferredLanguage() {
+        const browserLanguages = Array.isArray(navigator.languages) && navigator.languages.length
+            ? navigator.languages
+            : [navigator.language || navigator.userLanguage || ''];
+        return browserLanguages.some(function (lang) {
+            return /^ru\b/i.test(String(lang || ''));
+        }) ? 'ru' : 'en';
+    }
+
     function getStoredLanguage() {
         const saved = localStorage.getItem(STORAGE_KEY);
-        return SUPPORTED_LANGUAGES.has(saved) ? saved : 'en';
+        return SUPPORTED_LANGUAGES.has(saved) ? saved : getPreferredLanguage();
     }
 
     let currentLanguage = getStoredLanguage();
@@ -713,19 +839,19 @@
                 transform: (m) => `Студийный кадр ${m[1]}`,
             },
             {
-                regex: /^(?:•\s*)?Cooler socket mismatch: (.+) does not support (.+)$/,
+                regex: /^(?:•\s*|⚠️\s*)?Cooler socket mismatch: (.+) does not support (.+)$/,
                 transform: (m) => `Несовместимый сокет кулера: ${m[1]} не поддерживает ${m[2]}`,
             },
             {
-                regex: /^(?:•\s*)?Cooling capacity issue detected: (.+) is rated for (\d+)W, but (.+) can reach (\d+)W\. AI recommendation: choose a cooler with at least (\d+)W TDP support\.$/,
+                regex: /^(?:•\s*|⚠️\s*|❌\s*)?Cooling capacity issue detected: (.+) is rated for (\d+)W, but (.+) can reach (\d+)W\. AI recommendation: choose a cooler with at least (\d+)W TDP support\.$/,
                 transform: (m) => `Обнаружена нехватка охлаждения: ${m[1]} рассчитан на ${m[2]}Вт, но ${m[3]} может достигать ${m[4]}Вт. Рекомендация AI: выберите кулер с TDP не ниже ${m[5]}Вт.`,
             },
             {
-                regex: /^(?:•\s*)?Case clearance risk detected: (\d+)mm AIO radiator exceeds the case limit of (\d+)mm\. AI recommendation: choose a shorter AIO or a larger case\.$/,
+                regex: /^(?:•\s*|⚠️\s*)?Case clearance risk detected: (\d+)mm AIO radiator exceeds the case limit of (\d+)mm\. AI recommendation: choose a shorter AIO or a larger case\.$/,
                 transform: (m) => `Обнаружен риск по совместимости корпуса: радиатор СЖО ${m[1]}мм длиннее лимита корпуса ${m[2]}мм. Рекомендация AI: выберите более короткую СЖО или корпус побольше.`,
             },
             {
-                regex: /^(?:•\s*)?Cooler too tall: (\d+)mm > (\d+)mm allowed height$/,
+                regex: /^(?:•\s*|⚠️\s*)?Cooler too tall: (\d+)mm > (\d+)mm allowed height$/,
                 transform: (m) => `Кулер слишком высокий: ${m[1]}мм > ${m[2]}мм допустимой высоты`,
             },
             {
@@ -821,6 +947,18 @@
                 transform: (m) => `• TDP ${m[1]} Вт`,
             },
             {
+                regex: /^• (Air Cooler|Liquid Cooling) • TDP ([0-9]+(?:\.[0-9]+)?) W$/,
+                transform: (m) => `• ${translateKnownValue(m[1])} • TDP ${m[2]} Вт`,
+            },
+            {
+                regex: /^• Radiator ([0-9]+(?:\.[0-9]+)?) mm$/,
+                transform: (m) => `• Радиатор ${m[1]} мм`,
+            },
+            {
+                regex: /^• Height ([0-9]+(?:\.[0-9]+)?) mm$/,
+                transform: (m) => `• Высота ${m[1]} мм`,
+            },
+            {
                 regex: /^• Max GPU: (\d+)mm$/,
                 transform: (m) => `• Макс. GPU: ${m[1]} мм`,
             },
@@ -860,6 +998,66 @@
                 regex: /^(ATX|Micro-ATX|Mini-ITX|E-ATX|MICRO_ATX|MINI_ITX|E_ATX) \/ (\d+)mm GPU$/,
                 transform: (m) => `${translateKnownValue(m[1])} / ${m[2]} мм GPU`,
             },
+            {
+                regex: /^(.+?) Air Cooler$/,
+                transform: (m) => `${m[1]} башенный кулер`,
+            },
+            {
+                regex: /^(.+?) ([0-9]+(?:\.[0-9]+)?)mm Liquid Cooling$/,
+                transform: (m) => `${m[1]} СЖО ${m[2]} мм`,
+            },
+            {
+                regex: /^(.+?) CPU cooler\.$/,
+                transform: (m) => `${m[1]} кулер для процессора.`,
+            },
+            {
+                regex: /^(.+?) liquid cooling with a ([0-9]+(?:\.[0-9]+)?) mm radiator and support for CPUs up to (\d+)W TDP\.$/,
+                transform: (m) => `${m[1]} жидкостное охлаждение с радиатором ${m[2]} мм и поддержкой процессоров до ${m[3]} Вт TDP.`,
+            },
+            {
+                regex: /^(.+?) air cooler with a height of ([0-9]+(?:\.[0-9]+)?) mm and support for CPUs up to (\d+)W TDP\.$/,
+                transform: (m) => `${m[1]} воздушный кулер высотой ${m[2]} мм и поддержкой процессоров до ${m[3]} Вт TDP.`,
+            },
+        ];
+
+        for (const pattern of patterns) {
+            const match = text.match(pattern.regex);
+            if (match) return pattern.transform(match);
+        }
+
+        return text;
+    }
+
+    function translatePatternToEnglish(text) {
+        const patterns = [
+            {
+                regex: /^(.+?) СЖО ([0-9]+(?:\.[0-9]+)?) мм$/,
+                transform: (m) => `${m[1]} ${m[2]}mm Liquid Cooling`,
+            },
+            {
+                regex: /^(.+?) башенный кулер$/,
+                transform: (m) => `${m[1]} Air Cooler`,
+            },
+            {
+                regex: /^(.+?) кулер для процессора\.$/,
+                transform: (m) => `${m[1]} CPU cooler.`,
+            },
+            {
+                regex: /^(.+?) жидкостное охлаждение с радиатором ([0-9]+(?:\.[0-9]+)?) мм и поддержкой процессоров до (\d+) Вт TDP\.$/,
+                transform: (m) => `${m[1]} liquid cooling with a ${m[2]} mm radiator and support for CPUs up to ${m[3]}W TDP.`,
+            },
+            {
+                regex: /^(.+?) воздушный кулер высотой ([0-9]+(?:\.[0-9]+)?) мм и поддержкой процессоров до (\d+) Вт TDP\.$/,
+                transform: (m) => `${m[1]} air cooler with a height of ${m[2]} mm and support for CPUs up to ${m[3]}W TDP.`,
+            },
+            {
+                regex: /^• Радиатор ([0-9]+(?:\.[0-9]+)?) мм$/,
+                transform: (m) => `• Radiator ${m[1]} mm`,
+            },
+            {
+                regex: /^• Высота ([0-9]+(?:\.[0-9]+)?) мм$/,
+                transform: (m) => `• Height ${m[1]} mm`,
+            },
         ];
 
         for (const pattern of patterns) {
@@ -878,6 +1076,9 @@
             const dateTranslation = translateDateString(text);
             if (dateTranslation !== text) return dateTranslation;
             return translatePattern(text);
+        }
+        if (lang === 'en') {
+            return translatePatternToEnglish(text);
         }
         return text;
     }
@@ -950,7 +1151,7 @@
 
     function syncElementAttributes(element) {
         if (!(element instanceof Element) || element.closest('[data-i18n-skip]')) return;
-        ['placeholder', 'title', 'aria-label'].forEach(function (attrName) {
+        ['placeholder', 'title', 'aria-label', 'alt'].forEach(function (attrName) {
             if (element.hasAttribute(attrName)) {
                 syncAttribute(element, attrName);
             }
@@ -963,6 +1164,35 @@
         }
     }
 
+    function syncKeyedElement(element) {
+        if (!(element instanceof Element) || element.closest('[data-i18n-skip]')) return;
+
+        const textKey = element.getAttribute('data-i18n-key');
+        if (textKey && element.children.length === 0) {
+            const nextText = translateLoose(textKey, currentLanguage);
+            if (element.textContent !== nextText) {
+                element.textContent = nextText;
+            }
+        }
+
+        const attrMappings = [
+            ['data-i18n-placeholder-key', 'placeholder'],
+            ['data-i18n-title-key', 'title'],
+            ['data-i18n-aria-key', 'aria-label'],
+            ['data-i18n-alt-key', 'alt'],
+            ['data-i18n-value-key', 'value'],
+        ];
+
+        attrMappings.forEach(function ([keyAttr, targetAttr]) {
+            const key = element.getAttribute(keyAttr);
+            if (!key) return;
+            const nextValue = translateLoose(key, currentLanguage);
+            if (element.getAttribute(targetAttr) !== nextValue) {
+                element.setAttribute(targetAttr, nextValue);
+            }
+        });
+    }
+
     function walkAndTranslate(root) {
         if (!root) return;
         if (root.nodeType === Node.TEXT_NODE) {
@@ -972,6 +1202,7 @@
         if (root.nodeType !== Node.ELEMENT_NODE && root.nodeType !== Node.DOCUMENT_FRAGMENT_NODE) return;
 
         if (root.nodeType === Node.ELEMENT_NODE) {
+            syncKeyedElement(root);
             syncElementAttributes(root);
         }
 
@@ -981,6 +1212,7 @@
         }
 
         if (root.querySelectorAll) {
+            root.querySelectorAll('[data-i18n-key],[data-i18n-placeholder-key],[data-i18n-title-key],[data-i18n-aria-key],[data-i18n-alt-key],[data-i18n-value-key]').forEach(syncKeyedElement);
             root.querySelectorAll('[placeholder],[title],[aria-label],[data-i18n-value],input[type="button"],input[type="submit"],input[type="reset"]').forEach(syncElementAttributes);
         }
     }
@@ -998,7 +1230,7 @@
             subtree: true,
             characterData: true,
             attributes: true,
-            attributeFilter: ['placeholder', 'title', 'aria-label', 'value'],
+            attributeFilter: ['placeholder', 'title', 'aria-label', 'alt', 'value', 'data-i18n-key', 'data-i18n-placeholder-key', 'data-i18n-title-key', 'data-i18n-aria-key', 'data-i18n-alt-key', 'data-i18n-value-key'],
         });
     }
 
@@ -1062,6 +1294,7 @@
     function applyLanguage(lang) {
         currentLanguage = SUPPORTED_LANGUAGES.has(lang) ? lang : 'en';
         localStorage.setItem(STORAGE_KEY, currentLanguage);
+        document.cookie = `django_language=${currentLanguage}; path=/; max-age=31536000; SameSite=Lax`;
         document.documentElement.lang = currentLanguage;
         withObserverPaused(function () {
             walkAndTranslate(document.body);

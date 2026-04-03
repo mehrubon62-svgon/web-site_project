@@ -99,13 +99,13 @@ def _calc_preview(build):
     if build["processor"] and build["cooler"]:
         if not build["cooler"].supports_socket(build["processor"].socket):
             issues.append(
-                f"Несовместимый сокет кулера: кулер поддерживает {build['cooler'].supported_sockets}, "
-                f"а процессору нужен {build['processor'].socket}"
+                f"Cooler socket mismatch: {build['cooler'].name} does not support {build['processor'].socket}"
             )
         if build["processor"].tdp_max > build["cooler"].tdp_capacity:
             issues.append(
-                f"AI-анализ охлаждения: кулер рассчитан до {build['cooler'].tdp_capacity}Вт, "
-                f"но процессор может потреблять до {build['processor'].tdp_max}Вт"
+                f"Cooling capacity issue detected: {build['cooler'].name} is rated for {build['cooler'].tdp_capacity}W, "
+                f"but {build['processor'].name} can reach {build['processor'].tdp_max}W. "
+                f"AI recommendation: choose a cooler with at least {build['processor'].tdp_max}W TDP support."
             )
     if build["power_supply"] and build["power_supply"].wattage < recommended_psu:
         issues.append(f"Insufficient PSU power: {build['power_supply'].wattage}W < {recommended_psu}W")
@@ -115,12 +115,13 @@ def _calc_preview(build):
         if build["cooler"].cooler_type == "AIO" and build["cooler"].radiator_length_mm:
             if build["cooler"].radiator_length_mm > build["case"].max_gpu_length:
                 issues.append(
-                    f"Радиатор СЖО слишком длинный для корпуса: "
-                    f"{build['cooler'].radiator_length_mm}mm > {build['case'].max_gpu_length}mm"
+                    f"Case clearance risk detected: {build['cooler'].radiator_length_mm}mm AIO radiator exceeds "
+                    f"the case limit of {build['case'].max_gpu_length}mm. "
+                    f"AI recommendation: choose a shorter AIO or a larger case."
                 )
         elif build["cooler"].height_mm and build["cooler"].height_mm > build["case"].max_cpu_cooler_height:
             issues.append(
-                f"Кулер не помещается в корпус: {build['cooler'].height_mm}mm > {build['case'].max_cpu_cooler_height}mm"
+                f"Cooler too tall: {build['cooler'].height_mm}mm > {build['case'].max_cpu_cooler_height}mm allowed height"
             )
 
     tax = total_price * TAX_RATE

@@ -6,15 +6,15 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
       <div>
-        <h1 style="font-size:32px;font-weight:700;letter-spacing:-0.01em;" class="text-gray-900 dark:text-gray-50">Build Your PC</h1>
-        <p class="mt-1 text-gray-500 dark:text-gray-400">Select components and we'll check compatibility for you</p>
+        <h1 data-i18n-key="Build Your PC" style="font-size:32px;font-weight:700;letter-spacing:-0.01em;" class="text-gray-900 dark:text-gray-50">Build Your PC</h1>
+        <p data-i18n-key="Select components and we'll check compatibility for you" class="mt-1 text-gray-500 dark:text-gray-400">Select components and we'll check compatibility for you</p>
       </div>
       <div class="flex items-center gap-3">
         <a href="{% url 'saved_configurations' %}" class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-opacity hover:opacity-90 bg-accent text-gray-900">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3h14a2 2 0 012 2v14l-4-2-4 2-4-2-4 2V5a2 2 0 012-2z"></path>
           </svg>
-          Saved Builds
+          <span data-i18n-key="Saved Builds">Saved Builds</span>
         </a>
       </div>
     </div>
@@ -34,27 +34,27 @@
 
       <div class="lg:w-[340px] space-y-4">
         <div class="rounded-lg p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-          <label class="text-xs font-medium block mb-2 text-gray-500 dark:text-gray-400">BUILD NAME</label>
+          <label data-i18n-key="BUILD NAME" class="text-xs font-medium block mb-2 text-gray-500 dark:text-gray-400">BUILD NAME</label>
           <input type="text" name="config_name" value="{{ config_name }}" data-i18n-value class="w-full p-2 rounded border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-50 text-sm font-semibold outline-none">
         </div>
 
         <div class="rounded-lg p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-          <h3 class="text-sm font-semibold mb-3 text-gray-900 dark:text-gray-50">Your Build</h3>
+          <h3 data-i18n-key="Your Build" class="text-sm font-semibold mb-3 text-gray-900 dark:text-gray-50">Your Build</h3>
           <div id="build-summary" class="space-y-2"></div>
         </div>
 
         <div class="rounded-lg p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-          <h3 class="text-sm font-semibold mb-3 text-gray-900 dark:text-gray-50">Compatibility</h3>
+          <h3 data-i18n-key="Compatibility" class="text-sm font-semibold mb-3 text-gray-900 dark:text-gray-50">Compatibility</h3>
           <div id="compat-box" class="flex items-center gap-2 p-2 rounded bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400">Add components to check compatibility</div>
         </div>
 
         <div class="rounded-lg p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-          <h3 class="text-sm font-semibold mb-3 text-gray-900 dark:text-gray-50">Power Consumption</h3>
+          <h3 data-i18n-key="Power Consumption" class="text-sm font-semibold mb-3 text-gray-900 dark:text-gray-50">Power Consumption</h3>
           <div class="flex items-baseline gap-1 mb-1">
             <span id="power-total" style="font-size:46px;font-weight:700;" class="text-gray-900 dark:text-gray-50">0W</span>
-            <span class="text-xs text-gray-500 dark:text-gray-400">estimated</span>
+            <span data-i18n-key="estimated" class="text-xs text-gray-500 dark:text-gray-400">estimated</span>
           </div>
-          <p class="text-xs mb-3 text-gray-500 dark:text-gray-400">Recommended PSU: <strong id="recommended-psu" class="text-gray-900 dark:text-gray-50">0W</strong></p>
+          <p class="text-xs mb-3 text-gray-500 dark:text-gray-400"><span data-i18n-key="Recommended PSU:">Recommended PSU:</span> <strong id="recommended-psu" class="text-gray-900 dark:text-gray-50">0W</strong></p>
           <div class="h-1.5 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700">
             <div id="power-bar" class="h-full rounded-full transition-all duration-500" style="width:0%;background:#10B981"></div>
           </div>
@@ -62,14 +62,14 @@
         </div>
 
         <div class="rounded-lg p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-          <h3 class="text-sm font-semibold mb-3 text-gray-900 dark:text-gray-50">Price Summary</h3>
+          <h3 data-i18n-key="Price Summary" class="text-sm font-semibold mb-3 text-gray-900 dark:text-gray-50">Price Summary</h3>
           <div class="space-y-1.5 mb-3">
-            <div class="flex justify-between text-sm"><span class="text-gray-500 dark:text-gray-400">Subtotal</span><span id="subtotal" class="text-gray-900 dark:text-gray-50">$0.00</span></div>
-            <div class="flex justify-between text-sm"><span class="text-gray-500 dark:text-gray-400">Tax (1%)</span><span id="tax" class="text-gray-900 dark:text-gray-50">$0.00</span></div>
-            <div class="pt-2 border-t border-gray-200 dark:border-gray-700 flex justify-between"><span class="font-semibold text-gray-900 dark:text-gray-50">Total</span><span id="total" style="font-size:36px;font-weight:700;" class="text-gray-900 dark:text-gray-50">$0.00</span></div>
+            <div class="flex justify-between text-sm"><span data-i18n-key="Subtotal" class="text-gray-500 dark:text-gray-400">Subtotal</span><span id="subtotal" class="text-gray-900 dark:text-gray-50">$0.00</span></div>
+            <div class="flex justify-between text-sm"><span data-i18n-key="Tax (1%)" class="text-gray-500 dark:text-gray-400">Tax (1%)</span><span id="tax" class="text-gray-900 dark:text-gray-50">$0.00</span></div>
+            <div class="pt-2 border-t border-gray-200 dark:border-gray-700 flex justify-between"><span data-i18n-key="Total" class="font-semibold text-gray-900 dark:text-gray-50">Total</span><span id="total" style="font-size:36px;font-weight:700;" class="text-gray-900 dark:text-gray-50">$0.00</span></div>
           </div>
-          <button type="submit" formaction="{% url 'add_current_build_to_cart' %}" class="w-full py-3 rounded-lg text-sm font-medium transition-opacity hover:opacity-90" style="background:#FBBF24;color:#111827">Add Build to Cart</button>
-          <button type="submit" formaction="{% url 'save_configuration' %}" class="w-full mt-2 py-2.5 rounded-lg text-sm font-semibold transition-opacity hover:opacity-90 bg-accent text-gray-900">Save Configuration</button>
+          <button type="submit" formaction="{% url 'add_current_build_to_cart' %}" class="w-full py-3 rounded-lg text-sm font-medium transition-opacity hover:opacity-90" style="background:#FBBF24;color:#111827"><span data-i18n-key="Add Build to Cart">Add Build to Cart</span></button>
+          <button type="submit" formaction="{% url 'save_configuration' %}" class="w-full mt-2 py-2.5 rounded-lg text-sm font-semibold transition-opacity hover:opacity-90 bg-accent text-gray-900"><span data-i18n-key="Save Configuration">Save Configuration</span></button>
         </div>
       </div>
     </form>
@@ -83,13 +83,13 @@
       <button type="button" id="modal-close" class="hover:opacity-60 transition-opacity text-gray-500 dark:text-gray-400" style="font-size:24px">&times;</button>
     </div>
     <div class="px-5 py-3 border-b border-gray-200 dark:border-gray-700">
-      <input id="modal-search" type="text" placeholder="Search..." class="w-full p-2.5 border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-50 text-sm outline-none">
+      <input id="modal-search" type="text" placeholder="Search..." data-i18n-placeholder-key="Search..." class="w-full p-2.5 border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-50 text-sm outline-none">
     </div>
     <div id="modal-grid" class="flex-1 overflow-y-auto p-5 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
     <div class="px-5 py-3 border-t border-gray-200 dark:border-gray-700 flex items-center justify-between">
-      <button type="button" id="modal-prev" class="px-3 py-1.5 rounded text-sm border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-50">Prev</button>
+      <button type="button" id="modal-prev" data-i18n-key="Prev" class="px-3 py-1.5 rounded text-sm border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-50">Prev</button>
       <span id="modal-page" class="text-sm text-gray-500 dark:text-gray-400"></span>
-      <button type="button" id="modal-next" class="px-3 py-1.5 rounded text-sm border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-50">Next</button>
+      <button type="button" id="modal-next" data-i18n-key="Next" class="px-3 py-1.5 rounded text-sm border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-50">Next</button>
     </div>
   </div>
 </div>
@@ -97,17 +97,30 @@
 <script>
 (() => {
   const CONFIG_LANG_KEY = 'buildbox-language';
+  let runtimeLang = null;
 
   function currentLang() {
+    if (runtimeLang === 'ru' || runtimeLang === 'en') return runtimeLang;
+    if (window.BuildBoxI18n && typeof window.BuildBoxI18n.getLanguage === 'function') {
+      const globalLang = window.BuildBoxI18n.getLanguage();
+      if (globalLang === 'ru' || globalLang === 'en') return globalLang;
+    }
+    const htmlLang = document.documentElement.lang;
+    if (htmlLang === 'ru' || htmlLang === 'en') return htmlLang;
     const stored = localStorage.getItem(CONFIG_LANG_KEY);
     if (stored === 'ru' || stored === 'en') return stored;
-    const htmlLang = document.documentElement.lang;
-    return htmlLang === 'ru' ? 'ru' : 'en';
+    const cookieLangMatch = document.cookie.match(/(?:^|;\\s*)django_language=(ru|en)(?:;|$)/);
+    if (cookieLangMatch) return cookieLangMatch[1];
+    return 'en';
   }
 
   function tr(text) {
     if (typeof text !== 'string') return text;
-    if (currentLang() === 'en') return text;
+    const lang = currentLang();
+    const i18n = window.BuildBoxI18n;
+    if (i18n && typeof i18n.translateText === 'function') {
+      return i18n.translateText(text, lang);
+    }
 
     const exactRu = {
       'Processor': 'Процессор',
@@ -136,57 +149,112 @@
       'Liquid Cooling': 'Жидкостное охлаждение',
     };
 
-    if (Object.prototype.hasOwnProperty.call(exactRu, text)) {
-      return exactRu[text];
-    }
+    const exactEn = Object.fromEntries(Object.entries(exactRu).map(([en, ru]) => [ru, en]));
+    const directMap = lang === 'ru' ? exactRu : exactEn;
+    if (Object.prototype.hasOwnProperty.call(directMap, text)) return directMap[text];
 
     const patterns = [
       {
         regex: /^Page (\d+) \/ (\d+)$/,
-        transform: (m) => `Страница ${m[1]} / ${m[2]}`,
+        transform: (m) => lang === 'ru' ? `Страница ${m[1]} / ${m[2]}` : `Page ${m[1]} / ${m[2]}`,
+      },
+      {
+        regex: /^Страница (\d+) \/ (\d+)$/,
+        transform: (m) => lang === 'en' ? `Page ${m[1]} / ${m[2]}` : `Страница ${m[1]} / ${m[2]}`,
       },
       {
         regex: /^Select (.+)$/,
-        transform: (m) => `Выберите ${tr(m[1])}`,
+        transform: (m) => lang === 'ru' ? `Выберите ${tr(m[1])}` : `Select ${tr(m[1])}`,
+      },
+      {
+        regex: /^Выберите (.+)$/,
+        transform: (m) => lang === 'en' ? `Select ${tr(m[1])}` : `Выберите ${tr(m[1])}`,
       },
       {
         regex: /^No (.+)$/,
         transform: (m) => {
-          const translated = `No ${m[1]}`;
-          return exactRu[translated] || `${tr(m[1])} не выбран`;
+          if (lang === 'ru') {
+            const translated = `No ${m[1]}`;
+            return exactRu[translated] || `${tr(m[1])} не выбран`;
+          }
+          return `No ${tr(m[1])}`;
         },
       },
       {
+        regex: /^(.+) не выбран$/,
+        transform: (m) => lang === 'en' ? `No ${tr(m[1])}` : `${tr(m[1])} не выбран`,
+      },
+      {
         regex: /^(Air Cooler|Liquid Cooling) \/ TDP ([0-9]+(?:\.[0-9]+)?) W$/,
-        transform: (m) => `${tr(m[1])} / TDP ${m[2]} Вт`,
+        transform: (m) => lang === 'ru' ? `${tr(m[1])} / TDP ${m[2]} Вт` : `${tr(m[1])} / TDP ${m[2]} W`,
+      },
+      {
+        regex: /^(Воздушный кулер|Жидкостное охлаждение) \/ TDP ([0-9]+(?:\.[0-9]+)?) Вт$/,
+        transform: (m) => lang === 'en' ? `${tr(m[1])} / TDP ${m[2]} W` : `${tr(m[1])} / TDP ${m[2]} Вт`,
       },
       {
         regex: /^Socket mismatch: CPU (.+) \/ MB (.+)$/,
-        transform: (m) => `Несовпадение сокета: CPU ${m[1]} / MB ${m[2]}`,
+        transform: (m) => lang === 'ru' ? `Несовпадение сокета: CPU ${m[1]} / MB ${m[2]}` : `Socket mismatch: CPU ${m[1]} / MB ${m[2]}`,
+      },
+      {
+        regex: /^Несовпадение сокета: CPU (.+) \/ MB (.+)$/,
+        transform: (m) => lang === 'en' ? `Socket mismatch: CPU ${m[1]} / MB ${m[2]}` : `Несовпадение сокета: CPU ${m[1]} / MB ${m[2]}`,
       },
       {
         regex: /^RAM mismatch: (.+) RAM with (.+) motherboard$/,
-        transform: (m) => `Несовместимость RAM: память ${m[1]} с материнской платой ${m[2]}`,
+        transform: (m) => lang === 'ru' ? `Несовместимость RAM: память ${m[1]} с материнской платой ${m[2]}` : `RAM mismatch: ${m[1]} RAM with ${m[2]} motherboard`,
+      },
+      {
+        regex: /^Несовместимость RAM: память (.+) с материнской платой (.+)$/,
+        transform: (m) => lang === 'en' ? `RAM mismatch: ${m[1]} RAM with ${m[2]} motherboard` : `Несовместимость RAM: память ${m[1]} с материнской платой ${m[2]}`,
       },
       {
         regex: /^Cooler socket mismatch: (.+) does not support (.+)$/,
-        transform: (m) => `Несовместимый сокет кулера: ${m[1]} не поддерживает ${m[2]}`,
+        transform: (m) => lang === 'ru' ? `Несовместимый сокет кулера: ${m[1]} не поддерживает ${m[2]}` : `Cooler socket mismatch: ${m[1]} does not support ${m[2]}`,
+      },
+      {
+        regex: /^Несовместимый сокет кулера: (.+) не поддерживает (.+)$/,
+        transform: (m) => lang === 'en' ? `Cooler socket mismatch: ${m[1]} does not support ${m[2]}` : `Несовместимый сокет кулера: ${m[1]} не поддерживает ${m[2]}`,
       },
       {
         regex: /^Cooling capacity issue detected: (.+) is rated for (\d+)W, but (.+) can reach (\d+)W\. AI recommendation: choose a cooler with at least (\d+)W TDP support\.$/,
-        transform: (m) => `Обнаружена нехватка охлаждения: ${m[1]} рассчитан на ${m[2]}Вт, но ${m[3]} может достигать ${m[4]}Вт. Рекомендация AI: выберите кулер с TDP не ниже ${m[5]}Вт.`,
+        transform: (m) => lang === 'ru'
+          ? `Обнаружена нехватка охлаждения: ${m[1]} рассчитан на ${m[2]}Вт, но ${m[3]} может достигать ${m[4]}Вт. Рекомендация AI: выберите кулер с TDP не ниже ${m[5]}Вт.`
+          : `Cooling capacity issue detected: ${m[1]} is rated for ${m[2]}W, but ${m[3]} can reach ${m[4]}W. AI recommendation: choose a cooler with at least ${m[5]}W TDP support.`,
+      },
+      {
+        regex: /^Обнаружена нехватка охлаждения: (.+) рассчитан на (\d+)Вт, но (.+) может достигать (\d+)Вт\. Рекомендация AI: выберите кулер с TDP не ниже (\d+)Вт\.$/,
+        transform: (m) => lang === 'en'
+          ? `Cooling capacity issue detected: ${m[1]} is rated for ${m[2]}W, but ${m[3]} can reach ${m[4]}W. AI recommendation: choose a cooler with at least ${m[5]}W TDP support.`
+          : `Обнаружена нехватка охлаждения: ${m[1]} рассчитан на ${m[2]}Вт, но ${m[3]} может достигать ${m[4]}Вт. Рекомендация AI: выберите кулер с TDP не ниже ${m[5]}Вт.`,
       },
       {
         regex: /^PSU too weak: (\d+)W selected, (\d+)W recommended$/,
-        transform: (m) => `Слишком слабый БП: выбрано ${m[1]}W, рекомендуется ${m[2]}W`,
+        transform: (m) => lang === 'ru' ? `Слишком слабый БП: выбрано ${m[1]}W, рекомендуется ${m[2]}W` : `PSU too weak: ${m[1]}W selected, ${m[2]}W recommended`,
+      },
+      {
+        regex: /^Слишком слабый БП: выбрано (\d+)W, рекомендуется (\d+)W$/,
+        transform: (m) => lang === 'en' ? `PSU too weak: ${m[1]}W selected, ${m[2]}W recommended` : `Слишком слабый БП: выбрано ${m[1]}W, рекомендуется ${m[2]}W`,
       },
       {
         regex: /^Case clearance risk detected: (\d+)mm AIO radiator exceeds the case limit of (\d+)mm\. AI recommendation: choose a shorter AIO or a larger case\.$/,
-        transform: (m) => `Обнаружен риск по совместимости корпуса: радиатор СЖО ${m[1]}мм длиннее лимита корпуса ${m[2]}мм. Рекомендация AI: выберите более короткую СЖО или корпус побольше.`,
+        transform: (m) => lang === 'ru'
+          ? `Обнаружен риск по совместимости корпуса: радиатор СЖО ${m[1]}мм длиннее лимита корпуса ${m[2]}мм. Рекомендация AI: выберите более короткую СЖО или корпус побольше.`
+          : `Case clearance risk detected: ${m[1]}mm AIO radiator exceeds the case limit of ${m[2]}mm. AI recommendation: choose a shorter AIO or a larger case.`,
+      },
+      {
+        regex: /^Обнаружен риск по совместимости корпуса: радиатор СЖО (\d+)мм длиннее лимита корпуса (\d+)мм\. Рекомендация AI: выберите более короткую СЖО или корпус побольше\.$/,
+        transform: (m) => lang === 'en'
+          ? `Case clearance risk detected: ${m[1]}mm AIO radiator exceeds the case limit of ${m[2]}mm. AI recommendation: choose a shorter AIO or a larger case.`
+          : `Обнаружен риск по совместимости корпуса: радиатор СЖО ${m[1]}мм длиннее лимита корпуса ${m[2]}мм. Рекомендация AI: выберите более короткую СЖО или корпус побольше.`,
       },
       {
         regex: /^Cooler too tall: (\d+)mm > (\d+)mm allowed height$/,
-        transform: (m) => `Кулер слишком высокий: ${m[1]}мм > ${m[2]}мм допустимой высоты`,
+        transform: (m) => lang === 'ru' ? `Кулер слишком высокий: ${m[1]}мм > ${m[2]}мм допустимой высоты` : `Cooler too tall: ${m[1]}mm > ${m[2]}mm allowed height`,
+      },
+      {
+        regex: /^Кулер слишком высокий: (\d+)мм > (\d+)мм допустимой высоты$/,
+        transform: (m) => lang === 'en' ? `Cooler too tall: ${m[1]}mm > ${m[2]}mm allowed height` : `Кулер слишком высокий: ${m[1]}мм > ${m[2]}мм допустимой высоты`,
       },
     ];
 
@@ -553,9 +621,26 @@
     render();
     if (!modal.classList.contains('hidden') && activeSlot) renderModal();
   });
-  themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+  themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'lang'] });
 
-  document.addEventListener('buildbox:languagechange', () => {
+  document.querySelectorAll('[data-lang-btn]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const next = button.getAttribute('data-lang-btn');
+      if (next === 'ru' || next === 'en') {
+        runtimeLang = next;
+      } else {
+        runtimeLang = null;
+      }
+      requestAnimationFrame(() => {
+        render();
+        if (!modal.classList.contains('hidden') && activeSlot) renderModal();
+      });
+    });
+  });
+
+  document.addEventListener('buildbox:languagechange', (event) => {
+    const changed = event && event.detail ? event.detail.language : null;
+    runtimeLang = (changed === 'ru' || changed === 'en') ? changed : null;
     render();
     if (!modal.classList.contains('hidden') && activeSlot) renderModal();
   });

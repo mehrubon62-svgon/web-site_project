@@ -81,7 +81,7 @@
 {% block products %}
 {% for ram in page_obj %}
     <div class="product-card rounded-lg overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-shadow hover:shadow-lg cursor-pointer" onclick="window.location.href='{% url 'ram_detail' ram.pk %}'">
-        <div class="product-image relative overflow-hidden group h-52">
+        <div class="product-image relative overflow-hidden group h-52 bg-gray-50 dark:bg-gray-900/40 border-b border-gray-200 dark:border-gray-700">
             {% if ram.image %}
                 <img src="{{ ram.image.url }}" alt="{{ ram.name }}" class="w-full h-full object-contain p-2 js-carousel-image" data-images="{% for u in ram.card_images %}{{ u|escapejs }}{% if not forloop.last %}||{% endif %}{% endfor %}" data-index="0">
             {% else %}

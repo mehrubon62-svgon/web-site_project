@@ -71,7 +71,7 @@
 {% block products %}
 {% for storage in page_obj %}
     <div class="product-card rounded-lg overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-shadow hover:shadow-lg cursor-pointer" onclick="window.location.href='{% url 'storage_detail' storage.pk %}'">
-        <div class="product-image relative overflow-hidden group h-52">
+        <div class="product-image relative overflow-hidden group h-52 bg-gray-50 dark:bg-gray-900/40 border-b border-gray-200 dark:border-gray-700">
             {% if storage.image %}
                 <img src="{{ storage.image.url }}" alt="{{ storage.name }}" class="w-full h-full object-contain p-2 js-carousel-image" data-images="{% for u in storage.card_images %}{{ u|escapejs }}{% if not forloop.last %}||{% endif %}{% endfor %}" data-index="0">
             {% else %}

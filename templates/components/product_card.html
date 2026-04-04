@@ -1,6 +1,6 @@
 {% load static %}
 <div class="rounded-lg overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow cursor-pointer" onclick="window.location.href='{{ detail_url }}'">
-    <div class="relative overflow-hidden group" style="height: 200px;">
+    <div class="relative overflow-hidden group bg-gray-50 dark:bg-gray-900/40 border-b border-gray-200 dark:border-gray-700" style="height: 200px;">
         {% if product.image %}
             <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-contain p-2 js-carousel-image" data-images="{% for u in product.card_images %}{{ u|escapejs }}{% if not forloop.last %}||{% endif %}{% endfor %}" data-index="0">
         {% else %}

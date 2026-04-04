@@ -1,14 +1,18 @@
 {% load static %}
 <div class="rounded-lg overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow cursor-pointer" onclick="window.location.href='{{ detail_url }}'">
-    <div class="overflow-hidden" style="height: 200px;">
+    <div class="relative overflow-hidden group" style="height: 200px;">
         {% if product.image %}
-            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-contain p-2">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-contain p-2 js-carousel-image" data-images="{% for u in product.card_images %}{{ u|escapejs }}{% if not forloop.last %}||{% endif %}{% endfor %}" data-index="0">
         {% else %}
             <div class="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
                 <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                 </svg>
             </div>
+        {% endif %}
+        {% if product.card_images|length > 1 %}
+            <button type="button" class="js-carousel-prev absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/85 dark:bg-gray-900/80 text-gray-900 dark:text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto" onclick="event.stopPropagation();">‹</button>
+            <button type="button" class="js-carousel-next absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/85 dark:bg-gray-900/80 text-gray-900 dark:text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto" onclick="event.stopPropagation();">›</button>
         {% endif %}
     </div>
     <div class="p-4">

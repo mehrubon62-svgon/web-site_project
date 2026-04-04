@@ -71,15 +71,19 @@
 {% block products %}
 {% for case in page_obj %}
     <div class="product-card rounded-lg overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-shadow hover:shadow-lg cursor-pointer" onclick="window.location.href='{% url 'case_detail' case.pk %}'">
-        <div class="product-image relative overflow-hidden h-52">
+        <div class="product-image relative overflow-hidden group h-52">
             {% if case.image %}
-                <img src="{{ case.image.url }}" alt="{{ case.name }}" class="w-full h-full object-contain p-2">
+                <img src="{{ case.image.url }}" alt="{{ case.name }}" class="w-full h-full object-contain p-2 js-carousel-image" data-images="{% for u in case.card_images %}{{ u|escapejs }}{% if not forloop.last %}||{% endif %}{% endfor %}" data-index="0">
             {% else %}
                 <div class="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
                     <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                     </svg>
                 </div>
+            {% endif %}
+            {% if case.card_images|length > 1 %}
+                <button type="button" class="js-carousel-prev absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/85 dark:bg-gray-900/80 text-gray-900 dark:text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto" onclick="event.stopPropagation();">‹</button>
+                <button type="button" class="js-carousel-next absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/85 dark:bg-gray-900/80 text-gray-900 dark:text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto" onclick="event.stopPropagation();">›</button>
             {% endif %}
             <form method="post" action="{% url 'add_wish_case' case.pk %}" class="wishlist-form" onclick="event.stopPropagation();">
                 {% csrf_token %}

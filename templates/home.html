@@ -95,11 +95,15 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {% for item in popular_components %}
                 <div class="rounded-lg overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow cursor-pointer" onclick="window.location.href='{{ item.detail_url }}'">
-                    <div class="overflow-hidden" style="height: 180px;">
+                    <div class="relative overflow-hidden group" style="height: 180px;">
                         {% if item.image %}
-                            <img src="{{ item.image }}" alt="{{ item.name }}" class="w-full h-full object-contain p-2">
+                            <img src="{{ item.image }}" alt="{{ item.name }}" class="w-full h-full object-contain p-2 js-carousel-image" data-images="{% for u in item.card_images %}{{ u|escapejs }}{% if not forloop.last %}||{% endif %}{% endfor %}" data-index="0">
                         {% else %}
                             <div class="w-full h-full bg-gray-200 dark:bg-gray-700"></div>
+                        {% endif %}
+                        {% if item.card_images|length > 1 %}
+                            <button type="button" class="js-carousel-prev absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/85 dark:bg-gray-900/80 text-gray-900 dark:text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto" onclick="event.stopPropagation();">‹</button>
+                            <button type="button" class="js-carousel-next absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/85 dark:bg-gray-900/80 text-gray-900 dark:text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto" onclick="event.stopPropagation();">›</button>
                         {% endif %}
                     </div>
                     <div class="p-4">

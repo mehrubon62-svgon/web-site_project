@@ -27,7 +27,7 @@
             <div class="lg:col-span-3">
                 <div class="relative rounded-lg overflow-hidden mb-3 group cursor-zoom-in border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800" style="height: 420px;">
                     {% if product.image %}
-                        <img id="main-product-image" src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-contain p-2">
+                        <img id="main-product-image" src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-contain p-2" data-images="{{ product.image.url|escapejs }}{% for extra_image in additional_images %}||{{ extra_image.image.url|escapejs }}{% endfor %}" data-index="0">
                     {% else %}
                         <div class="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
                             <svg class="w-24 h-24 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -40,6 +40,10 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path>
                         </svg>
                     </div>
+                    {% if product.image and additional_images %}
+                        <button id="detail-carousel-prev" type="button" class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/85 dark:bg-gray-900/80 text-gray-900 dark:text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">‹</button>
+                        <button id="detail-carousel-next" type="button" class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/85 dark:bg-gray-900/80 text-gray-900 dark:text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">›</button>
+                    {% endif %}
                 </div>
                 {% if additional_images %}
                     <div class="grid grid-cols-4 sm:grid-cols-5 gap-2">
@@ -830,14 +834,60 @@
 
     const mainProductImage = document.getElementById('main-product-image');
     const productThumbs = document.querySelectorAll('.product-thumb');
+    const detailPrev = document.getElementById('detail-carousel-prev');
+    const detailNext = document.getElementById('detail-carousel-next');
+    const normalizeImageKey = (url) => {
+        if (!url) return '';
+        try {
+            return decodeURIComponent(new URL(url, window.location.origin).pathname).toLowerCase();
+        } catch (_) {
+            return String(url).trim().toLowerCase();
+        }
+    };
+    const detailImages = (() => {
+        if (!mainProductImage) return [];
+        const seen = new Set();
+        const out = [];
+        ((mainProductImage.dataset.images || '').split('||').filter(Boolean)).forEach((url) => {
+            const key = normalizeImageKey(url);
+            if (!key || seen.has(key)) return;
+            seen.add(key);
+            out.push(url);
+        });
+        return out;
+    })();
+    let detailIndex = Number(mainProductImage?.dataset.index || 0);
+
+    const setDetailImageByIndex = (nextIndex) => {
+        if (!mainProductImage || !detailImages.length) return;
+        detailIndex = (nextIndex + detailImages.length) % detailImages.length;
+        mainProductImage.src = detailImages[detailIndex];
+        mainProductImage.dataset.index = String(detailIndex);
+    };
 
     productThumbs.forEach((thumb) => {
         thumb.addEventListener('click', () => {
             const nextUrl = thumb.getAttribute('data-image-url');
             if (mainProductImage && nextUrl) {
                 mainProductImage.src = nextUrl;
+                const idx = detailImages.findIndex((url) => normalizeImageKey(url) === normalizeImageKey(nextUrl));
+                if (idx >= 0) {
+                    detailIndex = idx;
+                    mainProductImage.dataset.index = String(detailIndex);
+                }
             }
         });
+    });
+
+    detailPrev?.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        setDetailImageByIndex(detailIndex - 1);
+    });
+    detailNext?.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        setDetailImageByIndex(detailIndex + 1);
     });
 
     // Tab switching

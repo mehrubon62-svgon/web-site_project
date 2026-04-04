@@ -79,15 +79,19 @@
 {% block products %}
 {% for gpu in page_obj %}
     <div class="product-card rounded-lg overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-shadow hover:shadow-lg cursor-pointer" onclick="window.location.href='{% url 'gpu_detail' gpu.pk %}'">
-        <div class="product-image relative overflow-hidden h-52">
+        <div class="product-image relative overflow-hidden group h-52">
             {% if gpu.image %}
-                <img src="{{ gpu.image.url }}" alt="{{ gpu.name }}" class="w-full h-full object-contain p-2">
+                <img src="{{ gpu.image.url }}" alt="{{ gpu.name }}" class="w-full h-full object-contain p-2 js-carousel-image" data-images="{% for u in gpu.card_images %}{{ u|escapejs }}{% if not forloop.last %}||{% endif %}{% endfor %}" data-index="0">
             {% else %}
                 <div class="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
                     <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
                     </svg>
                 </div>
+            {% endif %}
+            {% if gpu.card_images|length > 1 %}
+                <button type="button" class="js-carousel-prev absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/85 dark:bg-gray-900/80 text-gray-900 dark:text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto" onclick="event.stopPropagation();">‹</button>
+                <button type="button" class="js-carousel-next absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/85 dark:bg-gray-900/80 text-gray-900 dark:text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto" onclick="event.stopPropagation();">›</button>
             {% endif %}
             <form method="post" action="{% url 'add_wish_gpu' gpu.pk %}" class="wishlist-form" onclick="event.stopPropagation();">
                 {% csrf_token %}

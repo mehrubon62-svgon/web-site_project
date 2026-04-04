@@ -961,6 +961,61 @@
             }
         })();
 
+        // Product card carousel (arrows in listing cards)
+        (() => {
+            const normalizeImageKey = (url) => {
+                if (!url) return '';
+                try {
+                    return decodeURIComponent(new URL(url, window.location.origin).pathname).toLowerCase();
+                } catch (_) {
+                    return url.trim().toLowerCase();
+                }
+            };
+            const parseImages = (raw) => {
+                const seen = new Set();
+                const out = [];
+                (raw || "").split("||").map((x) => x.trim()).filter(Boolean).forEach((url) => {
+                    const key = normalizeImageKey(url);
+                    if (!key || seen.has(key)) return;
+                    seen.add(key);
+                    out.push(url);
+                });
+                return out;
+            };
+            const cards = document.querySelectorAll('.product-image, .relative.overflow-hidden');
+            cards.forEach((card) => {
+                const img = card.querySelector('.js-carousel-image');
+                if (!img) return;
+                const images = parseImages(img.dataset.images);
+                if (images.length < 2) return;
+
+                let index = Number(img.dataset.index || 0);
+                const apply = () => {
+                    img.src = images[index];
+                    img.dataset.index = String(index);
+                };
+
+                const prev = card.querySelector('.js-carousel-prev');
+                const next = card.querySelector('.js-carousel-next');
+                if (prev) {
+                    prev.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        index = (index - 1 + images.length) % images.length;
+                        apply();
+                    });
+                }
+                if (next) {
+                    next.addEventListener('click', (event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        index = (index + 1) % images.length;
+                        apply();
+                    });
+                }
+            });
+        })();
+
     </script>
 </body>
 </html>

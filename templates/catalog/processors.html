@@ -87,15 +87,19 @@
 {% block products %}
 {% for processor in page_obj %}
     <div class="product-card rounded-lg overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-shadow hover:shadow-lg cursor-pointer" onclick="window.location.href='{% url 'processor_detail' processor.pk %}'">
-        <div class="product-image relative overflow-hidden h-52">
+        <div class="product-image relative overflow-hidden group h-52">
             {% if processor.image %}
-                <img src="{{ processor.image.url }}" alt="{{ processor.name }}" class="w-full h-full object-contain p-2">
+                <img src="{{ processor.image.url }}" alt="{{ processor.name }}" class="w-full h-full object-contain p-2 js-carousel-image" data-images="{% for u in processor.card_images %}{{ u|escapejs }}{% if not forloop.last %}||{% endif %}{% endfor %}" data-index="0">
             {% else %}
                 <div class="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
                     <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
                     </svg>
                 </div>
+            {% endif %}
+            {% if processor.card_images|length > 1 %}
+                <button type="button" class="js-carousel-prev absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/85 dark:bg-gray-900/80 text-gray-900 dark:text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto" onclick="event.stopPropagation();">‹</button>
+                <button type="button" class="js-carousel-next absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white/85 dark:bg-gray-900/80 text-gray-900 dark:text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto" onclick="event.stopPropagation();">›</button>
             {% endif %}
             <form method="post" action="{% url 'add_wish_processor' processor.pk %}" class="wishlist-form" onclick="event.stopPropagation();">
                 {% csrf_token %}

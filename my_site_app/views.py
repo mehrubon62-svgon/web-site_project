@@ -13,6 +13,8 @@ from django.db import transaction
 from django.db.utils import ProgrammingError, OperationalError
 from django.utils.translation import gettext as _
 import random
+from collections import defaultdict
+from urllib.parse import urlsplit, unquote
 from reviews.models import Review
 
 SESSION_CART_KEY = "cart_items"
@@ -192,6 +194,87 @@ def _product_category_label(product):
     return CATEGORY_DISPLAY_MAP.get(product._meta.model_name, product._meta.model_name.replace("_", " ").title())
 
 
+def _safe_main_image_url(product):
+    try:
+        return product.image.url if getattr(product, "image", None) else ""
+    except ValueError:
+        return ""
+
+
+def _collect_extra_images_by_object_ids(model_class, object_ids):
+    if not object_ids:
+        return {}
+    content_type = ContentType.objects.get_for_model(model_class)
+    extras = defaultdict(list)
+    rows = ProductImage.objects.filter(
+        content_type=content_type,
+        object_id__in=object_ids,
+    ).order_by("object_id", "order", "id")
+    for row in rows:
+        if not getattr(row, "image", None):
+            continue
+        try:
+            url = row.image.url
+        except ValueError:
+            continue
+        if url:
+            extras[row.object_id].append(url)
+    return extras
+
+
+def _build_card_images(main_url, extra_urls):
+    def canonical_key(url):
+        if not url:
+            return ""
+        parsed = urlsplit(url)
+        return unquote(parsed.path).strip().lower()
+
+    images = []
+    seen = set()
+    if main_url:
+        images.append(main_url)
+        seen.add(canonical_key(main_url))
+    for url in extra_urls or []:
+        key = canonical_key(url)
+        if url and key and key not in seen:
+            images.append(url)
+            seen.add(key)
+    return images
+
+
+def _get_additional_images_for_product(product):
+    content_type = ContentType.objects.get_for_model(product.__class__)
+    rows = ProductImage.objects.filter(content_type=content_type, object_id=product.pk).order_by("order", "id")
+    main_url = _safe_main_image_url(product)
+    main_key = unquote(urlsplit(main_url).path).strip().lower() if main_url else ""
+    unique = []
+    seen = set()
+    if main_key:
+        seen.add(main_key)
+    for row in rows:
+        if not getattr(row, "image", None):
+            continue
+        try:
+            url = row.image.url
+        except ValueError:
+            continue
+        key = unquote(urlsplit(url).path).strip().lower()
+        if not key or key in seen:
+            continue
+        seen.add(key)
+        unique.append(row)
+    return unique
+
+
+def _attach_card_images_to_page(page_obj, model_class):
+    objs = list(page_obj.object_list)
+    obj_ids = [obj.pk for obj in objs]
+    extras = _collect_extra_images_by_object_ids(model_class, obj_ids)
+    for obj in objs:
+        main_url = _safe_main_image_url(obj)
+        obj.card_images = _build_card_images(main_url, extras.get(obj.pk, []))
+
+
 class Home(View):
     def get(self, request, *args, **kwargs):
         pools = [
@@ -205,22 +288,34 @@ class Home(View):
             list(Cooler.objects.all()[:2]),
         ]
         cards = []
+        products_for_gallery = defaultdict(set)
         for bucket in pools:
             for product in bucket:
-                image = ""
-                try:
-                    image = product.image.url if getattr(product, "image", None) else ""
-                except ValueError:
-                    image = ""
+                image = _safe_main_image_url(product)
+                model_name = product._meta.model_name
+                products_for_gallery[model_name].add(product.pk)
                 cards.append(
                     {
                         "name": getattr(product, "name", "Product"),
                         "price": getattr(product, "price", 0),
                         "image": image,
+                        "product_id": product.pk,
+                        "model_name": model_name,
                         "category": _product_category_label(product),
                         "detail_url": _detail_url_for_product(product),
                     }
                 )
+        gallery_map = {}
+        for model_name, pks in products_for_gallery.items():
+            model_cls = PRODUCT_MODEL_MAP.get(model_name)
+            if not model_cls:
+                continue
+            extras = _collect_extra_images_by_object_ids(model_cls, list(pks))
+            for pk, urls in extras.items():
+                gallery_map[(model_name, pk)] = urls
+        for card in cards:
+            key = (card.get("model_name"), card.get("product_id"))
+            card["card_images"] = _build_card_images(card.get("image", ""), gallery_map.get(key, []))
         random.shuffle(cards)
         hero_images = list(HomeHeroImage.objects.filter(is_active=True).order_by("order", "-created_at"))
         fallback_hero_url = "https://images.unsplash.com/photo-1717283413190-d4551453b92a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080"
@@ -610,6 +705,7 @@ class ProcessorListView(View):
         paginator = Paginator(processor_filter.qs, 12)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
+        _attach_card_images_to_page(page_obj, Processor)
         
         # Get user's wishlist items
         user_wishlist = []
@@ -639,6 +735,7 @@ class GPUListView(View):
         paginator = Paginator(gpu_filter.qs, 12)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
+        _attach_card_images_to_page(page_obj, GPU)
         
         # Get user's wishlist items
         user_wishlist = []
@@ -668,6 +765,7 @@ class RAMListView(View):
         paginator = Paginator(ram_filter.qs, 12)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
+        _attach_card_images_to_page(page_obj, RAM)
         
         # Get user's wishlist items
         user_wishlist = []
@@ -697,6 +795,7 @@ class MotherboardListView(View):
         paginator = Paginator(motherboard_filter.qs, 12)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
+        _attach_card_images_to_page(page_obj, Motherboard)
         
         # Get user's wishlist items
         user_wishlist = []
@@ -726,6 +825,7 @@ class StorageListView(View):
         paginator = Paginator(storage_filter.qs, 12)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
+        _attach_card_images_to_page(page_obj, Storage)
         
         # Get user's wishlist items
         user_wishlist = []
@@ -755,6 +855,7 @@ class PowerSupplyListView(View):
         paginator = Paginator(psu_filter.qs, 12)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
+        _attach_card_images_to_page(page_obj, PowerSupply)
         
         # Get user's wishlist items
         user_wishlist = []
@@ -784,6 +885,7 @@ class CaseListView(View):
         paginator = Paginator(case_filter.qs, 12)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
+        _attach_card_images_to_page(page_obj, Case)
         
         # Get user's wishlist items
         user_wishlist = []
@@ -813,6 +915,7 @@ class CoolerListView(View):
         paginator = Paginator(cooler_filter.qs, 12)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
+        _attach_card_images_to_page(page_obj, Cooler)
 
         user_wishlist = []
         user = get_logged_in_user(request)
@@ -841,6 +944,7 @@ class LaptopListView(View):
         paginator = Paginator(laptop_filter.qs, 12)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
+        _attach_card_images_to_page(page_obj, Laptop)
         
         # Get user's wishlist items
         user_wishlist = []
@@ -876,10 +980,10 @@ class ProcessorDetailView(View):
                 content_type=content_type,
                 object_id=pk
             ).exists()
-            additional_images = ProductImage.objects.filter(content_type=content_type, object_id=pk).order_by('order')
+            additional_images = _get_additional_images_for_product(processor)
         else:
             content_type = ContentType.objects.get_for_model(Processor)
-            additional_images = ProductImage.objects.filter(content_type=content_type, object_id=pk).order_by('order')
+            additional_images = _get_additional_images_for_product(processor)
         
         context = {
             'product': processor,
@@ -906,10 +1010,10 @@ class GPUDetailView(View):
                 content_type=content_type,
                 object_id=pk
             ).exists()
-            additional_images = ProductImage.objects.filter(content_type=content_type, object_id=pk).order_by('order')
+            additional_images = _get_additional_images_for_product(gpu)
         else:
             content_type = ContentType.objects.get_for_model(GPU)
-            additional_images = ProductImage.objects.filter(content_type=content_type, object_id=pk).order_by('order')
+            additional_images = _get_additional_images_for_product(gpu)
         
         context = {
             'product': gpu,
@@ -936,10 +1040,10 @@ class RAMDetailView(View):
                 content_type=content_type,
                 object_id=pk
             ).exists()
-            additional_images = ProductImage.objects.filter(content_type=content_type, object_id=pk).order_by('order')
+            additional_images = _get_additional_images_for_product(ram)
         else:
             content_type = ContentType.objects.get_for_model(RAM)
-            additional_images = ProductImage.objects.filter(content_type=content_type, object_id=pk).order_by('order')
+            additional_images = _get_additional_images_for_product(ram)
         
         context = {
             'product': ram,
@@ -966,10 +1070,10 @@ class MotherboardDetailView(View):
                 content_type=content_type,
                 object_id=pk
             ).exists()
-            additional_images = ProductImage.objects.filter(content_type=content_type, object_id=pk).order_by('order')
+            additional_images = _get_additional_images_for_product(motherboard)
         else:
             content_type = ContentType.objects.get_for_model(Motherboard)
-            additional_images = ProductImage.objects.filter(content_type=content_type, object_id=pk).order_by('order')
+            additional_images = _get_additional_images_for_product(motherboard)
         
         context = {
             'product': motherboard,
@@ -996,10 +1100,10 @@ class StorageDetailView(View):
                 content_type=content_type,
                 object_id=pk
             ).exists()
-            additional_images = ProductImage.objects.filter(content_type=content_type, object_id=pk).order_by('order')
+            additional_images = _get_additional_images_for_product(storage)
         else:
             content_type = ContentType.objects.get_for_model(Storage)
-            additional_images = ProductImage.objects.filter(content_type=content_type, object_id=pk).order_by('order')
+            additional_images = _get_additional_images_for_product(storage)
         
         context = {
             'product': storage,
@@ -1026,10 +1130,10 @@ class PowerSupplyDetailView(View):
                 content_type=content_type,
                 object_id=pk
             ).exists()
-            additional_images = ProductImage.objects.filter(content_type=content_type, object_id=pk).order_by('order')
+            additional_images = _get_additional_images_for_product(psu)
         else:
             content_type = ContentType.objects.get_for_model(PowerSupply)
-            additional_images = ProductImage.objects.filter(content_type=content_type, object_id=pk).order_by('order')
+            additional_images = _get_additional_images_for_product(psu)
         
         context = {
             'product': psu,
@@ -1056,10 +1160,10 @@ class CaseDetailView(View):
                 content_type=content_type,
                 object_id=pk
             ).exists()
-            additional_images = ProductImage.objects.filter(content_type=content_type, object_id=pk).order_by('order')
+            additional_images = _get_additional_images_for_product(case)
         else:
             content_type = ContentType.objects.get_for_model(Case)
-            additional_images = ProductImage.objects.filter(content_type=content_type, object_id=pk).order_by('order')
+            additional_images = _get_additional_images_for_product(case)
         
         context = {
             'product': case,
@@ -1086,10 +1190,10 @@ class CoolerDetailView(View):
                 content_type=content_type,
                 object_id=pk
             ).exists()
-            additional_images = ProductImage.objects.filter(content_type=content_type, object_id=pk).order_by('order')
+            additional_images = _get_additional_images_for_product(cooler)
         else:
             content_type = ContentType.objects.get_for_model(Cooler)
-            additional_images = ProductImage.objects.filter(content_type=content_type, object_id=pk).order_by('order')
+            additional_images = _get_additional_images_for_product(cooler)
 
         context = {
             'product': cooler,
@@ -1116,10 +1220,10 @@ class LaptopDetailView(View):
                 content_type=content_type,
                 object_id=pk
             ).exists()
-            additional_images = ProductImage.objects.filter(content_type=content_type, object_id=pk).order_by('order')
+            additional_images = _get_additional_images_for_product(laptop)
         else:
             content_type = ContentType.objects.get_for_model(Laptop)
-            additional_images = ProductImage.objects.filter(content_type=content_type, object_id=pk).order_by('order')
+            additional_images = _get_additional_images_for_product(laptop)
         
         context = {
             'product': laptop,
@@ -1460,6 +1564,7 @@ class ExploreAllView(View):
         }
         showcase_items = ExploreShowcaseItem.objects.filter(is_active=True).select_related("content_type")
         cards = []
+        cards_for_gallery = []
 
         if showcase_items.exists():
             for item in showcase_items:
@@ -1469,10 +1574,7 @@ class ExploreAllView(View):
                 if not product:
                     continue
                 image = ""
-                try:
-                    image = product.image.url if getattr(product, "image", None) else ""
-                except ValueError:
-                    image = ""
+                image = _safe_main_image_url(product)
                 cards.append(
                     {
                         "title": item.title or getattr(product, "name", "Product"),
@@ -1488,6 +1590,7 @@ class ExploreAllView(View):
                         "detail_url": _detail_url_for_product(product),
                     }
                 )
+                cards_for_gallery.append((item.content_type_id, product.pk, len(cards) - 1))
         else:
             pools = [
                 list(Processor.objects.all()[:4]),
@@ -1502,10 +1605,8 @@ class ExploreAllView(View):
             for bucket in pools:
                 for product in bucket:
                     image = ""
-                    try:
-                        image = product.image.url if getattr(product, "image", None) else ""
-                    except ValueError:
-                        image = ""
+                    image = _safe_main_image_url(product)
+                    ct_id = ContentType.objects.get_for_model(product.__class__).id
                     cards.append(
                         {
                             "title": getattr(product, "name", "Product"),
@@ -1516,12 +1617,37 @@ class ExploreAllView(View):
                             "image": image,
                             "category": _product_category_label(product),
                             "category_key": product._meta.model_name,
-                            "content_type_id": ContentType.objects.get_for_model(product.__class__).id,
+                            "content_type_id": ct_id,
                             "object_id": product.pk,
                             "detail_url": _detail_url_for_product(product),
                         }
                     )
+                    cards_for_gallery.append((ct_id, product.pk, len(cards) - 1))
             cards.sort(key=lambda x: (x["category"].lower(), x["name"].lower()))
+
+        ct_to_object_ids = defaultdict(set)
+        for ct_id, obj_id, _ in cards_for_gallery:
+            ct_to_object_ids[ct_id].add(obj_id)
+        extra_map = defaultdict(list)
+        for ct_id, object_ids in ct_to_object_ids.items():
+            rows = ProductImage.objects.filter(
+                content_type_id=ct_id,
+                object_id__in=list(object_ids),
+            ).order_by("object_id", "order", "id")
+            for row in rows:
+                if not getattr(row, "image", None):
+                    continue
+                try:
+                    url = row.image.url
+                except ValueError:
+                    continue
+                if url:
+                    extra_map[(ct_id, row.object_id)].append(url)
+        for ct_id, obj_id, idx in cards_for_gallery:
+            cards[idx]["card_images"] = _build_card_images(
+                cards[idx].get("image", ""),
+                extra_map.get((ct_id, obj_id), []),
+            )
 
         if search_query:
             aliases = {

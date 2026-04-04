@@ -570,7 +570,7 @@
       card.innerHTML = `
         <div class="flex gap-3">
           <div class="w-16 h-16 rounded overflow-hidden flex-shrink-0" style="background:${palette.isDark ? '#1F2937' : '#FFFFFF'}">
-            ${it.image ? `<img src="${it.image}" alt="${it.name}" class="w-full h-full object-cover">` : ''}
+            ${it.image ? `<img src="${it.image}" alt="${it.name}" class="w-full h-full object-contain p-2">` : ''}
           </div>
           <div class="flex-1 min-w-0">
             <p class="text-sm font-semibold mb-1 line-clamp-2" style="color:${palette.title}">${it.name}</p>

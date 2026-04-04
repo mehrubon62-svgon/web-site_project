@@ -97,7 +97,7 @@
                 <div class="rounded-lg overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow cursor-pointer" onclick="window.location.href='{{ item.detail_url }}'">
                     <div class="overflow-hidden" style="height: 180px;">
                         {% if item.image %}
-                            <img src="{{ item.image }}" alt="{{ item.name }}" class="w-full h-full object-cover">
+                            <img src="{{ item.image }}" alt="{{ item.name }}" class="w-full h-full object-contain p-2">
                         {% else %}
                             <div class="w-full h-full bg-gray-200 dark:bg-gray-700"></div>
                         {% endif %}

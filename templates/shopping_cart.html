@@ -38,7 +38,7 @@
                         <div data-cart-item-id="{{ item.id }}" class="rounded-lg p-4 flex gap-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-md">
                             <div class="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-gray-100 dark:bg-gray-700">
                                 {% if item.image %}
-                                    <img src="{{ item.image }}" alt="{{ item.name }}" class="w-full h-full object-cover">
+                                    <img src="{{ item.image }}" alt="{{ item.name }}" class="w-full h-full object-contain p-2">
                                 {% else %}
                                     <div class="w-full h-full"></div>
                                 {% endif %}

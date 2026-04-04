@@ -73,7 +73,7 @@
     <div class="product-card rounded-lg overflow-hidden bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 transition-shadow hover:shadow-lg cursor-pointer" onclick="window.location.href='{% url 'storage_detail' storage.pk %}'">
         <div class="product-image relative overflow-hidden h-52">
             {% if storage.image %}
-                <img src="{{ storage.image.url }}" alt="{{ storage.name }}" class="w-full h-full object-cover">
+                <img src="{{ storage.image.url }}" alt="{{ storage.name }}" class="w-full h-full object-contain p-2">
             {% else %}
                 <div class="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
                     <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

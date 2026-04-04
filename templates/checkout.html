@@ -170,7 +170,7 @@
                                 {% for item in cart_items %}
                                     <div class="flex items-center gap-3">
                                         <div class="w-10 h-10 rounded overflow-hidden flex-shrink-0 bg-gray-200 dark:bg-gray-600">
-                                            {% if item.image %}<img src="{{ item.image }}" alt="{{ item.name }}" class="w-full h-full object-cover">{% endif %}
+                                            {% if item.image %}<img src="{{ item.image }}" alt="{{ item.name }}" class="w-full h-full object-contain p-2">{% endif %}
                                         </div>
                                         <div class="flex-1 min-w-0">
                                             <p class="text-xs font-medium truncate text-gray-900 dark:text-white">{{ item.name }}</p>
@@ -211,7 +211,7 @@
                         {% for item in cart_items %}
                             <div class="flex items-center gap-3">
                                 <div class="w-10 h-10 rounded overflow-hidden flex-shrink-0 relative bg-gray-200 dark:bg-gray-600">
-                                    {% if item.image %}<img src="{{ item.image }}" alt="{{ item.name }}" class="w-full h-full object-cover">{% endif %}
+                                    {% if item.image %}<img src="{{ item.image }}" alt="{{ item.name }}" class="w-full h-full object-contain p-2">{% endif %}
                                     <span class="absolute -top-1 -right-1 w-4 h-4 rounded-full text-[9px] font-bold flex items-center justify-center bg-accent text-gray-900">{{ item.quantity }}</span>
                                 </div>
                                 <div class="flex-1 min-w-0"><p class="text-xs truncate text-gray-900 dark:text-white">{{ item.name }}</p></div>

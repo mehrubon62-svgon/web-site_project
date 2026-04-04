@@ -45,8 +45,13 @@
                         <button id="detail-carousel-next" type="button" class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/85 dark:bg-gray-900/80 text-gray-900 dark:text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none group-hover:pointer-events-auto">›</button>
                     {% endif %}
                 </div>
-                {% if additional_images %}
+                {% if product.image or additional_images %}
                     <div class="grid grid-cols-4 sm:grid-cols-5 gap-2">
+                        {% if product.image %}
+                            <button type="button" class="product-thumb h-16 rounded-md overflow-hidden border border-gray-300 dark:border-gray-600 hover:border-accent transition-colors" data-image-url="{{ product.image.url }}">
+                                <img src="{{ product.image.url }}" alt="{{ product.name }} main photo" class="w-full h-full object-contain bg-white dark:bg-gray-800">
+                            </button>
+                        {% endif %}
                         {% for extra_image in additional_images %}
                             <button type="button" class="product-thumb h-16 rounded-md overflow-hidden border border-gray-300 dark:border-gray-600 hover:border-accent transition-colors" data-image-url="{{ extra_image.image.url }}">
                                 <img src="{{ extra_image.image.url }}" alt="{{ product.name }} photo {{ forloop.counter }}" class="w-full h-full object-contain bg-white dark:bg-gray-800">
